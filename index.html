@@ -198,14 +198,14 @@
                     <div class="apply-card">
                         <div class="apply-badge">🎯 Роль Тестера</div>
                         <h3>Бета-тестирование 0.18.0</h3>
-                        <p>Получайте доступ к закрытым сборкам с новой физикой и ножами, ищите баги и получайте эксклюзивные награды.</p>
+                        <p>Тестируйте закрытые сборки с новой физикой и ножами, ищите баги и получайте эксклюзивные привилегии проекта.</p>
                         <ul class="apply-perks">
-                            <li>✨ Закрытый доступ к новым версиям игры</li>
-                            <li>🗡 Личный Керамбит и 5 000 Gold за тесты</li>
-                            <li>🏷 Эксклюзивная роль и бейджик тестера</li>
+                            <li>🔢 Возможность получить кастомный ID в игре</li>
+                            <li>🛡️ Официальный значок тестера рядом с ID</li>
+                            <li>🤖 Доступ к закрытому боту для тестеров (@Promocode1_stand_bot)</li>
                         </ul>
                         <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-blue" style="width:100%; justify-content:center;">
-                            <span>Подать заявку на Тестера 🚀</span>
+                            <span>Подать через Telegram-бота 🚀</span>
                         </a>
                     </div>
 
@@ -219,12 +219,53 @@
                             <li>📢 Репосты лучших роликов в наших ресурсах</li>
                         </ul>
                         <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-gold" style="width:100%; justify-content:center;">
-                            <span>Подать заявку на Медиа 🎬</span>
+                            <span>Подать через Telegram-бота 🎬</span>
                         </a>
                     </div>
                 </div>
 
-                <div class="apply-bot-callout">
+                <!-- Онлайн-форма подачи заявки прямо с сайта -->
+                <div class="site-application-form glass-panel" style="margin-top: 25px; padding: 22px; border-radius: 14px;">
+                    <div class="form-header" style="margin-bottom: 16px;">
+                        <h3 style="font-family: 'Rajdhani', sans-serif; font-size: 20px; color: #fff;">📝 Быстрая онлайн-анкета (отправка прямо в Telegram разработчику)</h3>
+                        <p style="font-size: 13px; color: var(--text-muted); margin-top: 4px;">Заполните форму ниже — заявка моментально поступит в панель Главного Разработчика в Telegram!</p>
+                    </div>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Желаемая роль в проекте:</label>
+                            <select id="web-app-role" class="input-field select-field" onchange="toggleWebRoleFields()">
+                                <option value="tester">🎯 Тестер (Значок + Кастомный ID + Бот)</option>
+                                <option value="media">🎥 Медиа-партнёр (YouTube / TikTok / Twitch)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Ваш Telegram (для связи и выдачи доступа):</label>
+                            <input type="text" id="web-app-tg" placeholder="@ваш_юзернейм" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label id="lbl-q1">Игровой ник и реальный возраст:</label>
+                            <input type="text" id="web-app-q1" placeholder="Пример: Frosty / 16 лет" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label id="lbl-q2">Характеристики устройства (ПК или модель телефона):</label>
+                            <input type="text" id="web-app-q2" placeholder="Пример: Xiaomi Redmi Note 12 / ПК Win 11" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label id="lbl-q3">Опыт тестирования / поиска багов:</label>
+                            <input type="text" id="web-app-q3" placeholder="Пример: Был тестером на приватках, умею писать репорты" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label id="lbl-q4">Сколько часов в день готовы уделять:</label>
+                            <input type="text" id="web-app-q4" placeholder="Пример: 2-3 часа каждый вечер" class="input-field">
+                        </div>
+                    </div>
+                    <button class="btn btn-gold" style="width: 100%; justify-content: center; margin-top: 14px;" onclick="submitWebApplication()">
+                        <span>Отправить заявку в панель разработчику 🚀</span>
+                    </button>
+                    <div id="web-app-result" class="result-box hidden"></div>
+                </div>
+
+                <div class="apply-bot-callout" style="margin-top: 20px;">
                     <div class="bot-callout-icon">🤖</div>
                     <div class="bot-callout-info">
                         <h4>Быстрая подача через Telegram-бота:</h4>

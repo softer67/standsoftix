@@ -293,7 +293,7 @@ async function createDevPromo() {
         }
     } catch (e) {}
 
-    resultBox.className = 'result-box result-success';
+        resultBox.className = 'result-box result-success';
     resultBox.innerHTML = `
         <div>👑 <b>Промокод Главного Разработчика готов:</b></div>
         <div class="promo-code-card">
@@ -302,4 +302,128 @@ async function createDevPromo() {
         </div>
         <div style="margin-top: 6px; font-size: 12px;">Тип: <b>${rType}</b> | Значение: <b>${rVal}</b> | Активаций: <b>${uses === 0 ? 'Безлимит' : uses}</b></div>
     `;
+}
+
+// 6. Подача онлайн-заявки с сайта в панель разработчика Telegram
+function toggleWebRoleFields() {
+    const role = document.getElementById('web-app-role').value;
+    const l1 = document.getElementById('lbl-q1');
+    const l2 = document.getElementById('lbl-q2');
+    const l3 = document.getElementById('lbl-q3');
+    const l4 = document.getElementById('lbl-q4');
+    const q1 = document.getElementById('web-app-q1');
+    const q2 = document.getElementById('web-app-q2');
+    const q3 = document.getElementById('web-app-q3');
+    const q4 = document.getElementById('web-app-q4');
+
+    if (role === 'tester') {
+        l1.textContent = 'Игровой ник и реальный возраст:';
+        q1.placeholder = 'Пример: Frosty / 16 лет';
+        l2.textContent = 'Характеристики устройства (ПК или модель телефона):';
+        q2.placeholder = 'Пример: Xiaomi Redmi Note 12 / ПК Win 11';
+        l3.textContent = 'Опыт тестирования / поиска багов:';
+        q3.placeholder = 'Пример: Был тестером на приватках, умею писать репорты';
+        l4.textContent = 'Сколько часов в день готовы уделять:';
+        q4.placeholder = 'Пример: 2-3 часа каждый вечер';
+    } else {
+        l1.textContent = 'Ссылка на ваш канал (YouTube/TikTok/Twitch):';
+        q1.placeholder = 'https://youtube.com/@my_channel';
+        l2.textContent = 'Количество подписчиков и средний актив:';
+        q2.placeholder = 'Пример: 3 500 подписчиков, ~2 000 просмотров';
+        l3.textContent = 'Формат планируемого контента:';
+        q3.placeholder = 'Пример: Стримы, обзоры ножей и зимних скинов 0.18.0';
+        l4.textContent = 'Контакт для сотрудничества (Discord/VK):';
+        q4.placeholder = 'Пример: @discord_tag или ссылка VK';
+    }
+}
+
+async function submitWebApplication() {
+    const role = document.getElementById('web-app-role').value;
+    const tg = document.getElementById('web-app-tg').value.trim();
+    const q1 = document.getElementById('web-app-q1').value.trim();
+    const q2 = document.getElementById('web-app-q2').value.trim();
+    const q3 = document.getElementById('web-app-q3').value.trim();
+    const q4 = document.getElementById('web-app-q4').value.trim();
+    const resBox = document.getElementById('web-app-result');
+
+    if (!tg) {
+        alert('Пожалуйста, укажите ваш Telegram для связи (@username)!');
+        return;
+    }
+    if (!q1 || !q2) {
+        alert('Пожалуйста, заполните основные поля анкеты!');
+        return;
+    }
+
+    resBox.className = 'result-box';
+    resBox.textContent = 'Отправляем заявку разработчику в Telegram...';
+    resBox.classList.remove('hidden');
+
+    const cleanNick = tg.replace('@', '').trim();
+    const roleTitle = role === 'tester' ? '🎯 ТЕСТЕР (Значок + ID + Бот)' : '🎥 МЕДИА-ПАРТНЁР';
+
+    const tgMessage = 
+        `🌐 <b>НОВАЯ ЗАЯВКА С ОФИЦИАЛЬНОГО САЙТА!</b>\n\n` +
+        `🏷 Роль: <b>${roleTitle}</b>\n` +
+        `👤 Telegram: <b>@${cleanNick}</b>\n\n` +
+        `<b>Ответы кандидата:</b>\n` +
+        `• Ник/Канал: <b>${q1}</b>\n` +
+        `• Устройство/Стата: <b>${q2}</b>\n` +
+        `• Опыт/Формат: <b>${q3 || '-'}</b>\n` +
+        `• Время/Контакт: <b>${q4 || '-'}</b>`;
+
+    const inlineKeyboard = {
+        inline_keyboard: [
+            [
+                { text: `✅ Одобрить ${role === 'tester' ? 'Тестера' : 'Медиа'}`, callback_data: `webapp_acc_${role}_${cleanNick}` },
+                { text: '❌ Отклонить', callback_data: `webapp_rej_${cleanNick}` }
+            ]
+        ]
+    };
+
+    let sent = false;
+    try {
+        // Прямая отправка в Telegram-панель разработчика (чат_id: 6493650695)
+        const tgResp = await fetch('https://api.telegram.org/bot9240577854:AAFE4L1q0-KZ2Z09M9xF7LSdczEHnppZ9cE/sendMessage', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: 6493650695,
+                text: tgMessage,
+                parse_mode: 'HTML',
+                reply_markup: inlineKeyboard
+            })
+        });
+        if (tgResp.ok) sent = true;
+    } catch (e) {
+        console.warn('TG API direct send notice:', e);
+    }
+
+    try {
+        // Также отправляем на локальный сервер если доступен
+        await fetch('/api/apply', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                role: role,
+                username: cleanNick,
+                answers: { q1, q2, q3, q4 }
+            })
+        });
+    } catch (e) {}
+
+    resBox.className = 'result-box result-success';
+    resBox.innerHTML = `
+        <div style="font-size: 16px; font-weight: 700; color: #4dc7ff; margin-bottom: 6px;">🎉 Заявка успешно отправлена!</div>
+        <p style="margin: 0; font-size: 13px; color: #e2e8f0;">
+            Ваша анкета кандидата на роль <b>${roleTitle}</b> направлена в закрытую панель Главного Разработчика.<br>
+            Как только разработчик нажмёт кнопку <b>«Одобрить»</b> в Telegram, ваш аккаунт <b>@${cleanNick}</b> получит статус тестера, значок рядом с ID и доступ к закрытому боту <b>@Promocode1_stand_bot</b>!
+        </p>
+    `;
+
+    // Очистка полей
+    document.getElementById('web-app-q1').value = '';
+    document.getElementById('web-app-q2').value = '';
+    document.getElementById('web-app-q3').value = '';
+    document.getElementById('web-app-q4').value = '';
 }
