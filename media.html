@@ -501,12 +501,11 @@
             <!-- БЛОК 1: Промокоды на ВСЕ НОЖИ игры для контента и роликов (Лимит: 10 раз в неделю) -->
             <div class="glass-panel" style="padding:22px; margin-bottom:24px;">
                 <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fb7185; margin-bottom:6px;">🗡️ Генератор промокодов на ВСЕ Ножи в игре</h3>
-                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Создавайте редкие ножи всех типов для съёмок видео и демонстрации в роликах. Лимит: <b>10 раз в неделю</b>.</p>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Создавайте редкие ножи всех типов для съёмок видео и демонстрации в роликах. Лимит: <b>10 раз в неделю</b>. <i style="color:#f43f5e;">(Генерация предметов редкости Nameless недоступна для медиа-партнёров)</i>.</p>
                 <div class="input-group">
-                    <label>Выберите нож (полный каталог игры):</label>
+                    <label>Выберите нож (каталог игры без Nameless):</label>
                     <select id="media-knife-select" class="input-field select-field">
                         <optgroup label="🗡️ Керамбиты (Karambit)">
-                            <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
                             <option value="karambit_gold">Karambit "Gold" (Arcane 🏆)</option>
                             <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
                             <option value="karambit_claw">Karambit "Claw" (Arcane 🦅)</option>
@@ -864,7 +863,17 @@
             }
 
             const knifeSelect = document.getElementById('media-knife-select');
+            const knifeVal = knifeSelect.value;
             const knifeName = knifeSelect.options[knifeSelect.selectedIndex].text;
+
+            // Запрет предметов категории Nameless для медиа-партнеров
+            if (knifeVal.toLowerCase().includes('icedragon') || knifeName.toLowerCase().includes('nameless')) {
+                resBox.className = 'result-box result-error';
+                resBox.innerHTML = '⛔ <b>Ошибка:</b> Генерация предметов категории <b>Nameless</b> запрещена для медиа-партнёров!';
+                resBox.classList.remove('hidden');
+                return;
+            }
+
             const code = 'MEDIA_' + generateRandomStr(7);
 
             limits.count++;
