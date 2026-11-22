@@ -449,22 +449,22 @@
 
     <main class="main-content">
 
-        <!-- 1. Экран закрытого входа Разработчика -->
+        <!-- 1. Экран закрытого входа Разработчика ТОЛЬКО ПО КЛЮЧУ ДОСТУПА -->
         <div id="auth-section" class="auth-card glass-panel">
-            <div class="auth-icon">👑</div>
-            <h2 style="font-family:'Rajdhani', sans-serif; font-size:28px; color:#fbbf24; margin-bottom:6px;">Вход в Панель Разработчика</h2>
+            <div class="auth-icon" style="filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.8));">🔑</div>
+            <h2 style="font-family:'Rajdhani', sans-serif; font-size:28px; color:#fbbf24; margin-bottom:6px;">Вход по Ключу Доступа</h2>
             <p style="color:#94a3b8; font-size:14px; line-height:1.5; margin-bottom:20px;">
                 Секретная панель управления сервером StandSoftix 0.18.0.<br>
-                Введите мастер-ключ или пароль Главного Разработчика:
+                Доступ открыт строго по официальному <b>Ключу Доступа Разработчика</b>:
             </p>
 
-            <div style="display:flex; flex-direction:column; gap:10px; max-width:400px; margin:0 auto; width:100%;">
+            <div style="display:flex; flex-direction:column; gap:10px; max-width:440px; margin:0 auto; width:100%;">
                 <div class="input-group">
-                    <label>Мастер-пароль / Логин Разработчика:</label>
-                    <input type="password" id="dev-password-input" placeholder="Введите ключ доступа..." class="input-field" onkeypress="if(event.key==='Enter') verifyDevAccess()">
+                    <label>🔑 Персональный Ключ Доступа (Master Access Key):</label>
+                    <input type="password" id="dev-password-input" placeholder="Введите ключ доступа (например: DEV-KEY-STANDSOFTIX)..." class="input-field" style="letter-spacing:1px; text-transform:uppercase;" onkeypress="if(event.key==='Enter') verifyDevAccess()">
                 </div>
                 <button class="btn btn-gold" style="width:100%; margin-top:4px;" onclick="verifyDevAccess()">
-                    <span>Войти в Панель Управления 🔐</span>
+                    <span>Войти по ключу доступа 🔐</span>
                 </button>
             </div>
             <div id="auth-status-msg" class="result-box hidden"></div>
@@ -917,30 +917,59 @@
         async function verifyDevAccess() {
             const input = document.getElementById('dev-password-input');
             const statusMsg = document.getElementById('auth-status-msg');
-            const pass = input.value.trim();
+            const key = input.value.trim();
 
-            if (!pass) {
+            if (!key) {
                 statusMsg.className = 'result-box result-error';
-                statusMsg.textContent = 'Введите мастер-пароль разработчика!';
+                statusMsg.textContent = 'Введите ваш персональный ключ доступа!';
                 statusMsg.classList.remove('hidden');
                 return;
             }
 
             statusMsg.className = 'result-box';
-            statusMsg.textContent = 'Проверка мастер-доступа...';
+            statusMsg.textContent = 'Проверка криптографического ключа доступа...';
             statusMsg.classList.remove('hidden');
 
-            const passHash = await sha256Hex(pass.toLowerCase());
-            const devPassHash = await sha256Hex('standsoftix2408');
+            const cleanKey = key.toUpperCase();
+            const rawKeyLower = key.toLowerCase();
+            const keyHash = await sha256Hex(rawKeyLower);
             const masterHash = '8acf760eb6ce0d66c25a5654fba732af9abd23e01bc35c26a11f5aab3d712f0a';
 
-            if (pass === 'standsoftix2408' || passHash === devPassHash || passHash === masterHash) {
+            // Список официально подтвержденных ключей доступа разработчика
+            const VALID_KEYS = [
+                'DEV-KEY-STANDSOFTIX',
+                'DEV-STANDSOFTIX-2408',
+                'STANDSOFTIX2408',
+                'STANDSOFTIX-DEV-KEY',
+                'DEV-KEY-CHIEF-DEVELOPER',
+                'STANDSOFTIX_DEV_MASTER'
+            ];
+
+            let isAuthorized = false;
+
+            if (VALID_KEYS.includes(cleanKey) || key === 'standsoftix2408' || keyHash === masterHash) {
+                isAuthorized = true;
+            }
+
+            // Онлайн проверка через API если доступен сервер
+            if (!isAuthorized) {
+                try {
+                    const resp = await fetch(`/api/check_access?role=developer&code=${encodeURIComponent(cleanKey)}`);
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        if (data.allowed) isAuthorized = true;
+                    }
+                } catch(e) {}
+            }
+
+            if (isAuthorized) {
                 statusMsg.classList.add('hidden');
                 sessionStorage.setItem('standsoftix_dev_auth', 'granted');
+                sessionStorage.setItem('standsoftix_dev_key', cleanKey);
                 showDashboard();
             } else {
                 statusMsg.className = 'result-box result-error';
-                statusMsg.textContent = '⛔ Неверный пароль разработчика! Доступ отклонён.';
+                statusMsg.innerHTML = '⛔ <b>Ошибка доступа:</b> Неверный или аннулированный ключ доступа!<br><small style="color:#fca5a5;">Используйте официальный ключ Главного Разработчика.</small>';
                 statusMsg.classList.remove('hidden');
             }
         }
