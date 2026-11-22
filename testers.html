@@ -142,47 +142,29 @@
                 </div>
             </div>
 
-            <!-- Разделы промокодов тестера -->
-            <div class="form-grid" style="margin-bottom:30px;">
-                
-                <!-- Ножи и скины -->
-                <div class="glass-panel" style="padding:22px; border-radius:14px;">
-                    <h3 style="font-family:'Rajdhani', sans-serif; font-size:20px; color:#38bdf8; margin-bottom:8px;">🗡️ Промокоды на эксклюзивные ножи</h3>
-                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Генерируйте уникальные ножи и скины коллекции Winter Fun. Лимит: <b>10 раз в неделю</b>.</p>
-                    <div class="form-group">
-                        <label>Выберите скин / нож:</label>
-                        <select id="tester-knife-select" class="input-field select-field">
-                            <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
-                            <option value="kunai_coldflame">Kunai "Cold Flame" (Arcane 🔥)</option>
-                            <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
-                            <option value="awm_crystal">AWM "Crystal" (Epic 💎)</option>
-                            <option value="m40_snowdemon">M40 "Snow Demon" (Legendary 👹)</option>
-                            <option value="akr_nano">AKR "Nano" (Arcane ⚡)</option>
-                            <option value="butterfly_coldflame">Butterfly "Cold Flame" 🦋</option>
-                        </select>
-                    </div>
-                    <button class="btn btn-blue" style="width:100%; justify-content:center; margin-top:10px;" onclick="generateTesterKnifePromo()">
-                        <span>Сгенерировать промокод на скин ❄️</span>
-                    </button>
-                    <div id="knife-result" class="result-box hidden"></div>
+            <!-- Промокоды на ножи тестера -->
+            <div class="glass-panel" style="padding:22px; border-radius:14px; margin-bottom:25px;">
+                <h3 style="font-family:'Rajdhani', sans-serif; font-size:20px; color:#38bdf8; margin-bottom:8px;">🗡️ Промокоды на эксклюзивные ножи</h3>
+                <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Генерируйте уникальные ножи и скины коллекции Winter Fun. Лимит: <b>10 раз в неделю</b>.</p>
+                <div class="form-group">
+                    <label>Выберите скин / нож:</label>
+                    <select id="tester-knife-select" class="input-field select-field">
+                        <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
+                        <option value="kunai_coldflame">Kunai "Cold Flame" (Arcane 🔥)</option>
+                        <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
+                        <option value="awm_crystal">AWM "Crystal" (Epic 💎)</option>
+                        <option value="m40_snowdemon">M40 "Snow Demon" (Legendary 👹)</option>
+                        <option value="akr_nano">AKR "Nano" (Arcane ⚡)</option>
+                        <option value="butterfly_coldflame">Butterfly "Cold Flame" 🦋</option>
+                    </select>
                 </div>
-
-                <!-- Мега-код на 10 000 Gold -->
-                <div class="glass-panel" style="padding:22px; border-radius:14px;">
-                    <h3 style="font-family:'Rajdhani', sans-serif; font-size:20px; color:#fbbf24; margin-bottom:8px;">🔥 Еженедельный мега-код на 10 000 Gold</h3>
-                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Персональный промокод повышенного номинала для активных тестеров. Доступен: <b>1 раз в неделю</b>.</p>
-                    <div style="background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); border-radius:10px; padding:12px; margin-bottom:14px; font-size:13px; color:#fde68a;">
-                        💰 Номинал: <b>10 000 Gold</b><br>
-                        📊 Сброс лимита: каждый понедельник в 00:00 МСК
-                    </div>
-                    <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="generateTesterWeeklyGold()">
-                        <span>Забрать 10 000 Gold на этой неделе 👑</span>
-                    </button>
-                    <div id="gold10k-result" class="result-box hidden"></div>
-                </div>
+                <button class="btn btn-blue" style="width:100%; justify-content:center; margin-top:10px;" onclick="generateTesterKnifePromo()">
+                    <span>Сгенерировать промокод на скин ❄️</span>
+                </button>
+                <div id="knife-result" class="result-box hidden"></div>
             </div>
 
-            <!-- Новый генератор Gold для тестеров с лимитами как для медиа -->
+            <!-- Генератор Gold для тестеров с лимитами как для медиа -->
             <div class="glass-panel" style="padding:24px; border-radius:14px; margin-bottom:30px; border:1px solid rgba(56,189,248,0.4);">
                 <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fff; margin-bottom:6px;">💰 Генератор Gold для Тестеров (номиналы до 20 000G)</h3>
                 <p style="font-size:13px; color:var(--text-muted); margin-bottom:18px;">
@@ -421,45 +403,6 @@
                     <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
                 </div>
                 <div style="font-size:12px; margin-top:6px;">Скин: <b>${knife}</b> | 1 активация | Использовано: <b>${count} из 10</b> на этой неделе.</div>
-            `;
-            res.classList.remove('hidden');
-        }
-
-        function generateTesterWeeklyGold() {
-            const res = document.getElementById('gold10k-result');
-            const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
-
-            // Лимит 1 в неделю
-            const d = new Date();
-            const weekKey = `standsoftix_tester_10k_${d.getFullYear()}_w${Math.ceil((d.getDate() + 6) / 7)}_${currentUser.toLowerCase()}`;
-            let count = parseInt(localStorage.getItem(weekKey) || '0');
-
-            if (currentUser.toLowerCase().replace('@','') !== 'softer_052' && count >= 1) {
-                res.className = 'result-box result-error';
-                res.innerHTML = `⚠️ <b>Еженедельный лимит исчерпан!</b><br>Промокод на 10 000 Gold доступен максимум <b>1 раз в неделю</b>.<br>Следующий код откроется в понедельник!`;
-                res.classList.remove('hidden');
-                return;
-            }
-
-            count++;
-            localStorage.setItem(weekKey, count.toString());
-
-            const code = `TESTER10K_${generateRandomStr(6)}`;
-
-            fetch('/api/create', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ code, reward_type: 'gold', reward_value: '10000', max_uses: 1, role: 'tester', creator: currentUser })
-            }).catch(() => {});
-
-            res.className = 'result-box result-success';
-            res.innerHTML = `
-                <div>🔥 <b>Мега-промокод на 10 000 Gold создан:</b></div>
-                <div class="promo-code-card">
-                    <span>${code}</span>
-                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
-                </div>
-                <div style="font-size:12px; margin-top:6px;">Награда: <b>10 000 Gold</b> | Использовано: <b>1 из 1</b> на этой неделе.</div>
             `;
             res.classList.remove('hidden');
         }
