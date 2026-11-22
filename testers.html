@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StandSoftix 0.18.0 — Закрытый портал Тестеров 🛡️</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .auth-card {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 36px 30px;
+            text-align: center;
+        }
+        .auth-icon {
+            font-size: 56px;
+            margin-bottom: 16px;
+            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6));
+        }
+        .denied-card {
+            max-width: 650px;
+            margin: 40px auto;
+            padding: 36px 30px;
+            text-align: center;
+            border-color: #ef4444 !important;
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.3) !important;
+        }
+        .denied-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            animation: pulse 1.5s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.08); }
+            100% { transform: scale(1); }
+        }
+        .user-badge-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            padding: 14px 22px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .countdown-text {
+            color: #fbbf24;
+            font-size: 14px;
+            margin-top: 18px;
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body class="winter-theme">
+    <div class="snowflakes-container" id="snowflakes"></div>
+
+    <!-- Шапка сайта -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">❄️</span>
+                <span class="logo-text">STAND<span>SOFTIX</span></span>
+                <span class="badge-role" style="background:#0284c7; color:#fff; font-size:11px; padding:3px 8px; border-radius:6px; margin-left:8px; font-weight:700;">TESTER HUB</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">🌐 На главную</a>
+                <a href="media.html">🎥 Медиа-центр</a>
+                <a href="https://t.me/zayavki_standsoftix_bot" target="_blank">📝 Подать заявку</a>
+            </nav>
+            <div class="server-status">
+                <span class="status-dot"></span>
+                <span class="status-text">Сервер: <b>ONLINE</b></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+        <!-- 1. Экран авторизации (проверка доступа) -->
+        <div id="auth-section" class="auth-card glass-panel">
+            <div class="auth-icon">🛡️</div>
+            <h2 style="font-family:'Rajdhani', sans-serif; font-size:30px; color:#fff; margin-bottom:8px;">Вход в закрытый портал Тестеров</h2>
+            <p style="color:var(--text-muted); font-size:14px; line-height:1.5; margin-bottom:24px;">
+                Доступ открыт строго для кандидатов с одобренной заявкой от Главного Разработчика (<b>@softer_052</b>).<br>
+                Введите ваш Telegram Username или ID в игре для подтверждения статуса:
+            </p>
+            <div style="display:flex; flex-direction:column; gap:12px; max-width:420px; margin:0 auto;">
+                <input type="text" id="tester-auth-input" placeholder="@ваш_юзернейм или ID в игре" class="input-field" style="text-align:center; font-size:15px;" onkeypress="if(event.key==='Enter') verifyTesterAccess()">
+                <button class="btn btn-blue" style="justify-content:center; width:100%;" onclick="verifyTesterAccess()">
+                    <span>Войти в закрытую панель 🔐</span>
+                </button>
+            </div>
+            <div id="auth-status-msg" class="result-box hidden" style="margin-top:16px;"></div>
+        </div>
+
+        <!-- 2. Экран отказа в доступе (если нет в одобренных) -->
+        <div id="denied-section" class="denied-card glass-panel hidden">
+            <div class="denied-icon">⛔</div>
+            <h2 style="font-family:'Rajdhani', sans-serif; font-size:28px; color:#ef4444; margin-bottom:10px;">ДОСТУП ЗАПРЕЩЁН!</h2>
+            <h4 style="color:#fff; font-size:16px; margin-bottom:12px;">Данный сайт недоступен обычному пользователю</h4>
+            <p style="color:#cbd5e1; font-size:14px; line-height:1.6; margin-bottom:24px;">
+                Пользователь <b id="denied-username" style="color:#38bdf8;">@пользователь</b> не найден в списке официально одобренных тестеров приватного сервера StandSoftix 0.18.0.<br>
+                Чтобы получить доступ к закрытым функциям, закрытым сборкам игры и генерации промокодов, подайте официальную заявку!
+            </p>
+            <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
+                <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-gold">
+                    <span>📝 Подать заявку на Тестера (@zayavki_standsoftix_bot)</span>
+                </a>
+                <a href="index.html" class="btn btn-blue">
+                    <span>🌐 На официальный сайт StandSoftix</span>
+                </a>
+            </div>
+            <div class="countdown-text" id="countdown-box">
+                ⏳ Автоматический переход на официальный сайт через <span id="countdown-num">6</span> сек...
+            </div>
+        </div>
+
+        <!-- 3. Рабочий кабинет Тестера (при успешном входе) -->
+        <div id="dashboard-section" class="hidden">
+            <div class="user-badge-header">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div style="font-size:32px;">🛡️</div>
+                    <div>
+                        <div style="font-size:18px; font-weight:700; color:#fff;" id="profile-name">@softer_twink</div>
+                        <div style="font-size:12px; color:#38bdf8; text-transform:uppercase; font-weight:600;">Официальный Верифицированный Тестер StandSoftix 0.18.0</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <a href="https://t.me/Promocode1_stand_bot" target="_blank" class="tg-tag tg-tag-gold" style="font-size:12px; padding:6px 14px;">
+                        🤖 Закрытый бот @Promocode1_stand_bot ➔
+                    </a>
+                    <button class="btn btn-blue" style="padding:6px 14px; font-size:12px;" onclick="logoutTester()">
+                        <span>Выйти 🚪</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Разделы промокодов тестера -->
+            <div class="form-grid" style="margin-bottom:30px;">
+                
+                <!-- Ножи и скины -->
+                <div class="glass-panel" style="padding:22px; border-radius:14px;">
+                    <h3 style="font-family:'Rajdhani', sans-serif; font-size:20px; color:#38bdf8; margin-bottom:8px;">🗡️ Промокоды на эксклюзивные ножи</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Генерируйте уникальные ножи и скины коллекции Winter Fun. Лимит: <b>10 раз в неделю</b>.</p>
+                    <div class="form-group">
+                        <label>Выберите скин / нож:</label>
+                        <select id="tester-knife-select" class="input-field select-field">
+                            <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
+                            <option value="kunai_coldflame">Kunai "Cold Flame" (Arcane 🔥)</option>
+                            <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
+                            <option value="awm_crystal">AWM "Crystal" (Epic 💎)</option>
+                            <option value="m40_snowdemon">M40 "Snow Demon" (Legendary 👹)</option>
+                            <option value="akr_nano">AKR "Nano" (Arcane ⚡)</option>
+                            <option value="butterfly_coldflame">Butterfly "Cold Flame" 🦋</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-blue" style="width:100%; justify-content:center; margin-top:10px;" onclick="generateTesterKnifePromo()">
+                        <span>Сгенерировать промокод на скин ❄️</span>
+                    </button>
+                    <div id="knife-result" class="result-box hidden"></div>
+                </div>
+
+                <!-- Мега-код на 10 000 Gold -->
+                <div class="glass-panel" style="padding:22px; border-radius:14px;">
+                    <h3 style="font-family:'Rajdhani', sans-serif; font-size:20px; color:#fbbf24; margin-bottom:8px;">🔥 Еженедельный мега-код на 10 000 Gold</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Персональный промокод повышенного номинала для активных тестеров. Доступен: <b>1 раз в неделю</b>.</p>
+                    <div style="background:rgba(251,191,36,0.1); border:1px solid rgba(251,191,36,0.3); border-radius:10px; padding:12px; margin-bottom:14px; font-size:13px; color:#fde68a;">
+                        💰 Номинал: <b>10 000 Gold</b><br>
+                        📊 Сброс лимита: каждый понедельник в 00:00 МСК
+                    </div>
+                    <button class="btn btn-gold" style="width:100%; justify-content:center;" onclick="generateTesterWeeklyGold()">
+                        <span>Забрать 10 000 Gold на этой неделе 👑</span>
+                    </button>
+                    <div id="gold10k-result" class="result-box hidden"></div>
+                </div>
+            </div>
+
+            <!-- Дополнительно: 1000G и привилегии профиля -->
+            <div class="glass-panel" style="padding:22px; border-radius:14px; margin-bottom:30px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+                    <div>
+                        <h3 style="font-family:'Rajdhani', sans-serif; font-size:20px; color:#fff;">🎁 Быстрый бонус тестера: +1 000 Gold</h3>
+                        <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Дополнительные промокоды на 1 000G для тестирования экономики игры (лимит: 50 шт/нед).</p>
+                    </div>
+                    <button class="btn btn-blue" onclick="generateTesterGold1k()">
+                        <span>Создать код на 1 000 Gold 💰</span>
+                    </button>
+                </div>
+                <div id="gold1k-result" class="result-box hidden"></div>
+            </div>
+
+            <div class="glass-panel" style="padding:20px; border-radius:14px; background:linear-gradient(135deg, rgba(2,132,199,0.15) 0%, rgba(30,41,59,0.5) 100%);">
+                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
+                    <div>
+                        <div style="font-size:15px; font-weight:700; color:#38bdf8;">🛡️ Значок Тестера и Кастомный ID в игре</div>
+                        <div style="font-size:13px; color:#cbd5e1; margin-top:4px;">Привязка статуса тестера к вашему игровому клиенту StandSoftix 0.18.0 активна. Значок отображается в профиле и лобби.</div>
+                    </div>
+                    <a href="https://t.me/Promocode1_stand_bot" target="_blank" class="btn btn-apk">
+                        <span>Настроить в боте @Promocode1_stand_bot 💬</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>© 2026 <b>StandSoftix Team</b>. Закрытая панель бета-тестирования 0.18.0 Winter Fun.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Снежинки
+        const container = document.getElementById('snowflakes');
+        if (container) {
+            const flakes = ['❄', '❅', '❆', '•'];
+            for (let i = 0; i < 30; i++) {
+                const f = document.createElement('div');
+                f.className = 'snowflake';
+                f.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+                f.style.left = Math.random() * 100 + 'vw';
+                f.style.animationDuration = (Math.random() * 6 + 5) + 's';
+                f.style.animationDelay = (Math.random() * 5) + 's';
+                f.style.fontSize = (Math.random() * 12 + 10) + 'px';
+                f.style.opacity = Math.random() * 0.7 + 0.3;
+                container.appendChild(f);
+            }
+        }
+
+        let redirectTimer = null;
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert(`✅ Промокод ${code} скопирован в буфер!`);
+            });
+        }
+
+        function generateRandomStr(len = 6) {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let res = '';
+            for (let i = 0; i < len; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+            return res;
+        }
+
+        // Список известных утвержденных тестеров (пополняется динамически)
+        let approvedTestersList = ["softer_052", "softer_twink", "7571887122"];
+
+        // Загрузка approved_users.json
+        fetch('approved_users.json')
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.testers) {
+                    approvedTestersList = data.testers;
+                }
+            })
+            .catch(() => {});
+
+        // Авто-вход, если уже сохранен в сессии
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = sessionStorage.getItem('standsoftix_tester_auth');
+            if (savedUser) {
+                showDashboard(savedUser);
+            }
+        });
+
+        async function verifyTesterAccess() {
+            const input = document.getElementById('tester-auth-input');
+            const statusMsg = document.getElementById('auth-status-msg');
+            const rawUser = input.value.trim();
+            const cleanUser = rawUser.toLowerCase().replace('@', '');
+
+            if (!cleanUser) {
+                statusMsg.className = 'result-box result-error';
+                statusMsg.textContent = 'Введите ваш Telegram Username или игровой ID!';
+                statusMsg.classList.remove('hidden');
+                return;
+            }
+
+            statusMsg.className = 'result-box';
+            statusMsg.textContent = 'Проверка доступа в реестре Главного Разработчика...';
+            statusMsg.classList.remove('hidden');
+
+            let isApproved = false;
+
+            // 1. Попытка онлайн-проверки через бэкенд
+            try {
+                const resp = await fetch(`/api/check_access?role=tester&user=${encodeURIComponent(cleanUser)}`);
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data.allowed) isApproved = true;
+                }
+            } catch (e) {}
+
+            // 2. Проверка по локальному кэшу/JSON
+            if (!isApproved) {
+                if (cleanUser === 'softer_052' || approvedTestersList.some(u => u.toLowerCase() === cleanUser)) {
+                    isApproved = true;
+                }
+            }
+
+            if (isApproved) {
+                statusMsg.classList.add('hidden');
+                sessionStorage.setItem('standsoftix_tester_auth', rawUser.startsWith('@') ? rawUser : '@' + rawUser);
+                showDashboard(rawUser);
+            } else {
+                statusMsg.classList.add('hidden');
+                showAccessDenied(rawUser);
+            }
+        }
+
+        function showDashboard(username) {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('denied-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+            document.getElementById('profile-name').textContent = username.startsWith('@') ? username : '@' + username;
+            if (redirectTimer) clearInterval(redirectTimer);
+        }
+
+        function showAccessDenied(username) {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('denied-section').classList.remove('hidden');
+            document.getElementById('denied-username').textContent = username.startsWith('@') ? username : '@' + username;
+
+            let timeLeft = 6;
+            const countNum = document.getElementById('countdown-num');
+            countNum.textContent = timeLeft;
+
+            if (redirectTimer) clearInterval(redirectTimer);
+            redirectTimer = setInterval(() => {
+                timeLeft--;
+                countNum.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(redirectTimer);
+                    window.location.href = 'index.html';
+                }
+            }, 1000);
+        }
+
+        function logoutTester() {
+            sessionStorage.removeItem('standsoftix_tester_auth');
+            location.reload();
+        }
+
+        // --- Генераторы промокодов для тестера ---
+
+        function generateTesterKnifePromo() {
+            const knife = document.getElementById('tester-knife-select').value;
+            const res = document.getElementById('knife-result');
+            const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
+
+            // Лимит 10 в неделю
+            const d = new Date();
+            const weekKey = `standsoftix_tester_knives_${d.getFullYear()}_w${Math.ceil((d.getDate() + 6) / 7)}_${currentUser.toLowerCase()}`;
+            let count = parseInt(localStorage.getItem(weekKey) || '0');
+
+            if (currentUser.toLowerCase().replace('@','') !== 'softer_052' && count >= 10) {
+                res.className = 'result-box result-error';
+                res.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Тестеры могут создавать максимум <b>10 ножей в неделю</b>.<br>Использовано: <b>10 из 10</b>. Лимит обновится в понедельник!`;
+                res.classList.remove('hidden');
+                return;
+            }
+
+            count++;
+            localStorage.setItem(weekKey, count.toString());
+
+            const code = `TESTER_${knife.toUpperCase().slice(0,6)}_${generateRandomStr(5)}`;
+
+            // Регистрация в бэкенде если доступен
+            fetch('/api/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ code, reward_type: 'skin', reward_value: knife, max_uses: 1, role: 'tester', creator: currentUser })
+            }).catch(() => {});
+
+            res.className = 'result-box result-success';
+            res.innerHTML = `
+                <div>🗡️ <b>Ваш тестовый промокод на скин создан:</b></div>
+                <div class="promo-code-card">
+                    <span>${code}</span>
+                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
+                </div>
+                <div style="font-size:12px; margin-top:6px;">Скин: <b>${knife}</b> | 1 активация | Использовано: <b>${count} из 10</b> на этой неделе.</div>
+            `;
+            res.classList.remove('hidden');
+        }
+
+        function generateTesterWeeklyGold() {
+            const res = document.getElementById('gold10k-result');
+            const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
+
+            // Лимит 1 в неделю
+            const d = new Date();
+            const weekKey = `standsoftix_tester_10k_${d.getFullYear()}_w${Math.ceil((d.getDate() + 6) / 7)}_${currentUser.toLowerCase()}`;
+            let count = parseInt(localStorage.getItem(weekKey) || '0');
+
+            if (currentUser.toLowerCase().replace('@','') !== 'softer_052' && count >= 1) {
+                res.className = 'result-box result-error';
+                res.innerHTML = `⚠️ <b>Еженедельный лимит исчерпан!</b><br>Промокод на 10 000 Gold доступен максимум <b>1 раз в неделю</b>.<br>Следующий код откроется в понедельник!`;
+                res.classList.remove('hidden');
+                return;
+            }
+
+            count++;
+            localStorage.setItem(weekKey, count.toString());
+
+            const code = `TESTER10K_${generateRandomStr(6)}`;
+
+            fetch('/api/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ code, reward_type: 'gold', reward_value: '10000', max_uses: 1, role: 'tester', creator: currentUser })
+            }).catch(() => {});
+
+            res.className = 'result-box result-success';
+            res.innerHTML = `
+                <div>🔥 <b>Мега-промокод на 10 000 Gold создан:</b></div>
+                <div class="promo-code-card">
+                    <span>${code}</span>
+                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
+                </div>
+                <div style="font-size:12px; margin-top:6px;">Награда: <b>10 000 Gold</b> | Использовано: <b>1 из 1</b> на этой неделе.</div>
+            `;
+            res.classList.remove('hidden');
+        }
+
+        function generateTesterGold1k() {
+            const res = document.getElementById('gold1k-result');
+            const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
+
+            const code = `TEST1K_${generateRandomStr(6)}`;
+
+            fetch('/api/create', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ code, reward_type: 'gold', reward_value: '1000', max_uses: 1, role: 'tester', creator: currentUser })
+            }).catch(() => {});
+
+            res.className = 'result-box result-success';
+            res.innerHTML = `
+                <div>💰 <b>Промокод на 1 000 Gold готов:</b></div>
+                <div class="promo-code-card">
+                    <span>${code}</span>
+                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
+                </div>
+                <div style="font-size:12px; margin-top:6px;">Награда: <b>1 000 Gold</b> | Одноразовый | Лимит: 50 шт/нед.</div>
+            `;
+            res.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
