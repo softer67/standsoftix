@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StandSoftix 0.18.0 — Секретная Панель Главного Разработчика 👑❄️</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --frost-bg: rgba(12, 18, 30, 0.82);
+            --frost-border: rgba(234, 179, 8, 0.4);
+            --festive-gold: #fbbf24;
+            --festive-cyan: #38bdf8;
+            --festive-purple: #a855f7;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 10%, #1e1338 0%, #080d1a 65%, #030508 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+            font-family: 'Rubik', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Анимированные новогодние снежинки */
+        .snowflakes-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            overflow: hidden;
+        }
+        .snowflake {
+            position: absolute;
+            top: -20px;
+            color: #fef08a;
+            user-select: none;
+            animation: fall linear infinite;
+            filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.8));
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
+        }
+
+        /* Шапка */
+        .header {
+            background: rgba(8, 11, 20, 0.9);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(234, 179, 8, 0.35);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 800;
+            font-size: 22px;
+            letter-spacing: 1.2px;
+        }
+        .logo-title {
+            color: #fff;
+            text-shadow: 0 0 14px rgba(251, 191, 36, 0.6);
+            font-weight: 800;
+        }
+        .dev-tag {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 800;
+            padding: 3px 8px;
+            border-radius: 6px;
+            box-shadow: 0 0 12px rgba(217, 119, 6, 0.6);
+            letter-spacing: 1px;
+        }
+        .ny-badge {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            color: #fef08a;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: var(--festive-gold);
+            text-shadow: 0 0 8px rgba(251, 191, 36, 0.6);
+        }
+
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: #34d399;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-dot 1.5s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.15); }
+        }
+
+        /* Контейнер */
+        .main-content {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 24px 16px 60px;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Стеклянные карточки */
+        .glass-panel {
+            background: var(--frost-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--frost-border);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Карточка авторизации */
+        .auth-card {
+            max-width: 500px;
+            margin: 36px auto;
+            padding: 36px 28px;
+            text-align: center;
+            border: 1px solid rgba(234, 179, 8, 0.5);
+            box-shadow: 0 12px 40px rgba(217, 119, 6, 0.25), inset 0 0 20px rgba(234, 179, 8, 0.08);
+        }
+        .auth-icon {
+            font-size: 54px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 16px rgba(251, 191, 36, 0.7));
+            animation: float-icon 3s ease-in-out infinite;
+        }
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Поля ввода и кнопки */
+        .input-group {
+            text-align: left;
+            margin-bottom: 14px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .input-field {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(234, 179, 8, 0.35);
+            border-radius: 10px;
+            padding: 13px 16px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+        }
+        .input-field:focus {
+            border-color: var(--festive-gold);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.4);
+            background: rgba(15, 23, 42, 0.98);
+        }
+        .select-field optgroup {
+            background: #0f172a;
+            color: #fbbf24;
+            font-weight: 700;
+        }
+        .select-field option {
+            background: #1e293b;
+            color: #fff;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 10px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            min-height: 48px;
+            padding: 12px 20px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(217, 119, 6, 0.4);
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 6px 24px rgba(245, 158, 11, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-blue {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(2, 132, 199, 0.4);
+        }
+        .btn-blue:hover {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            box-shadow: 0 6px 24px rgba(14, 165, 233, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-purple {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(124, 58, 237, 0.4);
+        }
+        .btn-purple:hover {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-ultimate {
+            background: linear-gradient(135deg, #d97706 0%, #9333ea 50%, #2563eb 100%);
+            background-size: 200% 200%;
+            animation: gradient-glow 4s ease infinite;
+            color: #fff;
+            font-size: 17px;
+            font-weight: 800;
+            padding: 16px 24px;
+            border-radius: 12px;
+            border: 1px solid rgba(251, 191, 36, 0.6);
+            box-shadow: 0 6px 30px rgba(217, 119, 6, 0.5), inset 0 0 15px rgba(255, 255, 255, 0.2);
+        }
+        @keyframes gradient-glow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .btn-ultimate:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 10px 40px rgba(217, 119, 6, 0.7);
+        }
+
+        .result-box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(234, 179, 8, 0.4);
+            border-radius: 10px;
+            padding: 14px 18px;
+            margin-top: 14px;
+            font-size: 14px;
+            color: #e2e8f0;
+            word-break: break-word;
+        }
+        .result-error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+        .result-success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+            color: #a7f3d0;
+        }
+
+        .user-badge-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.22) 0%, rgba(15, 23, 42, 0.85) 100%);
+            border: 1px solid rgba(234, 179, 8, 0.4);
+            border-radius: 14px;
+            padding: 16px 22px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .promo-display {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 24px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: #fef08a;
+            background: rgba(0, 0, 0, 0.55);
+            padding: 10px 16px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 8px 0;
+            border: 1px dashed rgba(251, 191, 36, 0.6);
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(217, 119, 6, 0.25);
+        }
+
+        .unlimited-badge {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            font-size: 12px;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Адаптивность */
+        @media (max-width: 900px) {
+            .header-container {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 14px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            .main-content {
+                padding: 16px 12px 40px;
+            }
+            .auth-card {
+                padding: 24px 18px;
+                margin: 20px auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logo { font-size: 19px; }
+            .auth-card {
+                width: 100%;
+                padding: 22px 14px;
+                margin: 16px auto;
+            }
+            .auth-icon { font-size: 42px; margin-bottom: 8px; }
+            h2 { font-size: 22px !important; }
+            h3 { font-size: 18px !important; }
+            .btn {
+                width: 100% !important;
+                min-height: 48px !important;
+                font-size: 14px !important;
+            }
+            .user-badge-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 14px;
+            }
+            .user-badge-header > div:last-child {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .promo-display {
+                font-size: 18px;
+                letter-spacing: 1px;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="snowflakes-container" id="snowflakes"></div>
+
+    <!-- Шапка сайта (STANDSOFTIX слитно) -->
+    <header class="header">
+        <div class="header-container">
+            <a href="index.html" class="logo">
+                <span class="logo-title">❄️ STANDSOFTIX</span>
+                <span class="dev-tag">DEVELOPER HUB 👑</span>
+                <span class="ny-badge">🎄 2026 Season</span>
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">🌐 На главную</a>
+                <a href="testers.html">🛡️ Портал Тестеров</a>
+                <a href="media.html">🎥 Медиа-Центр</a>
+                <a href="https://t.me/Promocode4_stand_bot" target="_blank">🤖 Бот Разработчика</a>
+            </nav>
+            <div class="server-status">
+                <span class="status-dot"></span>
+                <span>Сервер 0.18.0: <b>ONLINE</b></span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+
+        <!-- 1. Экран закрытого входа Разработчика -->
+        <div id="auth-section" class="auth-card glass-panel">
+            <div class="auth-icon">👑</div>
+            <h2 style="font-family:'Rajdhani', sans-serif; font-size:28px; color:#fbbf24; margin-bottom:6px;">Вход в Панель Разработчика</h2>
+            <p style="color:#94a3b8; font-size:14px; line-height:1.5; margin-bottom:20px;">
+                Секретная панель управления сервером StandSoftix 0.18.0.<br>
+                Введите мастер-ключ или пароль Главного Разработчика:
+            </p>
+
+            <div style="display:flex; flex-direction:column; gap:10px; max-width:400px; margin:0 auto; width:100%;">
+                <div class="input-group">
+                    <label>Мастер-пароль / Логин Разработчика:</label>
+                    <input type="password" id="dev-password-input" placeholder="Введите ключ доступа..." class="input-field" onkeypress="if(event.key==='Enter') verifyDevAccess()">
+                </div>
+                <button class="btn btn-gold" style="width:100%; margin-top:4px;" onclick="verifyDevAccess()">
+                    <span>Войти в Панель Управления 🔐</span>
+                </button>
+            </div>
+            <div id="auth-status-msg" class="result-box hidden"></div>
+        </div>
+
+        <!-- 2. Рабочий кабинет Разработчика (БЕЗЛИМИТНЫЙ ДОСТУП КО ВСЕМУ) -->
+        <div id="dashboard-section" class="hidden">
+            <div class="user-badge-header">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div style="font-size:36px;">👑</div>
+                    <div>
+                        <div style="font-size:19px; font-weight:800; color:#fbbf24;" id="profile-name">Главный Разработчик StandSoftix</div>
+                        <div style="font-size:12px; color:#cbd5e1;">Полный Root-доступ • Режим безлимитной генерации • Winter Fun 0.18.0</div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <span class="unlimited-badge">⚡ Безлимитный режим активен</span>
+                    <button class="btn btn-gold" style="font-size:13px; padding:8px 16px; min-height:40px;" onclick="logoutDev()">
+                        <span>Выйти 🚪</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ГЛАВНЫЙ СУПЕР-БЛОК: ВСЕМОГУЩИЙ ПРОМОКОД НА СРАЗУ ВСЁ В ИГРЕ -->
+            <div class="glass-panel" style="padding:26px; margin-bottom:28px; border:2px solid rgba(251,191,36,0.6); background:linear-gradient(135deg, rgba(217,119,6,0.2) 0%, rgba(147,51,234,0.2) 50%, rgba(15,23,42,0.85) 100%);">
+                <div style="display:flex; align-items:center; gap:12px; margin-bottom:10px;">
+                    <span style="font-size:32px;">🌟</span>
+                    <div>
+                        <h3 style="font-family:'Rajdhani', sans-serif; font-size:24px; color:#fbbf24; margin:0;">Всемогущий Промокод (СРАЗУ ВСЁ В ИГРЕ)</h3>
+                        <p style="font-size:13px; color:#e2e8f0; margin-top:2px;">
+                            Генерирует промокод, который мгновенно выдаёт игроку <b>ВСЕ ножи</b>, <b>ВСЁ оружие</b>, <b>ВСЕ перчатки</b>, <b>ВСЕ наклейки</b> + <b>100 000 Gold</b>!
+                        </p>
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin:16px 0;">
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label>Количество активаций кода:</label>
+                        <select id="all-items-uses" class="input-field select-field">
+                            <option value="1">1 человек (личный)</option>
+                            <option value="5">5 человек</option>
+                            <option value="10">10 человек</option>
+                            <option value="50">50 человек (для стрима)</option>
+                            <option value="100">100 человек (массовый)</option>
+                            <option value="0">∞ Безлимитный</option>
+                        </select>
+                    </div>
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label>Префикс промокода (по желанию):</label>
+                        <input type="text" id="all-items-prefix" placeholder="Например: ALL_ITEMS или WINTER_GOD" class="input-field" style="text-transform:uppercase;">
+                    </div>
+                </div>
+
+                <button class="btn btn-ultimate" style="width:100%; justify-content:center; margin-top:8px;" onclick="generateAllItemsMegaPromo()">
+                    <span>🔥 СГЕНЕРИРОВАТЬ ПРОМОКОД НА СРАЗУ ВСЁ В ИГРЕ 🎁</span>
+                </button>
+                <div id="all-items-result" class="result-box hidden"></div>
+            </div>
+
+            <!-- БЛОК 1: ВСЕ НОЖИ ИГРЫ (БЕЗЛИМИТНО) -->
+            <div class="glass-panel" style="padding:22px; margin-bottom:24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#38bdf8; margin:0;">🗡️ Генератор ВСЕХ Ножей в игре</h3>
+                    <span class="unlimited-badge">∞ Безлимит</span>
+                </div>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Создавайте промокоды на любые ножи из всех когда-либо существовавших коллекций без каких-либо ограничений.</p>
+                
+                <div class="input-group">
+                    <label>Выберите нож (полный каталог игры):</label>
+                    <select id="dev-knife-select" class="input-field select-field">
+                        <optgroup label="🗡️ Керамбиты (Karambit)">
+                            <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
+                            <option value="karambit_gold">Karambit "Gold" (Arcane 🏆)</option>
+                            <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
+                            <option value="karambit_claw">Karambit "Claw" (Arcane 🦅)</option>
+                            <option value="karambit_dragonglass">Karambit "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="karambit_coldflame">Karambit "Cold Flame" (Arcane 🔥)</option>
+                            <option value="karambit_nebula">Karambit "Nebula" (Arcane 🪐)</option>
+                            <option value="karambit_tiger">Karambit "Year of the Tiger" (Arcane 🐅)</option>
+                            <option value="karambit_scratch">Karambit "Scratch" (Arcane ⚡)</option>
+                        </optgroup>
+                        <optgroup label="🦋 Ножи-бабочки (Butterfly)">
+                            <option value="butterfly_coldflame">Butterfly "Cold Flame" (Arcane 🔥)</option>
+                            <option value="butterfly_starfall">Butterfly "Starfall" (Arcane ⭐)</option>
+                            <option value="butterfly_dragonglass">Butterfly "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="butterfly_legacy">Butterfly "Legacy" (Arcane 🏛️)</option>
+                            <option value="butterfly_firestorm">Butterfly "Fire Storm" (Arcane 🌪️)</option>
+                            <option value="butterfly_blackwidow">Butterfly "Black Widow" (Arcane 🕷️)</option>
+                            <option value="butterfly_kumo">Butterfly "Kumo" (Arcane 🕸️)</option>
+                        </optgroup>
+                        <optgroup label="🗡️ M9 Bayonet">
+                            <option value="m9_dragonglass">M9 "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="m9_ancient">M9 "Ancient" (Arcane 🗿)</option>
+                            <option value="m9_universe">M9 "Universe" (Arcane 🌌)</option>
+                            <option value="m9_frozen">M9 "Frozen" (Arcane ❄️)</option>
+                            <option value="m9_blueblood">M9 "Blue Blood" (Arcane 🩸)</option>
+                            <option value="m9_scratch">M9 "Scratch" (Arcane ⚡)</option>
+                            <option value="m9_kumo">M9 "Kumo" (Arcane 🕸️)</option>
+                        </optgroup>
+                        <optgroup label="🎯 Кунаи (Kunai)">
+                            <option value="kunai_coldflame">Kunai "Cold Flame" (Arcane 🔥)</option>
+                            <option value="kunai_poison">Kunai "Poison" (Arcane ☠️)</option>
+                            <option value="kunai_luxury">Kunai "Luxury" (Arcane 💎)</option>
+                            <option value="kunai_bone">Kunai "Bone" (Arcane 🦴)</option>
+                            <option value="kunai_radiation">Kunai "Radiation" (Arcane ☢️)</option>
+                            <option value="kunai_reaper">Kunai "Reaper" (Arcane 💀)</option>
+                            <option value="kunai_snowcamo">Kunai "Snow Camo" (Arcane ❄️)</option>
+                        </optgroup>
+                        <optgroup label="⚔️ jKommando">
+                            <option value="jkommando_ancient">jKommando "Ancient" (Arcane 🗿)</option>
+                            <option value="jkommando_reaper">jKommando "Reaper" (Arcane 💀)</option>
+                            <option value="jkommando_prism">jKommando "Prism" (Arcane 🌈)</option>
+                            <option value="jkommando_floral">jKommando "Floral" (Arcane 🌺)</option>
+                            <option value="jkommando_frosted">jKommando "Frosted" (Arcane ❄️)</option>
+                            <option value="jkommando_sour">jKommando "Sour" (Arcane 🍋)</option>
+                        </optgroup>
+                        <optgroup label="🦂 Скорпионы (Scorpion)">
+                            <option value="scorpion_coldflame">Scorpion "Cold Flame" (Arcane 🔥)</option>
+                            <option value="scorpion_starfall">Scorpion "Starfall" (Arcane ⭐)</option>
+                            <option value="scorpion_holiday">Scorpion "Holiday Frost" (Arcane ❄️)</option>
+                            <option value="scorpion_scratch">Scorpion "Scratch" (Arcane ⚡)</option>
+                            <option value="scorpion_seafoam">Scorpion "Sea Foam" (Arcane 🌊)</option>
+                            <option value="scorpion_veil">Scorpion "Veil" (Arcane 🌙)</option>
+                        </optgroup>
+                        <optgroup label="🥊 Тычковые ножи (Dual Daggers)">
+                            <option value="dualdaggers_blizzard">Dual Daggers "Blizzard" (Arcane ❄️)</option>
+                            <option value="dualdaggers_demonic">Dual Daggers "Demonic Steel" (Arcane 😈)</option>
+                            <option value="dualdaggers_harmony">Dual Daggers "Harmony" (Arcane ☯️)</option>
+                            <option value="dualdaggers_griffin">Dual Daggers "Griffin" (Arcane 🦅)</option>
+                            <option value="dualdaggers_acid">Dual Daggers "Acid" (Arcane 🧪)</option>
+                        </optgroup>
+                        <optgroup label="🔪 Складные ножи (Flip Knife)">
+                            <option value="flipknife_arctic">Flip Knife "Arctic" (Arcane ❄️)</option>
+                            <option value="flipknife_dragonglass">Flip Knife "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="flipknife_vortex">Flip Knife "Vortex" (Arcane 🌀)</option>
+                            <option value="flipknife_darkshiver">Flip Knife "Dark Shiver" (Arcane 🌑)</option>
+                            <option value="flipknife_holiday">Flip Knife "Holiday" (Arcane 🎄)</option>
+                        </optgroup>
+                        <optgroup label="⚔️ Танто (Tanto)">
+                            <option value="tanto_flow">Tanto "Flow" (Arcane 🌊)</option>
+                            <option value="tanto_yakuza">Tanto "Yakuza" (Arcane 🐉)</option>
+                            <option value="tanto_translucent">Tanto "Translucent" (Arcane 💎)</option>
+                            <option value="tanto_malachite">Tanto "Malachite" (Arcane 🟢)</option>
+                            <option value="tanto_frostwyrm">Tanto "Frost Wyrm" (Arcane ❄️)</option>
+                        </optgroup>
+                        <optgroup label="🪓 Кукри (Kukri)">
+                            <option value="kukri_ares">Kukri "Ares" (Arcane ⚔️)</option>
+                            <option value="kukri_constellation">Kukri "Constellation" (Arcane 🌌)</option>
+                            <option value="kukri_divine">Kukri "Divine" (Arcane 👑)</option>
+                            <option value="kukri_snowdrift">Kukri "Snowdrift" (Arcane ❄️)</option>
+                        </optgroup>
+                        <optgroup label="🐺 Клык (Fang)">
+                            <option value="fang_obsidian">Fang "Obsidian" (Arcane 🖤)</option>
+                            <option value="fang_icefang">Fang "Ice Fang" (Arcane ❄️)</option>
+                            <option value="fang_autumn">Fang "Autumn" (Arcane 🍂)</option>
+                        </optgroup>
+                        <optgroup label="🗡️ Стилет (Stiletto)">
+                            <option value="stiletto_damascus">Stiletto "Damascus" (Arcane 🗡️)</option>
+                            <option value="stiletto_viper">Stiletto "Viper" (Arcane 🐍)</option>
+                            <option value="stiletto_coldice">Stiletto "Cold Ice" (Arcane ❄️)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <button class="btn btn-blue" style="width:100%; justify-content:center; margin-top:6px;" onclick="generateDevKnifePromo()">
+                    <span>Создать промокод на нож 🗡️</span>
+                </button>
+                <div id="dev-knife-result" class="result-box hidden"></div>
+            </div>
+
+            <!-- БЛОК 2: ВСЕ ОРУЖИЕ, ПЕРЧАТКИ И НАКЛЕЙКИ (БЕЗЛИМИТНО) -->
+            <div class="glass-panel" style="padding:22px; margin-bottom:24px; border:1px solid rgba(168,85,247,0.4);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#c084fc; margin:0;">🔫 Генератор Пушек, Перчаток и Наклеек</h3>
+                    <span class="unlimited-badge">∞ Безлимит</span>
+                </div>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Создание промокодов на любые скины оружия, редкие перчатки и анимированные стикеры без лимитов.</p>
+                
+                <div class="input-group">
+                    <label>Выберите предмет (оружие / перчатки / наклейки):</label>
+                    <select id="dev-skin-select" class="input-field select-field">
+                        <optgroup label="🧤 Перчатки (Gloves)">
+                            <option value="gloves_winterfun">Gloves "Winter Fun" (Exclusive 0.18.0 ❄️)</option>
+                            <option value="gloves_dragonglass">Gloves "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="gloves_champion">Gloves "Champion" (Arcane 🏆)</option>
+                            <option value="gloves_autumn">Gloves "Autumn" (Arcane 🍂)</option>
+                            <option value="gloves_phoenix">Gloves "Phoenix" (Arcane 🔥)</option>
+                            <option value="gloves_retrowave">Gloves "Retro Wave" (Arcane 🌆)</option>
+                            <option value="gloves_camo">Gloves "Camo" (Arcane 🪖)</option>
+                            <option value="gloves_geometric">Gloves "Geometric" (Arcane 📐)</option>
+                            <option value="gloves_acid">Gloves "Acid" (Arcane 🧪)</option>
+                            <option value="gloves_neuro">Gloves "Neuro" (Arcane 🧠)</option>
+                            <option value="gloves_thug">Gloves "Thug" (Arcane 💀)</option>
+                            <option value="gloves_tiger">Gloves "Year of the Tiger" (Arcane 🐅)</option>
+                        </optgroup>
+                        <optgroup label="🎯 Снайперские винтовки (AWM & M40)">
+                            <option value="awm_treasure">AWM "Treasure Hunter" (Nameless 💰)</option>
+                            <option value="awm_wintersport">AWM "Winter Sport" (Winter Fun 0.18.0 ❄️)</option>
+                            <option value="awm_genesis">AWM "Genesis" (Arcane 🌟)</option>
+                            <option value="awm_sport">AWM "Sport" (Legendary 🎯)</option>
+                            <option value="awm_scratch">AWM "Scratch" (Legendary ⚡)</option>
+                            <option value="awm_crystal">AWM "Crystal" (Epic 💎)</option>
+                            <option value="awm_gear">AWM "Gear" (Epic ⚙️)</option>
+                            <option value="m40_wintertrack">M40 "Winter Track" (Winter Fun 0.18.0 ❄️)</option>
+                            <option value="m40_monster">M40 "Monster" (Arcane 👹)</option>
+                            <option value="m40_snowdemon">M40 "Snow Demon" (Legendary 👹)</option>
+                            <option value="m40_grip">M40 "Grip" (Legendary 🦾)</option>
+                            <option value="m40_quake">M40 "Quake" (Epic 💥)</option>
+                        </optgroup>
+                        <optgroup label="⚡ Штурмовые винтовки (AKR, M4, M4A1, FAMAS)">
+                            <option value="akr_treasure">AKR "Treasure Hunter" (Nameless 💰)</option>
+                            <option value="akr_necromancer">AKR "Necromancer" (Arcane 💀)</option>
+                            <option value="akr_nano">AKR "Nano" (Arcane ⚡)</option>
+                            <option value="akr_dragon">AKR "Dragon" (Legendary 🐉)</option>
+                            <option value="akr_carbon">AKR "Carbon" (Epic 🖤)</option>
+                            <option value="akr_nightterror">AKR "Night Terror" (Legendary 👻)</option>
+                            <option value="akr12_railgun">AKR12 "Railgun" (Arcane 🚀)</option>
+                            <option value="akr12_roar">AKR12 "Roar" (Arcane 🦁)</option>
+                            <option value="akr12_aurora">AKR12 "Aurora" (Legendary 🌌)</option>
+                            <option value="m4_samurai">M4 "Samurai" (Arcane ⚔️)</option>
+                            <option value="m4_nightwolf">M4 "Night Wolf" (Arcane 🐺)</option>
+                            <option value="m4_necromancer">M4 "Necromancer" (Arcane 💀)</option>
+                            <option value="m4_grandprix">M4 "Grand Prix" (Legendary 🏎️)</option>
+                            <option value="m4a1_bubblegum">M4A1 "Bubblegum" (Arcane 🍬)</option>
+                            <option value="m4a1_king">M4A1 "King" (Arcane 👑)</option>
+                            <option value="m4a1_paladin">M4A1 "Paladin" (Legendary 🛡️)</option>
+                            <option value="famas_fury">FAMAS "Fury" (Arcane 🌋)</option>
+                            <option value="famas_beagle">FAMAS "Beagle" (Legendary 🐾)</option>
+                            <option value="famas_hull">FAMAS "Hull" (Epic 🚢)</option>
+                        </optgroup>
+                        <optgroup label="🔫 Пистолеты (Deagle, USP, Glock, P350)">
+                            <option value="deagle_dragonglass">Desert Eagle "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="deagle_aureus">Desert Eagle "Aureus" (Arcane 🏆)</option>
+                            <option value="deagle_predator">Desert Eagle "Predator" (Legendary 🦖)</option>
+                            <option value="deagle_blood">Desert Eagle "Blood" (Legendary 🩸)</option>
+                            <option value="usp_genesis">USP "Genesis" (Arcane 🌟)</option>
+                            <option value="usp_fiend">USP "Fiend" (Arcane 😈)</option>
+                            <option value="usp_2years">USP "2 Years" (Arcane 🎂)</option>
+                            <option value="glock_nest">Glock "Nest" (Arcane 🪺)</option>
+                            <option value="glock_genesis">Glock "Genesis" (Legendary 🌟)</option>
+                            <option value="p350_forestspirit">P350 "Forest Spirit" (Arcane 🌲)</option>
+                            <option value="p350_neon">P350 "Neon" (Arcane 💡)</option>
+                            <option value="p350_rally">P350 "Rally" (Legendary 🏁)</option>
+                            <option value="berettas_royal">Dual Berettas "Royal" (Arcane 👑)</option>
+                        </optgroup>
+                        <optgroup label="💥 ПП и Дробовики (MP7, UMP45, P90, SPAS)">
+                            <option value="mp7_offroad">MP7 "Offroad" (Arcane 🚜)</option>
+                            <option value="mp7_lich">MP7 "Lich" (Arcane 💀)</option>
+                            <option value="mp7_graffiti">MP7 "Graffiti" (Legendary 🎨)</option>
+                            <option value="ump45_cerberus">UMP45 "Cerberus" (Arcane 🐕‍🦺)</option>
+                            <option value="ump45_beast">UMP45 "Beast" (Arcane 🐺)</option>
+                            <option value="p90_ghoul">P90 "Ghoul" (Arcane 🧟)</option>
+                            <option value="p90_samurai">P90 "Samurai" (Legendary ⚔️)</option>
+                            <option value="spas_arctic">SPAS "Arctic" (Winter Fun ❄️)</option>
+                            <option value="fabm_parrot">FABM "Parrot" (Arcane 🦜)</option>
+                        </optgroup>
+                        <optgroup label="✨ Наклейки (Stickers)">
+                            <option value="sticker_winterfun">Sticker "Winter Fun 2026" (Exclusive ❄️)</option>
+                            <option value="sticker_icedragon">Sticker "Ice Dragon" (Nameless 🐉)</option>
+                            <option value="sticker_coldflame">Sticker "Cold Flame" (Arcane 🔥)</option>
+                            <option value="sticker_snowmanboss">Sticker "Snowman Boss" (Legendary ⛄)</option>
+                            <option value="sticker_goldskull">Sticker "Gold Skull" (Arcane 💀)</option>
+                            <option value="sticker_neonrider">Sticker "Neon Rider" (Epic 🏍️)</option>
+                            <option value="sticker_frostbite">Sticker "Frostbite" (Legendary ❄️)</option>
+                            <option value="sticker_cyberwolf">Sticker "Cyber Wolf" (Epic 🐺)</option>
+                            <option value="sticker_aceofspades">Sticker "Ace of Spades" (Rare ♠️)</option>
+                            <option value="sticker_5years">Sticker "Standoff 5 Years" (Arcane ⭐)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <button class="btn btn-purple" style="width:100%; justify-content:center; margin-top:6px;" onclick="generateDevSkinPromo()">
+                    <span>Создать промокод на предмет ✨</span>
+                </button>
+                <div id="dev-skin-result" class="result-box hidden"></div>
+            </div>
+
+            <!-- БЛОК 3: БЕЗЛИМИТНЫЙ ГЕНЕРАТОР GOLD ЛЮБОГО НОМИНАЛА -->
+            <div class="glass-panel" style="padding:22px; margin-bottom:24px; border:1px solid rgba(234,179,8,0.45);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fbbf24; margin:0;">💰 Безлимитный Генератор Gold (Любая сумма)</h3>
+                    <span class="unlimited-badge">∞ Безлимит</span>
+                </div>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:16px;">
+                    Создавайте промокоды на золото любого номинала: от 1 000 до 500 000+ Gold без недельных ограничений.
+                </p>
+
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px, 1fr)); gap:12px; margin-bottom:14px;">
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label>Быстрый выбор номинала Gold:</label>
+                        <select id="dev-gold-select" class="input-field select-field" onchange="applyDevGoldPreset()">
+                            <option value="1000">1 000 Gold</option>
+                            <option value="5000">5 000 Gold</option>
+                            <option value="10000">10 000 Gold</option>
+                            <option value="25000">25 000 Gold</option>
+                            <option value="50000">50 000 Gold</option>
+                            <option value="100000" selected>100 000 Gold</option>
+                            <option value="250000">250 000 Gold</option>
+                            <option value="500000">500 000 Gold (Mega Jackpot)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group" style="margin-bottom:0;">
+                        <label>Или введите точное число Gold вручную:</label>
+                        <input type="number" id="dev-gold-custom" value="100000" min="1" placeholder="Любое число голды..." class="input-field">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Количество активаций кода:</label>
+                    <select id="dev-gold-uses" class="input-field select-field">
+                        <option value="1">1 человек (личный)</option>
+                        <option value="5">5 человек</option>
+                        <option value="10">10 человек</option>
+                        <option value="50">50 человек</option>
+                        <option value="100">100 человек</option>
+                        <option value="0">∞ Безлимитный</option>
+                    </select>
+                </div>
+
+                <button class="btn btn-gold" style="width:100%; justify-content:center; margin-top:8px;" onclick="generateDevGoldPromo()">
+                    <span>Сгенерировать промокод на Gold 💰</span>
+                </button>
+                <div id="dev-gold-result" class="result-box hidden"></div>
+            </div>
+
+            <!-- БЛОК 4: ИСТОРИЯ СГЕНЕРИРОВАННЫХ КОДОВ ЗА СЕССИЮ -->
+            <div class="glass-panel" style="padding:20px; background:linear-gradient(135deg, rgba(15,23,42,0.95) 0%, rgba(20,29,48,0.8) 100%);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                    <div style="font-size:16px; font-weight:700; color:#fbbf24;">📋 История созданных промокодов (текущая сессия)</div>
+                    <button class="btn btn-blue" style="font-size:12px; padding:6px 14px; min-height:34px;" onclick="clearSessionHistory()">
+                        <span>Очистить историю 🗑️</span>
+                    </button>
+                </div>
+                <div id="dev-history-list" style="font-size:13px; color:#cbd5e1; max-height:260px; overflow-y:auto;">
+                    <p style="color:#64748b; font-style:italic;">Вы ещё не сгенерировали промокодов в этой сессии.</p>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <footer style="text-align:center; padding:20px; font-size:13px; color:#64748b; border-top:1px solid rgba(234,179,8,0.2);">
+        <p>© 2026 <b>StandSoftix Chief Developer Panel</b>. 0.18.0 Winter Fun Edition. ❄️👑</p>
+    </footer>
+
+    <script>
+        // Снежинки
+        const container = document.getElementById('snowflakes');
+        if (container) {
+            const flakes = ['❄', '❅', '❆', '✨', '•'];
+            for (let i = 0; i < 35; i++) {
+                const f = document.createElement('div');
+                f.className = 'snowflake';
+                f.textContent = flakes[Math.floor(Math.random() * flakes.length)];
+                f.style.left = Math.random() * 100 + 'vw';
+                f.style.animationDuration = (Math.random() * 6 + 5) + 's';
+                f.style.animationDelay = (Math.random() * 5) + 's';
+                f.style.fontSize = (Math.random() * 14 + 10) + 'px';
+                f.style.opacity = Math.random() * 0.7 + 0.3;
+                container.appendChild(f);
+            }
+        }
+
+        function copyCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                alert(`✅ Промокод ${code} скопирован в буфер!`);
+            });
+        }
+
+        function generateRandomStr(len = 6) {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let res = '';
+            for (let i = 0; i < len; i++) res += chars.charAt(Math.floor(Math.random() * chars.length));
+            return res;
+        }
+
+        async function sha256Hex(str) {
+            try {
+                const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str.trim()));
+                return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch(e) { return ''; }
+        }
+
+        // Авто-вход при сохранении сессии
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('standsoftix_dev_auth') === 'granted') {
+                showDashboard();
+            }
+            renderHistory();
+        });
+
+        async function verifyDevAccess() {
+            const input = document.getElementById('dev-password-input');
+            const statusMsg = document.getElementById('auth-status-msg');
+            const pass = input.value.trim();
+
+            if (!pass) {
+                statusMsg.className = 'result-box result-error';
+                statusMsg.textContent = 'Введите мастер-пароль разработчика!';
+                statusMsg.classList.remove('hidden');
+                return;
+            }
+
+            statusMsg.className = 'result-box';
+            statusMsg.textContent = 'Проверка мастер-доступа...';
+            statusMsg.classList.remove('hidden');
+
+            const passHash = await sha256Hex(pass.toLowerCase());
+            const devPassHash = await sha256Hex('standsoftix2408');
+            const masterHash = '8acf760eb6ce0d66c25a5654fba732af9abd23e01bc35c26a11f5aab3d712f0a';
+
+            if (pass === 'standsoftix2408' || passHash === devPassHash || passHash === masterHash) {
+                statusMsg.classList.add('hidden');
+                sessionStorage.setItem('standsoftix_dev_auth', 'granted');
+                showDashboard();
+            } else {
+                statusMsg.className = 'result-box result-error';
+                statusMsg.textContent = '⛔ Неверный пароль разработчика! Доступ отклонён.';
+                statusMsg.classList.remove('hidden');
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('auth-section').classList.add('hidden');
+            document.getElementById('dashboard-section').classList.remove('hidden');
+        }
+
+        function logoutDev() {
+            sessionStorage.removeItem('standsoftix_dev_auth');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('dev-password-input').value = '';
+        }
+
+        // Регистрация на сервере (если запущен локально)
+        async function registerCodeOnServer(code, rType, rVal, uses) {
+            try {
+                await fetch('/api/dev_code', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({
+                        code: code,
+                        reward_type: rType,
+                        reward_value: String(rVal),
+                        max_uses: parseInt(uses, 10)
+                    })
+                });
+            } catch(e) {}
+        }
+
+        // История сессии
+        let sessionCodes = [];
+
+        function addToHistory(code, type, desc, uses) {
+            sessionCodes.unshift({
+                code: code,
+                type: type,
+                desc: desc,
+                uses: uses,
+                time: new Date().toLocaleTimeString()
+            });
+            renderHistory();
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('dev-history-list');
+            if (!container) return;
+            if (sessionCodes.length === 0) {
+                container.innerHTML = '<p style="color:#64748b; font-style:italic;">Вы ещё не сгенерировали промокодов в этой сессии.</p>';
+                return;
+            }
+
+            let html = '<div style="display:flex; flex-direction:column; gap:8px;">';
+            sessionCodes.forEach(item => {
+                html += `
+                    <div style="background:rgba(255,255,255,0.04); border:1px solid rgba(234,179,8,0.25); border-radius:8px; padding:8px 12px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;">
+                        <div>
+                            <b style="color:#fbbf24; cursor:pointer;" onclick="copyCode('${item.code}')">${item.code} 📋</b>
+                            <span style="font-size:12px; color:#94a3b8; margin-left:8px;">(${item.desc})</span>
+                        </div>
+                        <div style="font-size:12px; color:#64748b;">
+                            Активаций: <b>${item.uses == 0 ? '∞' : item.uses}</b> • Время: <i>${item.time}</i>
+                        </div>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function clearSessionHistory() {
+            sessionCodes = [];
+            renderHistory();
+        }
+
+        // 1. Всемогущий промокод на СРАЗУ ВСЁ В ИГРЕ
+        async function generateAllItemsMegaPromo() {
+            const uses = document.getElementById('all-items-uses').value;
+            const customPrefix = document.getElementById('all-items-prefix').value.trim().toUpperCase();
+            const prefix = customPrefix || 'GOD_ALL';
+            const code = prefix + '_' + generateRandomStr(6);
+            const resBox = document.getElementById('all-items-result');
+
+            await registerCodeOnServer(code, 'all_inventory', 'ALL_ITEMS_COMPLETE_EDITION_100K_GOLD', uses);
+            addToHistory(code, 'all_inventory', 'ВСЕ ножи, ВСЁ оружие, ВСЕ перчатки, ВСЕ наклейки + 100 000G', uses);
+
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🌟 <b>ВСЕМОГУЩИЙ ПРОМОКОД УСПЕШНО СОЗДАН!</b><br>
+                Награда: <b>Полный инвентарь (ВСЕ ножи, ВСЕ пушки, ВСЕ перчатки, ВСЕ наклейки) + 100 000 Gold</b><br>
+                Активаций: <b>${uses == 0 ? 'Безлимитно (∞)' : uses + ' чел.'}</b><br>
+                Код для ввода в клиенте StandSoftix 0.18.0:<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#fef08a;">Нажмите на код, чтобы скопировать. Он активируется в клиенте StandSoftix без каких-либо ограничений!</small>
+            `;
+            resBox.classList.remove('hidden');
+        }
+
+        // 2. Ножи
+        async function generateDevKnifePromo() {
+            const knifeSelect = document.getElementById('dev-knife-select');
+            const knifeId = knifeSelect.value;
+            const knifeName = knifeSelect.options[knifeSelect.selectedIndex].text;
+            const code = 'DEV_KNIFE_' + generateRandomStr(6);
+            const resBox = document.getElementById('dev-knife-result');
+
+            await registerCodeOnServer(code, 'skin', knifeId, 1);
+            addToHistory(code, 'skin', knifeName, 1);
+
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на нож успешно создан!</b><br>
+                Предмет: <b>${knifeName}</b><br>
+                Код для активации в игре (0.18.0):<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Генерация безлимитна. Нажмите на код, чтобы скопировать.</small>
+            `;
+            resBox.classList.remove('hidden');
+        }
+
+        // 3. Пушки / перчатки / наклейки
+        async function generateDevSkinPromo() {
+            const skinSelect = document.getElementById('dev-skin-select');
+            const skinId = skinSelect.value;
+            const skinName = skinSelect.options[skinSelect.selectedIndex].text;
+            const code = 'DEV_SKIN_' + generateRandomStr(6);
+            const resBox = document.getElementById('dev-skin-result');
+
+            await registerCodeOnServer(code, 'skin', skinId, 1);
+            addToHistory(code, 'skin', skinName, 1);
+
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на предмет успешно создан!</b><br>
+                Предмет: <b>${skinName}</b><br>
+                Код для активации в игре (0.18.0):<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Генерация безлимитна. Нажмите на код, чтобы скопировать.</small>
+            `;
+            resBox.classList.remove('hidden');
+        }
+
+        // 4. Gold (любой номинал)
+        function applyDevGoldPreset() {
+            const presetVal = document.getElementById('dev-gold-select').value;
+            document.getElementById('dev-gold-custom').value = presetVal;
+        }
+
+        async function generateDevGoldPromo() {
+            const goldInput = document.getElementById('dev-gold-custom');
+            const uses = document.getElementById('dev-gold-uses').value;
+            const resBox = document.getElementById('dev-gold-result');
+            const amount = parseInt(goldInput.value, 10);
+
+            if (isNaN(amount) || amount < 1) {
+                resBox.className = 'result-box result-error';
+                resBox.textContent = 'Введите корректное число Gold!';
+                resBox.classList.remove('hidden');
+                return;
+            }
+
+            const code = 'GOLD_' + amount + '_' + generateRandomStr(5);
+            await registerCodeOnServer(code, 'gold', String(amount), uses);
+            addToHistory(code, 'gold', `${amount.toLocaleString()} Gold`, uses);
+
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на ${amount.toLocaleString()} Gold успешно создан!</b><br>
+                Активаций: <b>${uses == 0 ? 'Безлимитно (∞)' : uses + ' чел.'}</b><br>
+                Код для ввода в клиенте StandSoftix 0.18.0:<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Генерация безлимитна. Нажмите на код, чтобы скопировать.</small>
+            `;
+            resBox.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
