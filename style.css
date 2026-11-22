@@ -528,6 +528,124 @@ body {
     display: none !important;
 }
 
+/* Apply Section (Tester & Media) */
+.apply-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.apply-card {
+    background: rgba(12, 22, 38, 0.7);
+    border: 1px solid rgba(0, 217, 255, 0.25);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: 0.3s;
+}
+
+.apply-card:hover {
+    border-color: var(--accent-blue);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 217, 255, 0.2);
+}
+
+.apply-badge {
+    align-self: flex-start;
+    background: rgba(0, 150, 255, 0.25);
+    border: 1px solid rgba(0, 150, 255, 0.5);
+    color: #4dc7ff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.apply-badge-media {
+    background: rgba(255, 60, 120, 0.25);
+    border-color: rgba(255, 60, 120, 0.5);
+    color: #ff5599;
+}
+
+.apply-card h3 {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 22px;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+.apply-card p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+    margin-bottom: 16px;
+}
+
+.apply-perks {
+    list-style: none;
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.apply-perks li {
+    font-size: 13px;
+    color: #e0f2fe;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.apply-bot-callout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    background: linear-gradient(135deg, rgba(0, 136, 204, 0.2) 0%, rgba(0, 217, 255, 0.1) 100%);
+    border: 1px solid rgba(0, 217, 255, 0.4);
+    border-radius: 12px;
+    padding: 18px 24px;
+    flex-wrap: wrap;
+}
+
+.bot-callout-icon {
+    font-size: 36px;
+}
+
+.bot-callout-info {
+    flex: 1;
+    min-width: 250px;
+}
+
+.bot-callout-info h4 {
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.bot-callout-info p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin: 0;
+}
+
+.tg-tag-gold {
+    background: rgba(255, 204, 0, 0.2) !important;
+    border-color: rgba(255, 204, 0, 0.6) !important;
+    color: #ffdd44 !important;
+}
+
+.tg-tag-gold:hover {
+    background: rgba(255, 204, 0, 0.35) !important;
+    box-shadow: 0 0 14px rgba(255, 204, 0, 0.7) !important;
+}
+
 /* Footer */
 .footer {
     border-top: 1px solid var(--card-border);
