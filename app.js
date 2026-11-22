@@ -219,30 +219,111 @@ async function checkPromoCode() {
     }
 }
 
+function toggleCustomGoldField() {
+    const goldSelect = document.getElementById('partner-gold');
+    const customGroup = document.getElementById('group-custom-gold');
+    if (goldSelect && customGroup) {
+        if (goldSelect.value === 'custom') {
+            customGroup.classList.remove('hidden');
+            const customInput = document.getElementById('partner-custom-gold');
+            if (customInput) customInput.focus();
+        } else {
+            customGroup.classList.add('hidden');
+        }
+    }
+}
+
 // 4. Партнёрская панель (Медиа)
 async function generatePartnerPromo() {
     const platform = document.getElementById('partner-platform').value;
-    const gold = document.getElementById('partner-gold').value;
+    const goldSelect = document.getElementById('partner-gold').value;
     const name = document.getElementById('partner-name').value.trim() || 'Media';
     const resultBox = document.getElementById('partner-result');
+
+    let goldVal = 500;
+    if (goldSelect === 'custom') {
+        const customInput = document.getElementById('partner-custom-gold').value.trim();
+        goldVal = parseInt(customInput);
+        if (isNaN(goldVal) || goldVal < 1) {
+            resultBox.className = 'result-box result-error';
+            resultBox.textContent = '⚠️ Введите корректное число голды (от 1 до 20 000)!';
+            resultBox.classList.remove('hidden');
+            return;
+        }
+        if (goldVal > 20000) {
+            resultBox.className = 'result-box result-error';
+            resultBox.textContent = '⚠️ Максимальное число голды для блогерского промокода — 20 000 G!';
+            resultBox.classList.remove('hidden');
+            return;
+        }
+    } else {
+        goldVal = parseInt(goldSelect);
+    }
+
+    // Определяем недельный лимит для категории:
+    // 250, 500, 1000 => 50
+    // 5000 => 10
+    // 10000 => 15
+    // > 10000 (до 20000) => 15
+    let maxLimit = 50;
+    let tierKey = `tier_${goldVal}`;
+    let tierName = `${goldVal} G`;
+
+    if (goldVal === 5000) {
+        maxLimit = 10;
+        tierKey = 'tier_5000';
+    } else if (goldVal === 10000) {
+        maxLimit = 15;
+        tierKey = 'tier_10000';
+    } else if (goldVal > 10000) {
+        maxLimit = 15;
+        tierKey = 'tier_over_10k';
+        tierName = 'от 10 000 до 20 000 G';
+    }
+
+    // Проверка лимита недели в LocalStorage
+    const d = new Date();
+    const oneJan = new Date(d.getFullYear(), 0, 1);
+    const numberOfDays = Math.floor((d - oneJan) / (24 * 60 * 60 * 1000));
+    const weekNumber = Math.ceil((d.getDay() + 1 + numberOfDays) / 7);
+    const weekKey = `standsoftix_media_claims_${d.getFullYear()}_w${weekNumber}_${name.toLowerCase()}_${tierKey}`;
+
+    let currentClaims = parseInt(localStorage.getItem(weekKey) || '0');
+    if (name.toLowerCase() !== 'softer_052' && currentClaims >= maxLimit) {
+        resultBox.className = 'result-box result-error';
+        resultBox.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Категория <b>${tierName}</b> ограничена: максимум <b>${maxLimit} раз в неделю</b>.<br>Вы уже использовали: <b>${currentClaims} из ${maxLimit}</b>.<br><i>Лимит обновится в следующий понедельник!</i>`;
+        resultBox.classList.remove('hidden');
+        return;
+    }
 
     resultBox.className = 'result-box';
     resultBox.textContent = 'Генерируем промокод для ролика...';
     resultBox.classList.remove('hidden');
 
-    let code = `${platform}_${gold}G_${generateRandomStr(5)}`;
+    let code = `${platform}_${goldVal}G_${generateRandomStr(5)}`;
 
     try {
         const resp = await fetch('/api/partner_code', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ platform, gold, name })
+            body: JSON.stringify({ platform, gold: goldVal, name })
         });
         if (resp.ok) {
             const data = await resp.json();
             if (data.code) code = data.code;
+            if (data.used_count) currentClaims = data.used_count - 1;
+        } else {
+            const errData = await resp.json().catch(() => ({}));
+            if (errData.message && errData.message.includes('Лимит')) {
+                resultBox.className = 'result-box result-error';
+                resultBox.innerHTML = `⚠️ ${errData.message}`;
+                return;
+            }
         }
     } catch (e) {}
+
+    currentClaims++;
+    localStorage.setItem(weekKey, currentClaims.toString());
 
     resultBox.className = 'result-box result-success';
     resultBox.innerHTML = `
@@ -251,7 +332,8 @@ async function generatePartnerPromo() {
             <span>${code}</span>
             <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
         </div>
-        <div style="margin-top: 6px; font-size: 12px;">Награда: <b>${gold} Gold</b> | Одноразовый | Вставьте этот код в описание вашего видео/стрима.</div>
+        <div style="margin-top: 8px; font-size: 13px;">💰 Награда: <b>${goldVal.toLocaleString()} Gold</b> | 👥 50 активаций для зрителей</div>
+        <div style="margin-top: 4px; font-size: 12px; opacity: 0.85;">📊 Использовано в категории (${tierName}): <b>${currentClaims} из ${maxLimit}</b> на этой неделе.</div>
     `;
 }
 
