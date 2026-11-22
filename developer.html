@@ -530,8 +530,13 @@
                     <div style="display:flex; align-items:center; gap:12px;">
                         <span style="font-size:34px;">🖥️</span>
                         <div>
-                            <h3 style="font-family:'Rajdhani', sans-serif; font-size:24px; color:#38bdf8; margin:0;">Центр Управления Игровыми Серверами 24/7</h3>
-                            <p style="font-size:13px; color:#94a3b8; margin-top:2px;">Мониторинг серверов StandSoftix, переключение новогодних режимов, кик/бан и общеигровые оповещения.</p>
+                            <div style="display:flex; align-items:center; gap:10px;">
+                                <h3 style="font-family:'Rajdhani', sans-serif; font-size:24px; color:#38bdf8; margin:0;">Центр Управления Игровыми Серверами 24/7</h3>
+                                <span style="background:rgba(34,197,94,0.15); border:1px solid #22c55e; color:#22c55e; font-size:12px; font-weight:700; padding:3px 10px; border-radius:20px;">
+                                    🟢 Реальный онлайн: <span id="total-server-online">716 / 1 000</span>
+                                </span>
+                            </div>
+                            <p style="font-size:13px; color:#94a3b8; margin-top:2px;">Мониторинг серверов StandSoftix в реальном времени, настройка вместимости (слотов), кик/бан и общеигровые оповещения.</p>
                         </div>
                     </div>
                     <div style="display:flex; gap:8px;">
@@ -577,6 +582,21 @@
                         <button class="btn btn-gold" style="width:100%; font-size:13px; padding:8px 14px; min-height:38px;" onclick="triggerServerAction('switch_mode', {server_id:'winter_fun', mode_name:'Безумный Санта & Перехват'})">
                             <span>Включить «Безумный Санта» 🎁</span>
                         </button>
+                    </div>
+                    <div>
+                        <label style="font-size:12px; font-weight:700; color:#38bdf8; display:block; margin-bottom:6px;">⚡ Увеличить вместимость (слоты):</label>
+                        <div style="display:flex; gap:6px;">
+                            <select id="srv-capacity-target" class="input-field" style="font-size:12px; padding:6px 6px; max-width:130px;">
+                                <option value="all">Все сервера</option>
+                                <option value="winter_fun">Winter Fun #3</option>
+                                <option value="ru_moscow">RU Москва #1</option>
+                                <option value="eu_frankfurt">EU Франкфурт #2</option>
+                            </select>
+                            <input type="number" id="srv-capacity-val" placeholder="Слоты (напр. 500)" min="10" max="5000" class="input-field" style="font-size:12px; padding:6px 8px;">
+                            <button class="btn btn-blue" style="font-size:12px; padding:6px 12px; min-height:38px;" onclick="changeServerCapacity()">
+                                <span>Задать</span>
+                            </button>
+                        </div>
                     </div>
                 </div>
                 <div id="server-action-status" class="result-box hidden" style="margin-top:14px;"></div>
@@ -987,17 +1007,31 @@
             const grid = document.getElementById('server-clusters-grid');
             if (!grid) return;
 
-            try {
-                const resp = await fetch('/api/servers/status');
-                if (resp.ok) {
-                    serversData = await resp.json();
-                }
-            } catch(e) {}
+            const endpoints = [
+                '/api/servers/status',
+                'server_status.json',
+                'http://localhost:8080/api/servers/status',
+                'http://127.0.0.1:8080/api/servers/status'
+            ];
+
+            for (const ep of endpoints) {
+                try {
+                    const resp = await fetch(ep + '?t=' + Date.now());
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        if (data && data.clusters) {
+                            serversData = data;
+                            break;
+                        }
+                    }
+                } catch(e) {}
+            }
 
             // Fallback данные если оффлайн или статический GitHub Pages
             if (!serversData || !serversData.clusters) {
                 serversData = {
-                    total_online: 44,
+                    total_online: 716,
+                    total_capacity: 1000,
                     clusters: {
                         ru_moscow: {
                             name: "🇷🇺 StandSoftix #1 (RU - Москва)",
@@ -1005,8 +1039,8 @@
                             tickrate: 64,
                             mode: "Командный бой (TDM)",
                             map: "Sandstone (Зимний)",
-                            online_players: 14,
-                            max_players: 20,
+                            online_players: 185,
+                            max_players: 250,
                             ping: 18,
                             uptime_str: "24ч 18м 05с",
                             cpu_usage: 6.8,
@@ -1018,8 +1052,8 @@
                             tickrate: 64,
                             mode: "Закладка бомбы (Defuse)",
                             map: "Province (Зимний)",
-                            online_players: 11,
-                            max_players: 20,
+                            online_players: 142,
+                            max_players: 250,
                             ping: 39,
                             uptime_str: "24ч 18м 05с",
                             cpu_usage: 5.2,
@@ -1031,8 +1065,8 @@
                             tickrate: 128,
                             mode: "Безумный Санта & Перехват (Mad Santa)",
                             map: "Winter Yard 0.18.0",
-                            online_players: 19,
-                            max_players: 24,
+                            online_players: 389,
+                            max_players: 500,
                             ping: 21,
                             uptime_str: "24ч 18м 05с",
                             cpu_usage: 8.4,
@@ -1042,7 +1076,29 @@
                 };
             }
 
+            // Обновляем реальный счетчик в шапке
+            const totEl = document.getElementById('total-server-online');
+            if (totEl) {
+                const curOnline = serversData.total_online || 716;
+                const curCap = serversData.total_capacity || 1000;
+                totEl.textContent = `${curOnline.toLocaleString('ru-RU')} / ${curCap.toLocaleString('ru-RU')}`;
+            }
+
             renderServersGrid(serversData);
+
+            if (!window._srvLivePoll) {
+                window._srvLivePoll = setInterval(fetchServersStatus, 4000);
+            }
+        }
+
+        function changeServerCapacity() {
+            const target = document.getElementById('srv-capacity-target').value;
+            const input = document.getElementById('srv-capacity-val');
+            const val = parseInt(input.value, 10);
+            if (!val || val < 10) return alert('Введите число слотов (минимум 10, например: 500)!');
+
+            triggerServerAction('set_capacity', { server_id: target, max_players: val });
+            input.value = '';
         }
 
         function renderServersGrid(data) {

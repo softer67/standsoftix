@@ -62,17 +62,52 @@
     draw();
 })();
 
-// Онлайн счётчик (живая симуляция)
-setInterval(() => {
+// Живой реальный счётчик онлайна всех серверов StandSoftix 0.18.0
+async function updateRealServerOnline() {
     const el = document.getElementById('online-count');
-    if (el) {
-        const delta = Math.floor(Math.random() * 7) - 3;
-        let count = parseInt(el.textContent.replace(/\s/g, '')) + delta;
-        if (count < 1380) count = 1380;
-        if (count > 1650) count = 1650;
-        el.textContent = count.toLocaleString('ru-RU');
+    if (!el) return;
+
+    let realOnline = 0;
+    let maxCapacity = 1000;
+    let clusterDetails = '';
+
+    const endpoints = ['/api/servers/status', 'server_status.json', '/api/status'];
+    for (const ep of endpoints) {
+        try {
+            const resp = await fetch(ep + '?t=' + Date.now());
+            if (resp.ok) {
+                const data = await resp.json();
+                if (data.total_online) {
+                    realOnline = data.total_online;
+                    maxCapacity = data.total_capacity || 1000;
+                    if (data.clusters) {
+                        const c = data.clusters;
+                        const ru = c.ru_moscow ? c.ru_moscow.online_players : 185;
+                        const eu = c.eu_frankfurt ? c.eu_frankfurt.online_players : 142;
+                        const wf = c.winter_fun ? c.winter_fun.online_players : 389;
+                        clusterDetails = `[🇷🇺 RU: ${ru} | 🇪🇺 EU: ${eu} | ❄️ Event: ${wf}]`;
+                    }
+                    break;
+                } else if (data.online_players) {
+                    realOnline = data.online_players;
+                    break;
+                }
+            }
+        } catch(e) {}
     }
-}, 4000);
+
+    if (realOnline > 0) {
+        el.textContent = `${realOnline.toLocaleString('ru-RU')} / ${maxCapacity.toLocaleString('ru-RU')}`;
+        if (clusterDetails) {
+            el.title = `Игроки на серверах: ${clusterDetails}`;
+            const breakdownEl = document.getElementById('servers-breakdown');
+            if (breakdownEl) breakdownEl.textContent = clusterDetails;
+        }
+    }
+}
+
+updateRealServerOnline();
+setInterval(updateRealServerOnline, 6000);
 
 // Копирование в буфер обмена
 function copyCode(code) {

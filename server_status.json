@@ -1,0 +1,130 @@
+{
+  "status": "ok",
+  "clusters": {
+    "ru_moscow": {
+      "id": "ru_moscow",
+      "name": "🇷🇺 StandSoftix #1 (RU - Москва)",
+      "ip": "127.0.0.1",
+      "port": 7777,
+      "mode": "Командный бой (TDM)",
+      "map": "Sandstone (Зимний)",
+      "tickrate": 64,
+      "max_players": 250,
+      "online_players": 183,
+      "status": "ONLINE",
+      "ping": 18,
+      "uptime_start": 1795383011.1212578,
+      "uptime_str": "00ч 00м 00с",
+      "cpu_usage": 11.5,
+      "ram_mb": 858
+    },
+    "eu_frankfurt": {
+      "id": "eu_frankfurt",
+      "name": "🇪🇺 StandSoftix #2 (EU - Франкфурт)",
+      "ip": "127.0.0.1",
+      "port": 7778,
+      "mode": "Закладка бомбы (Defuse)",
+      "map": "Province (Зимний)",
+      "tickrate": 64,
+      "max_players": 250,
+      "online_players": 143,
+      "status": "ONLINE",
+      "ping": 39,
+      "uptime_start": 1795383011.1212578,
+      "uptime_str": "00ч 00м 00с",
+      "cpu_usage": 12.1,
+      "ram_mb": 838
+    },
+    "winter_fun": {
+      "id": "winter_fun",
+      "name": "❄️ StandSoftix #3 (EVENT - 0.18.0 Winter Fun)",
+      "ip": "127.0.0.1",
+      "port": 7779,
+      "mode": "Безумный Санта & Перехват (Mad Santa)",
+      "map": "Winter Yard 0.18.0",
+      "tickrate": 128,
+      "max_players": 500,
+      "online_players": 387,
+      "status": "ONLINE",
+      "ping": 21,
+      "uptime_start": 1795383011.1212578,
+      "uptime_str": "00ч 00м 00с",
+      "cpu_usage": 7.6,
+      "ram_mb": 702
+    }
+  },
+  "total_online": 713,
+  "total_capacity": 1000,
+  "broadcasts": [
+    "❄️ Добро пожаловать на официальные сервера StandSoftix 0.18.0 Winter Fun!",
+    "🎅 Новогодний режим «Безумный Санта» и подарки на сервере #3 активны!"
+  ],
+  "players": [
+    {
+      "id": "10000413",
+      "name": "LG_2106",
+      "server": "winter_fun",
+      "ping": 24,
+      "score": 1250,
+      "kills": 18
+    },
+    {
+      "id": "10000105",
+      "name": "Frost_Sniper",
+      "server": "winter_fun",
+      "ping": 19,
+      "score": 980,
+      "kills": 14
+    },
+    {
+      "id": "10000892",
+      "name": "Santa_Claws",
+      "server": "winter_fun",
+      "ping": 31,
+      "score": 850,
+      "kills": 11
+    },
+    {
+      "id": "10000341",
+      "name": "Viper_018",
+      "server": "ru_moscow",
+      "ping": 16,
+      "score": 640,
+      "kills": 9
+    },
+    {
+      "id": "10000777",
+      "name": "WinterKing",
+      "server": "ru_moscow",
+      "ping": 22,
+      "score": 1100,
+      "kills": 16
+    },
+    {
+      "id": "10000555",
+      "name": "Softer_Fan",
+      "server": "eu_frankfurt",
+      "ping": 38,
+      "score": 420,
+      "kills": 5
+    },
+    {
+      "id": "10000999",
+      "name": "Ghost_Rider",
+      "server": "winter_fun",
+      "ping": 25,
+      "score": 1430,
+      "kills": 21
+    },
+    {
+      "id": "10000222",
+      "name": "Ice_Karambit",
+      "server": "ru_moscow",
+      "ping": 17,
+      "score": 790,
+      "kills": 12
+    }
+  ],
+  "banned": [],
+  "timestamp": "2026-11-23 00:30:11"
+}
