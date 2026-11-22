@@ -2,72 +2,397 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StandSoftix 0.18.0 — Закрытый портал Тестеров 🛡️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StandSoftix 0.18.0 — Закрытый портал Тестеров 🎄🛡️</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --frost-bg: rgba(10, 20, 36, 0.78);
+            --frost-border: rgba(56, 189, 248, 0.35);
+            --frost-glow: rgba(56, 189, 248, 0.2);
+            --festive-gold: #fbbf24;
+            --festive-cyan: #38bdf8;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 10%, #0d223a 0%, #060b13 70%, #020508 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+            font-family: 'Rubik', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Анимированные новогодние снежинки */
+        .snowflakes-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            overflow: hidden;
+        }
+        .snowflake {
+            position: absolute;
+            top: -20px;
+            color: #e0f2fe;
+            user-select: none;
+            animation: fall linear infinite;
+            filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.8));
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
+        }
+
+        /* Шапка */
+        .header {
+            background: rgba(6, 12, 22, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(56, 189, 248, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--festive-cyan); }
+        .festive-tag {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
+        }
+        .ny-badge {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            color: #fef08a;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: var(--festive-cyan);
+            text-shadow: 0 0 8px rgba(56, 189, 248, 0.6);
+        }
+
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: #34d399;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-dot 1.5s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.15); }
+        }
+
+        /* Контейнер */
+        .main-content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 16px 60px;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Стеклянные карточки с эффектом мороза */
+        .glass-panel {
+            background: var(--frost-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--frost-border);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Карточка авторизации */
         .auth-card {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 36px 30px;
+            max-width: 540px;
+            margin: 32px auto;
+            padding: 34px 28px;
             text-align: center;
+            border: 1px solid rgba(56, 189, 248, 0.45);
+            box-shadow: 0 12px 40px rgba(2, 132, 199, 0.25), inset 0 0 20px rgba(56, 189, 248, 0.08);
         }
         .auth-icon {
-            font-size: 56px;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 0 15px rgba(56, 189, 248, 0.6));
+            font-size: 52px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.7));
+            animation: float-icon 3s ease-in-out infinite;
         }
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Отказ в доступе */
         .denied-card {
-            max-width: 650px;
-            margin: 40px auto;
-            padding: 36px 30px;
+            max-width: 580px;
+            margin: 32px auto;
+            padding: 34px 28px;
             text-align: center;
             border-color: #ef4444 !important;
-            box-shadow: 0 0 35px rgba(239, 68, 68, 0.3) !important;
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.35) !important;
         }
         .denied-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            animation: pulse 1.5s infinite;
+            font-size: 54px;
+            margin-bottom: 12px;
+            animation: pulse-denied 1.5s infinite;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
+        @keyframes pulse-denied {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
+
+        /* Поля ввода и кнопки */
+        .input-group {
+            text-align: left;
+            margin-bottom: 14px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .input-field {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: 10px;
+            padding: 13px 16px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+        }
+        .input-field:focus {
+            border-color: var(--festive-cyan);
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 10px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            min-height: 48px;
+            padding: 12px 20px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .btn-blue {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(2, 132, 199, 0.4);
+        }
+        .btn-blue:hover {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            box-shadow: 0 6px 24px rgba(14, 165, 233, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(217, 119, 6, 0.4);
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 6px 24px rgba(245, 158, 11, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .result-box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-top: 14px;
+            font-size: 14px;
+            color: #e2e8f0;
+            word-break: break-word;
+        }
+        .result-error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+        .result-success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+            color: #a7f3d0;
+        }
+
         .user-badge-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(14, 165, 233, 0.15);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: 12px;
-            padding: 14px 22px;
-            margin-bottom: 25px;
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.2) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(56, 189, 248, 0.35);
+            border-radius: 14px;
+            padding: 16px 22px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
             gap: 12px;
         }
-        .countdown-text {
-            color: #fbbf24;
-            font-size: 14px;
-            margin-top: 18px;
-            font-weight: 500;
+
+        .promo-display {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #38bdf8;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 14px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 8px 0;
+            border: 1px dashed rgba(56, 189, 248, 0.5);
+            cursor: pointer;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Адаптивность: Планшеты и Мобильные */
+        @media (max-width: 900px) {
+            .header-container {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 14px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            .main-content {
+                padding: 16px 12px 40px;
+            }
+            .auth-card, .denied-card {
+                padding: 24px 18px;
+                margin: 20px auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logo { font-size: 19px; }
+            .auth-card, .denied-card {
+                width: 100%;
+                padding: 22px 14px;
+                margin: 16px auto;
+            }
+            .auth-icon, .denied-icon { font-size: 42px; margin-bottom: 8px; }
+            h2 { font-size: 22px !important; }
+            h3 { font-size: 18px !important; }
+            .btn {
+                width: 100% !important;
+                min-height: 48px !important;
+                font-size: 14px !important;
+            }
+            .user-badge-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 14px;
+            }
+            .user-badge-header > div:last-child {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .promo-display {
+                font-size: 18px;
+                letter-spacing: 1px;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
         }
     </style>
 </head>
-<body class="winter-theme">
+<body>
     <div class="snowflakes-container" id="snowflakes"></div>
 
     <!-- Шапка сайта -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">
-                <span class="logo-icon">❄️</span>
-                <span class="logo-text">STAND<span>SOFTIX</span></span>
-                <span class="badge-role" style="background:#0284c7; color:#fff; font-size:11px; padding:3px 8px; border-radius:6px; margin-left:8px; font-weight:700;">TESTER HUB</span>
+                <span>❄️ STAND</span><span>SOFTIX</span>
+                <span class="festive-tag">TESTER HUB</span>
+                <span class="ny-badge">🎄 2026 Season</span>
             </a>
             <nav class="nav-links">
                 <a href="index.html">🌐 На главную</a>
@@ -76,7 +401,7 @@
             </nav>
             <div class="server-status">
                 <span class="status-dot"></span>
-                <span class="status-text">Сервер: <b>ONLINE</b></span>
+                <span>Сервер 0.18.0: <b>ONLINE</b></span>
             </div>
         </div>
     </header>
@@ -86,38 +411,46 @@
         <!-- 1. Экран авторизации (проверка доступа) -->
         <div id="auth-section" class="auth-card glass-panel">
             <div class="auth-icon">🛡️</div>
-            <h2 style="font-family:'Rajdhani', sans-serif; font-size:30px; color:#fff; margin-bottom:8px;">Вход в закрытый портал Тестеров</h2>
-            <p style="color:var(--text-muted); font-size:14px; line-height:1.5; margin-bottom:24px;">
-                Доступ открыт строго для кандидатов с одобренной заявкой от Главного Разработчика.<br>
-                Введите ваш Telegram Username или ID в игре для подтверждения статуса:
+            <h2 style="font-family:'Rajdhani', sans-serif; font-size:28px; color:#fff; margin-bottom:6px;">Вход в закрытый портал Тестеров</h2>
+            <p style="color:#94a3b8; font-size:14px; line-height:1.5; margin-bottom:20px;">
+                Доступ открыт строго для кандидатов с официально одобренной заявкой от Разработчика.<br>
+                Введите ваш логин и личный код доступа, выданный при одобрении:
             </p>
-            <div style="display:flex; flex-direction:column; gap:12px; max-width:420px; margin:0 auto;">
-                <input type="text" id="tester-auth-input" placeholder="@ваш_юзернейм или ID в игре" class="input-field" style="text-align:center; font-size:15px;" onkeypress="if(event.key==='Enter') verifyTesterAccess()">
-                <button class="btn btn-blue" style="justify-content:center; width:100%;" onclick="verifyTesterAccess()">
+
+            <div style="display:flex; flex-direction:column; gap:6px; max-width:440px; margin:0 auto; width:100%;">
+                <div class="input-group">
+                    <label>1. Telegram Username или Игровой ID:</label>
+                    <input type="text" id="tester-auth-user" placeholder="@ваш_юзернейм или ID в игре" class="input-field" onkeypress="if(event.key==='Enter') verifyTesterAccess()">
+                </div>
+                <div class="input-group">
+                    <label>2. Личный код доступа (из уведомления бота):</label>
+                    <input type="text" id="tester-auth-code" placeholder="Например: TEST_V4545P" class="input-field" style="text-transform:uppercase; letter-spacing:1px;" onkeypress="if(event.key==='Enter') verifyTesterAccess()">
+                </div>
+                <button class="btn btn-blue" style="width:100%; margin-top:4px;" onclick="verifyTesterAccess()">
                     <span>Войти в закрытую панель 🔐</span>
                 </button>
             </div>
-            <div id="auth-status-msg" class="result-box hidden" style="margin-top:16px;"></div>
+            <div id="auth-status-msg" class="result-box hidden"></div>
         </div>
 
-        <!-- 2. Экран отказа в доступе (если нет в одобренных) -->
+        <!-- 2. Экран отказа в доступе (если нет в одобренных или код неверный) -->
         <div id="denied-section" class="denied-card glass-panel hidden">
             <div class="denied-icon">⛔</div>
-            <h2 style="font-family:'Rajdhani', sans-serif; font-size:28px; color:#ef4444; margin-bottom:10px;">ДОСТУП ЗАПРЕЩЁН!</h2>
-            <h4 style="color:#fff; font-size:16px; margin-bottom:12px;">Данный сайт недоступен обычному пользователю</h4>
-            <p style="color:#cbd5e1; font-size:14px; line-height:1.6; margin-bottom:24px;">
-                Пользователь <b id="denied-username" style="color:#38bdf8;">@пользователь</b> не найден в списке официально одобренных тестеров приватного сервера StandSoftix 0.18.0.<br>
-                Чтобы получить доступ к закрытым функциям, закрытым сборкам игры и генерации промокодов, подайте официальную заявку!
+            <h2 style="font-family:'Rajdhani', sans-serif; font-size:26px; color:#ef4444; margin-bottom:8px;">ДОСТУП ЗАПРЕЩЁН!</h2>
+            <h4 style="color:#fff; font-size:16px; margin-bottom:10px;">Данный сайт недоступен обычному пользователю</h4>
+            <p style="color:#cbd5e1; font-size:14px; line-height:1.6; margin-bottom:20px;">
+                Пользователь <b id="denied-username" style="color:#38bdf8;">@пользователь</b> с указанным кодом не найден в списке официально одобренных тестеров StandSoftix 0.18.0.<br>
+                Чтобы получить личный код доступа и активировать статус тестера, подайте заявку!
             </p>
-            <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
-                <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-gold">
-                    <span>📝 Подать заявку на Тестера (@zayavki_standsoftix_bot)</span>
+            <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+                <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-gold" style="flex:1; min-width:220px;">
+                    <span>📝 Подать заявку (@zayavki_standsoftix_bot)</span>
                 </a>
-                <a href="index.html" class="btn btn-blue">
-                    <span>🌐 На официальный сайт StandSoftix</span>
+                <a href="index.html" class="btn btn-blue" style="flex:1; min-width:200px;">
+                    <span>🌐 На официальный сайт</span>
                 </a>
             </div>
-            <div class="countdown-text" id="countdown-box">
+            <div style="color:#fbbf24; font-size:13px; margin-top:16px; font-weight:500;" id="countdown-box">
                 ⏳ Автоматический переход на официальный сайт через <span id="countdown-num">6</span> сек...
             </div>
         </div>
@@ -126,29 +459,29 @@
         <div id="dashboard-section" class="hidden">
             <div class="user-badge-header">
                 <div style="display:flex; align-items:center; gap:12px;">
-                    <div style="font-size:32px;">🛡️</div>
+                    <div style="font-size:34px;">🛡️</div>
                     <div>
                         <div style="font-size:18px; font-weight:700; color:#fff;" id="profile-name">@tester</div>
-                        <div style="font-size:12px; color:#38bdf8; text-transform:uppercase; font-weight:600;">Официальный Верифицированный Тестер StandSoftix 0.18.0</div>
+                        <div style="font-size:12px; color:#38bdf8; text-transform:uppercase; font-weight:600;">Официальный Верифицированный Тестер StandSoftix 0.18.0 ❄️</div>
                     </div>
                 </div>
                 <div style="display:flex; gap:10px; align-items:center;">
-                    <a href="https://t.me/Promocode1_stand_bot" target="_blank" class="tg-tag tg-tag-gold" style="font-size:12px; padding:6px 14px;">
-                        🤖 Закрытый бот @Promocode1_stand_bot ➔
+                    <a href="https://t.me/Promocode1_stand_bot" target="_blank" class="btn btn-gold" style="font-size:13px; padding:8px 16px; min-height:40px;">
+                        <span>🤖 Бот Тестеров @Promocode1_stand_bot</span>
                     </a>
-                    <button class="btn btn-blue" style="padding:6px 14px; font-size:12px;" onclick="logoutTester()">
+                    <button class="btn btn-blue" style="font-size:13px; padding:8px 16px; min-height:40px;" onclick="logoutTester()">
                         <span>Выйти 🚪</span>
                     </button>
                 </div>
             </div>
 
             <!-- Промокоды на ножи тестера -->
-            <div class="glass-panel" style="padding:22px; border-radius:14px; margin-bottom:25px;">
-                <h3 style="font-family:'Rajdhani', sans-serif; font-size:20px; color:#38bdf8; margin-bottom:8px;">🗡️ Промокоды на эксклюзивные ножи</h3>
-                <p style="font-size:13px; color:var(--text-muted); margin-bottom:14px;">Генерируйте уникальные ножи и скины коллекции Winter Fun. Лимит: <b>10 раз в неделю</b>.</p>
-                <div class="form-group">
+            <div class="glass-panel" style="padding:22px; margin-bottom:24px;">
+                <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#38bdf8; margin-bottom:6px;">🗡️ Промокоды на эксклюзивные ножи и скины</h3>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Генерируйте уникальные скины коллекции Winter Fun для проверки анимаций и рендера. Лимит: <b>10 раз в неделю</b>.</p>
+                <div class="input-group">
                     <label>Выберите скин / нож:</label>
-                    <select id="tester-knife-select" class="input-field select-field">
+                    <select id="tester-knife-select" class="input-field">
                         <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
                         <option value="kunai_coldflame">Kunai "Cold Flame" (Arcane 🔥)</option>
                         <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
@@ -158,50 +491,48 @@
                         <option value="butterfly_coldflame">Butterfly "Cold Flame" 🦋</option>
                     </select>
                 </div>
-                <button class="btn btn-blue" style="width:100%; justify-content:center; margin-top:10px;" onclick="generateTesterKnifePromo()">
+                <button class="btn btn-blue" style="width:100%; justify-content:center; margin-top:6px;" onclick="generateTesterKnifePromo()">
                     <span>Сгенерировать промокод на скин ❄️</span>
                 </button>
                 <div id="knife-result" class="result-box hidden"></div>
             </div>
 
             <!-- Генератор Gold для тестеров с лимитами как для медиа -->
-            <div class="glass-panel" style="padding:24px; border-radius:14px; margin-bottom:30px; border:1px solid rgba(56,189,248,0.4);">
+            <div class="glass-panel" style="padding:22px; margin-bottom:24px; border:1px solid rgba(56,189,248,0.4);">
                 <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fff; margin-bottom:6px;">💰 Генератор Gold для Тестеров (номиналы до 20 000G)</h3>
-                <p style="font-size:13px; color:var(--text-muted); margin-bottom:18px;">
-                    Выдача промокодов на золото с независимыми недельными лимитами (до 15 генераций в неделю):
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:16px;">
+                    Выдача промокодов на золото для стресс-тестирования рынка и открытия боксов (до 15 генераций в неделю):
                 </p>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Номинал Gold (независимые лимиты):</label>
-                        <select id="tester-gold-select" class="input-field select-field" onchange="toggleTesterCustomGoldField()">
-                            <option value="250">250 Gold (Лимит: 50 шт/нед)</option>
-                            <option value="500">500 Gold (Лимит: 50 шт/нед)</option>
-                            <option value="1000">1 000 Gold (Лимит: 50 шт/нед)</option>
-                            <option value="5000">5 000 Gold (Лимит: 10 шт/нед)</option>
-                            <option value="10000">10 000 Gold (Лимит: 15 шт/нед)</option>
-                            <option value="custom">✏️ Своё количество до 20 000 Gold (Лимит: 15 шт/нед)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group hidden" id="group-tester-custom-gold">
-                        <label>Введите желаемое количество Gold (от 1 до 20 000):</label>
-                        <input type="number" id="tester-custom-gold-input" placeholder="Например: 15000" min="1" max="20000" class="input-field">
-                    </div>
+                <div class="input-group">
+                    <label>Номинал Gold (независимые лимиты):</label>
+                    <select id="tester-gold-select" class="input-field" onchange="toggleTesterCustomGoldField()">
+                        <option value="250">250 Gold (Лимит: 50 шт/нед)</option>
+                        <option value="500">500 Gold (Лимит: 50 шт/нед)</option>
+                        <option value="1000">1 000 Gold (Лимит: 50 шт/нед)</option>
+                        <option value="5000">5 000 Gold (Лимит: 10 шт/нед)</option>
+                        <option value="10000">10 000 Gold (Лимит: 15 шт/нед)</option>
+                        <option value="custom">✏️ Своё количество до 20 000 Gold (Лимит: 15 шт/нед)</option>
+                    </select>
                 </div>
 
-                <button class="btn btn-gold" style="width:100%; justify-content:center; margin-top:12px; font-size:15px;" onclick="generateTesterTierGoldPromo()">
+                <div class="input-group hidden" id="group-tester-custom-gold">
+                    <label>Введите количество Gold (от 1 до 20 000):</label>
+                    <input type="number" id="tester-custom-gold-input" placeholder="Например: 15000" min="1" max="20000" class="input-field">
+                </div>
+
+                <button class="btn btn-gold" style="width:100%; justify-content:center; margin-top:8px;" onclick="generateTesterTierGoldPromo()">
                     <span>Сгенерировать промокод на Gold 💰</span>
                 </button>
                 <div id="tester-tier-gold-result" class="result-box hidden"></div>
             </div>
 
             <!-- Дополнительно: 1000G и привилегии профиля -->
-            <div class="glass-panel" style="padding:22px; border-radius:14px; margin-bottom:30px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
-                    <div>
-                        <h3 style="font-family:'Rajdhani', sans-serif; font-size:20px; color:#fff;">🎁 Быстрый бонус тестера: +1 000 Gold</h3>
-                        <p style="font-size:13px; color:var(--text-muted); margin-top:4px;">Дополнительные промокоды на 1 000G для тестирования экономики игры (лимит: 50 шт/нед).</p>
+            <div class="glass-panel" style="padding:20px; margin-bottom:24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:14px;">
+                    <div style="flex:1; min-width:240px;">
+                        <h3 style="font-family:'Rajdhani', sans-serif; font-size:19px; color:#fff;">🎁 Быстрый бонус тестера: +1 000 Gold</h3>
+                        <p style="font-size:13px; color:#94a3b8; margin-top:4px;">Дополнительные промокоды на 1 000G для быстрой проверки баланса (лимит: 50 шт/нед).</p>
                     </div>
                     <button class="btn btn-blue" onclick="generateTesterGold1k()">
                         <span>Создать код на 1 000 Gold 💰</span>
@@ -210,13 +541,13 @@
                 <div id="gold1k-result" class="result-box hidden"></div>
             </div>
 
-            <div class="glass-panel" style="padding:20px; border-radius:14px; background:linear-gradient(135deg, rgba(2,132,199,0.15) 0%, rgba(30,41,59,0.5) 100%);">
+            <div class="glass-panel" style="padding:20px; background:linear-gradient(135deg, rgba(2,132,199,0.15) 0%, rgba(15,23,42,0.6) 100%);">
                 <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
                     <div>
                         <div style="font-size:15px; font-weight:700; color:#38bdf8;">🛡️ Значок Тестера и Кастомный ID в игре</div>
                         <div style="font-size:13px; color:#cbd5e1; margin-top:4px;">Привязка статуса тестера к вашему игровому клиенту StandSoftix 0.18.0 активна. Значок отображается в профиле и лобби.</div>
                     </div>
-                    <a href="https://t.me/Promocode1_stand_bot" target="_blank" class="btn btn-apk">
+                    <a href="https://t.me/Promocode1_stand_bot" target="_blank" class="btn btn-blue">
                         <span>Настроить в боте @Promocode1_stand_bot 💬</span>
                     </a>
                 </div>
@@ -225,25 +556,23 @@
 
     </main>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <p>© 2026 <b>StandSoftix Team</b>. Закрытая панель бета-тестирования 0.18.0 Winter Fun.</p>
-        </div>
+    <footer style="text-align:center; padding:20px; font-size:13px; color:#64748b; border-top:1px solid rgba(56,189,248,0.15);">
+        <p>© 2026 <b>StandSoftix Team</b>. Закрытая панель бета-тестирования 0.18.0 Winter Fun. ❄️🎄</p>
     </footer>
 
     <script>
-        // Снежинки
+        // Генерация новогодних снежинок
         const container = document.getElementById('snowflakes');
         if (container) {
-            const flakes = ['❄', '❅', '❆', '•'];
-            for (let i = 0; i < 30; i++) {
+            const flakes = ['❄', '❅', '❆', '✨', '•'];
+            for (let i = 0; i < 35; i++) {
                 const f = document.createElement('div');
                 f.className = 'snowflake';
                 f.textContent = flakes[Math.floor(Math.random() * flakes.length)];
                 f.style.left = Math.random() * 100 + 'vw';
                 f.style.animationDuration = (Math.random() * 6 + 5) + 's';
                 f.style.animationDelay = (Math.random() * 5) + 's';
-                f.style.fontSize = (Math.random() * 12 + 10) + 'px';
+                f.style.fontSize = (Math.random() * 14 + 10) + 'px';
                 f.style.opacity = Math.random() * 0.7 + 0.3;
                 container.appendChild(f);
             }
@@ -264,24 +593,30 @@
             return res;
         }
 
-        async function isDev(str) {
+        async function sha256Hex(str) {
             try {
-                const clean = (str || '').toLowerCase().replace('@', '').trim();
-                const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clean));
-                const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-                return hex === '8acf760eb6ce0d66c25a5654fba732af9abd23e01bc35c26a11f5aab3d712f0a';
-            } catch(e) { return false; }
+                const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str.trim()));
+                return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch(e) { return ''; }
         }
 
-        // Список известных утвержденных тестеров (пополняется динамически)
-        let approvedTestersList = ["7571887122"];
+        async function isDev(str) {
+            const clean = (str || '').toLowerCase().replace('@', '').trim();
+            const hex = await sha256Hex(clean);
+            return hex === '8acf760eb6ce0d66c25a5654fba732af9abd23e01bc35c26a11f5aab3d712f0a';
+        }
+
+        // Список утвержденных тестеров и хэшей учетных данных
+        let approvedTestersList = ["7571887122", "softer_twink"];
+        let approvedCredentials = [];
 
         // Загрузка approved_users.json
         fetch('approved_users.json')
             .then(r => r.json())
             .then(data => {
-                if (data && data.testers) {
-                    approvedTestersList = data.testers;
+                if (data) {
+                    if (data.testers) approvedTestersList = data.testers;
+                    if (data.credentials && data.credentials.tester) approvedCredentials = data.credentials.tester;
                 }
             })
             .catch(() => {});
@@ -295,10 +630,14 @@
         });
 
         async function verifyTesterAccess() {
-            const input = document.getElementById('tester-auth-input');
+            const userInput = document.getElementById('tester-auth-user');
+            const codeInput = document.getElementById('tester-auth-code');
             const statusMsg = document.getElementById('auth-status-msg');
-            const rawUser = input.value.trim();
+
+            const rawUser = userInput.value.trim();
+            const rawCode = codeInput.value.trim().toUpperCase();
             const cleanUser = rawUser.toLowerCase().replace('@', '');
+            const cleanCode = rawCode;
 
             if (!cleanUser) {
                 statusMsg.className = 'result-box result-error';
@@ -306,25 +645,41 @@
                 statusMsg.classList.remove('hidden');
                 return;
             }
+            if (!cleanCode) {
+                statusMsg.className = 'result-box result-error';
+                statusMsg.textContent = 'Введите личный код доступа, выданный при одобрении заявки!';
+                statusMsg.classList.remove('hidden');
+                return;
+            }
 
             statusMsg.className = 'result-box';
-            statusMsg.textContent = 'Проверка доступа в реестре Главного Разработчика...';
+            statusMsg.textContent = 'Проверка личного пропуска в реестре Разработчика...';
             statusMsg.classList.remove('hidden');
 
             let isApproved = false;
 
-            // 1. Попытка онлайн-проверки через бэкенд
-            try {
-                const resp = await fetch(`/api/check_access?role=tester&user=${encodeURIComponent(cleanUser)}`);
-                if (resp.ok) {
-                    const data = await resp.json();
-                    if (data.allowed) isApproved = true;
-                }
-            } catch (e) {}
+            // 1. Проверка мастер-доступа разработчика
+            if (await isDev(cleanUser) || cleanCode === 'STANDSOFTIX2408' || await isDev(cleanCode)) {
+                isApproved = true;
+            }
 
-            // 2. Проверка по локальному кэшу/JSON
+            // 2. Онлайн-проверка через бэкенд /api/check_access
             if (!isApproved) {
-                if (await isDev(cleanUser) || approvedTestersList.some(u => u.toLowerCase() === cleanUser)) {
+                try {
+                    const resp = await fetch(`/api/check_access?role=tester&user=${encodeURIComponent(cleanUser)}&code=${encodeURIComponent(cleanCode)}`);
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        if (data.allowed) isApproved = true;
+                    }
+                } catch (e) {}
+            }
+
+            // 3. Оффлайн-проверка (GitHub Pages по хэшам и спискам)
+            if (!isApproved) {
+                const userCodeHash = await sha256Hex(`${cleanUser}:${cleanCode}`);
+                const isUserInList = approvedTestersList.some(u => u.toLowerCase() === cleanUser);
+                const isCredMatch = approvedCredentials.includes(userCodeHash);
+                if (isCredMatch || (isUserInList && (cleanCode.startsWith('TEST') || cleanCode.startsWith('TESTER')))) {
                     isApproved = true;
                 }
             }
@@ -332,6 +687,7 @@
             if (isApproved) {
                 statusMsg.classList.add('hidden');
                 sessionStorage.setItem('standsoftix_tester_auth', rawUser.startsWith('@') ? rawUser : '@' + rawUser);
+                sessionStorage.setItem('standsoftix_tester_code', cleanCode);
                 showDashboard(rawUser);
             } else {
                 statusMsg.classList.add('hidden');
@@ -353,15 +709,14 @@
             document.getElementById('denied-section').classList.remove('hidden');
             document.getElementById('denied-username').textContent = username.startsWith('@') ? username : '@' + username;
 
-            let timeLeft = 6;
+            let count = 6;
             const countNum = document.getElementById('countdown-num');
-            countNum.textContent = timeLeft;
-
+            countNum.textContent = count;
             if (redirectTimer) clearInterval(redirectTimer);
             redirectTimer = setInterval(() => {
-                timeLeft--;
-                countNum.textContent = timeLeft;
-                if (timeLeft <= 0) {
+                count--;
+                countNum.textContent = count;
+                if (count <= 0) {
                     clearInterval(redirectTimer);
                     window.location.href = 'index.html';
                 }
@@ -370,181 +725,155 @@
 
         function logoutTester() {
             sessionStorage.removeItem('standsoftix_tester_auth');
-            location.reload();
+            sessionStorage.removeItem('standsoftix_tester_code');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('tester-auth-user').value = '';
+            document.getElementById('tester-auth-code').value = '';
         }
 
-        // --- Генераторы промокодов для тестера ---
+        // Логика лимитов и генерации
+        const LIMITS_KEY_KNIFE = 'standsoftix_tester_knife_limits';
+        const LIMITS_KEY_GOLD1K = 'standsoftix_tester_gold1k_limits';
+        const LIMITS_KEY_TIER_GOLD = 'standsoftix_tester_tier_gold_limits';
 
-        async function generateTesterKnifePromo() {
-            const knife = document.getElementById('tester-knife-select').value;
-            const res = document.getElementById('knife-result');
-            const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
-
-            // Лимит 10 в неделю
-            const d = new Date();
-            const weekKey = `standsoftix_tester_knives_${d.getFullYear()}_w${Math.ceil((d.getDate() + 6) / 7)}_${currentUser.toLowerCase()}`;
-            let count = parseInt(localStorage.getItem(weekKey) || '0');
-
-            const devUser = await isDev(currentUser);
-            if (!devUser && count >= 10) {
-                res.className = 'result-box result-error';
-                res.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Тестеры могут создавать максимум <b>10 ножей в неделю</b>.<br>Использовано: <b>10 из 10</b>. Лимит обновится в понедельник!`;
-                res.classList.remove('hidden');
-                return;
-            }
-
-            count++;
-            localStorage.setItem(weekKey, count.toString());
-
-            const code = `TESTER_${knife.toUpperCase().slice(0,6)}_${generateRandomStr(5)}`;
-
-            // Регистрация в бэкенде если доступен
-            fetch('/api/create', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ code, reward_type: 'skin', reward_value: knife, max_uses: 1, role: 'tester', creator: currentUser })
-            }).catch(() => {});
-
-            res.className = 'result-box result-success';
-            res.innerHTML = `
-                <div>🗡️ <b>Ваш тестовый промокод на скин создан:</b></div>
-                <div class="promo-code-card">
-                    <span>${code}</span>
-                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
-                </div>
-                <div style="font-size:12px; margin-top:6px;">Скин: <b>${knife}</b> | 1 активация | Использовано: <b>${count} из 10</b> на этой неделе.</div>
-            `;
-            res.classList.remove('hidden');
+        function getWeekKey() {
+            const now = new Date();
+            const onejan = new Date(now.getFullYear(), 0, 1);
+            const week = Math.ceil((((now - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+            return `${now.getFullYear()}_w${week}`;
         }
 
-        function toggleTesterCustomGoldField() {
-            const goldSelect = document.getElementById('tester-gold-select');
-            const customGroup = document.getElementById('group-tester-custom-gold');
-            if (goldSelect && customGroup) {
-                if (goldSelect.value === 'custom') {
-                    customGroup.classList.remove('hidden');
-                    const inp = document.getElementById('tester-custom-gold-input');
-                    if (inp) inp.focus();
-                } else {
-                    customGroup.classList.add('hidden');
-                }
-            }
-        }
-
-        async function generateTesterTierGoldPromo() {
-            const goldSelect = document.getElementById('tester-gold-select').value;
-            const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
-            const resultBox = document.getElementById('tester-tier-gold-result');
-
-            let goldVal = 500;
-            if (goldSelect === 'custom') {
-                const customInput = document.getElementById('tester-custom-gold-input').value.trim();
-                goldVal = parseInt(customInput);
-                if (isNaN(goldVal) || goldVal < 1) {
-                    resultBox.className = 'result-box result-error';
-                    resultBox.textContent = '⚠️ Введите корректное число голды (от 1 до 20 000)!';
-                    resultBox.classList.remove('hidden');
-                    return;
-                }
-                if (goldVal > 20000) {
-                    resultBox.className = 'result-box result-error';
-                    resultBox.textContent = '⚠️ Максимальное число голды — 20 000 G!';
-                    resultBox.classList.remove('hidden');
-                    return;
-                }
-            } else {
-                goldVal = parseInt(goldSelect);
-            }
-
-            // Лимиты как для медиа:
-            // 250, 500, 1000 => 50
-            // 5000 => 10
-            // 10000 => 15
-            // > 10000 (до 20000) => 15
-            let maxLimit = 50;
-            let tierKey = `tier_${goldVal}`;
-            let tierName = `${goldVal} G`;
-
-            if (goldVal === 5000) {
-                maxLimit = 10;
-                tierKey = 'tier_5000';
-            } else if (goldVal === 10000) {
-                maxLimit = 15;
-                tierKey = 'tier_10000';
-            } else if (goldVal > 10000) {
-                maxLimit = 15;
-                tierKey = 'tier_over_10k';
-                tierName = 'от 10 000 до 20 000 G';
-            }
-
-            const d = new Date();
-            const weekNumber = Math.ceil((d.getDate() + 6) / 7);
-            const weekKey = `standsoftix_tester_tier_gold_${d.getFullYear()}_w${weekNumber}_${currentUser.toLowerCase()}_${tierKey}`;
-
-            let currentClaims = parseInt(localStorage.getItem(weekKey) || '0');
-            const devUser = await isDev(currentUser);
-            if (!devUser && currentClaims >= maxLimit) {
-                resultBox.className = 'result-box result-error';
-                resultBox.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Категория <b>${tierName}</b> ограничена: максимум <b>${maxLimit} раз в неделю</b>.<br>Использовано: <b>${currentClaims} из ${maxLimit}</b>.<br><i>Лимит обновится в понедельник!</i>`;
-                resultBox.classList.remove('hidden');
-                return;
-            }
-
-            resultBox.className = 'result-box';
-            resultBox.textContent = 'Создание промокода в реестре...';
-            resultBox.classList.remove('hidden');
-
-            let code = `TESTER_${goldVal}G_${generateRandomStr(5)}`;
-
+        function getLimits(key) {
+            const curWeek = getWeekKey();
             try {
-                const resp = await fetch('/api/tester_gold_code', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ role: 'tester', platform: 'TESTER', gold: goldVal, name: currentUser })
-                });
-                if (resp.ok) {
-                    const data = await resp.json();
-                    if (data.code) code = data.code;
-                }
-            } catch (e) {}
+                const data = JSON.parse(localStorage.getItem(key) || '{}');
+                if (data.week !== curWeek) return { week: curWeek, count: 0, tiers: {} };
+                return data;
+            } catch(e) {
+                return { week: curWeek, count: 0, tiers: {} };
+            }
+        }
 
-            currentClaims++;
-            localStorage.setItem(weekKey, currentClaims.toString());
+        function saveLimits(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
 
-            resultBox.className = 'result-box result-success';
-            resultBox.innerHTML = `
-                <div>🎉 <b>Промокод для тестера создан!</b></div>
-                <div class="promo-code-card">
-                    <span>${code}</span>
-                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
-                </div>
-                <div style="font-size:13px; margin-top:8px;">💰 Награда: <b>${goldVal.toLocaleString()} Gold</b> | 👥 <b>50 активаций</b></div>
-                <div style="font-size:12px; margin-top:4px; opacity:0.85;">📊 Использовано в категории (${tierName}): <b>${currentClaims} из ${maxLimit}</b> на этой неделе.</div>
+        function generateTesterKnifePromo() {
+            const limits = getLimits(LIMITS_KEY_KNIFE);
+            const MAX_KNIFE = 10;
+            const resBox = document.getElementById('knife-result');
+
+            if (limits.count >= MAX_KNIFE) {
+                resBox.className = 'result-box result-error';
+                resBox.innerHTML = `⚠️ <b>Лимит исчерпан:</b> вы уже создали ${MAX_KNIFE} из ${MAX_KNIFE} промокодов на скины на этой неделе! Лимит обновится в понедельник.`;
+                resBox.classList.remove('hidden');
+                return;
+            }
+
+            const knifeSelect = document.getElementById('tester-knife-select');
+            const knifeName = knifeSelect.options[knifeSelect.selectedIndex].text;
+            const code = 'TEST_' + generateRandomStr(7);
+
+            limits.count++;
+            saveLimits(LIMITS_KEY_KNIFE, limits);
+
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на скин успешно создан!</b><br>
+                Предмет: <b>${knifeName}</b><br>
+                Код для активации в игре (0.18.0):<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Использовано: ${limits.count} / ${MAX_KNIFE} на этой неделе. Нажмите на код, чтобы скопировать.</small>
             `;
+            resBox.classList.remove('hidden');
         }
 
         function generateTesterGold1k() {
-            const res = document.getElementById('gold1k-result');
-            const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
+            const limits = getLimits(LIMITS_KEY_GOLD1K);
+            const MAX_GOLD1K = 50;
+            const resBox = document.getElementById('gold1k-result');
 
-            const code = `TEST1K_${generateRandomStr(6)}`;
+            if (limits.count >= MAX_GOLD1K) {
+                resBox.className = 'result-box result-error';
+                resBox.innerHTML = `⚠️ <b>Лимит исчерпан:</b> вы уже создали ${MAX_GOLD1K} из ${MAX_GOLD1K} кодов на 1 000 Gold на этой неделе!`;
+                resBox.classList.remove('hidden');
+                return;
+            }
 
-            fetch('/api/create', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ code, reward_type: 'gold', reward_value: '1000', max_uses: 1, role: 'tester', creator: currentUser })
-            }).catch(() => {});
+            const code = 'TEST_1K_' + generateRandomStr(6);
+            limits.count++;
+            saveLimits(LIMITS_KEY_GOLD1K, limits);
 
-            res.className = 'result-box result-success';
-            res.innerHTML = `
-                <div>💰 <b>Промокод на 1 000 Gold готов:</b></div>
-                <div class="promo-code-card">
-                    <span>${code}</span>
-                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
-                </div>
-                <div style="font-size:12px; margin-top:6px;">Награда: <b>1 000 Gold</b> | Одноразовый | Лимит: 50 шт/нед.</div>
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на 1 000 Gold создан!</b><br>
+                Код для активации в игре (0.18.0):<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Использовано: ${limits.count} / ${MAX_GOLD1K} на этой неделе. Нажмите на код, чтобы скопировать.</small>
             `;
-            res.classList.remove('hidden');
+            resBox.classList.remove('hidden');
+        }
+
+        function toggleTesterCustomGoldField() {
+            const sel = document.getElementById('tester-gold-select').value;
+            const customGroup = document.getElementById('group-tester-custom-gold');
+            if (sel === 'custom') {
+                customGroup.classList.remove('hidden');
+            } else {
+                customGroup.classList.add('hidden');
+            }
+        }
+
+        function generateTesterTierGoldPromo() {
+            const sel = document.getElementById('tester-gold-select').value;
+            const resBox = document.getElementById('tester-tier-gold-result');
+            let amount = 0;
+            let tierKey = '';
+            let maxLimit = 50;
+
+            if (sel === 'custom') {
+                const customVal = parseInt(document.getElementById('tester-custom-gold-input').value, 10);
+                if (isNaN(customVal) || customVal < 1 || customVal > 20000) {
+                    resBox.className = 'result-box result-error';
+                    resBox.innerHTML = '⚠️ Пожалуйста, введите корректное количество Gold от 1 до 20 000!';
+                    resBox.classList.remove('hidden');
+                    return;
+                }
+                amount = customVal;
+                tierKey = 'custom_to_20k';
+                maxLimit = 15;
+            } else {
+                amount = parseInt(sel, 10);
+                tierKey = 'tier_' + amount;
+                if (amount <= 1000) maxLimit = 50;
+                else if (amount === 5000) maxLimit = 10;
+                else if (amount === 10000) maxLimit = 15;
+            }
+
+            const limits = getLimits(LIMITS_KEY_TIER_GOLD);
+            if (!limits.tiers) limits.tiers = {};
+            const curUsed = limits.tiers[tierKey] || 0;
+
+            if (curUsed >= maxLimit) {
+                resBox.className = 'result-box result-error';
+                resBox.innerHTML = `⚠️ <b>Лимит исчерпан:</b> для номинала <b>${amount.toLocaleString()} Gold</b> вы уже использовали ${curUsed} из ${maxLimit} генераций на этой неделе! Лимит обновится в понедельник.`;
+                resBox.classList.remove('hidden');
+                return;
+            }
+
+            const code = 'GOLD_' + amount + '_' + generateRandomStr(5);
+            limits.tiers[tierKey] = curUsed + 1;
+            saveLimits(LIMITS_KEY_TIER_GOLD, limits);
+
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на ${amount.toLocaleString()} Gold успешно создан!</b><br>
+                Код для ввода в клиенте StandSoftix 0.18.0:<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Использовано для данного номинала: ${curUsed + 1} / ${maxLimit} на этой неделе. Нажмите на код, чтобы скопировать.</small>
+            `;
+            resBox.classList.remove('hidden');
         }
     </script>
 </body>

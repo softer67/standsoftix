@@ -2,72 +2,407 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StandSoftix 0.18.0 — Медиа-Центр Партнёров 🎥</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StandSoftix 0.18.0 — Медиа-Центр Партнёров 🎄🎥</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --frost-bg: rgba(10, 20, 36, 0.78);
+            --frost-border: rgba(244, 63, 94, 0.35);
+            --festive-rose: #f43f5e;
+            --festive-gold: #fbbf24;
+            --festive-cyan: #38bdf8;
+        }
+
+        body {
+            background: radial-gradient(circle at 50% 10%, #2b0f1c 0%, #0d111a 70%, #030508 100%);
+            min-height: 100vh;
+            color: #f1f5f9;
+            font-family: 'Rubik', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Анимированные новогодние снежинки */
+        .snowflakes-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+            overflow: hidden;
+        }
+        .snowflake {
+            position: absolute;
+            top: -20px;
+            color: #fed7aa;
+            user-select: none;
+            animation: fall linear infinite;
+            filter: drop-shadow(0 0 6px rgba(244, 63, 94, 0.8));
+        }
+        @keyframes fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(105vh) rotate(360deg); opacity: 0.2; }
+        }
+
+        /* Шапка */
+        .header {
+            background: rgba(12, 10, 20, 0.85);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(244, 63, 94, 0.25);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            letter-spacing: 1px;
+        }
+        .logo span { color: var(--festive-rose); }
+        .festive-tag {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            box-shadow: 0 0 10px rgba(225, 29, 72, 0.4);
+        }
+        .ny-badge {
+            background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+            color: #fef08a;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(251, 191, 36, 0.5);
+            box-shadow: 0 0 10px rgba(220, 38, 38, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .nav-links a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+        .nav-links a:hover {
+            color: var(--festive-rose);
+            text-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+        }
+
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.35);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: #34d399;
+        }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            box-shadow: 0 0 8px #10b981;
+            animation: pulse-dot 1.5s infinite;
+        }
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.15); }
+        }
+
+        /* Контейнер */
+        .main-content {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 24px 16px 60px;
+            position: relative;
+            z-index: 20;
+        }
+
+        /* Стеклянные панели */
+        .glass-panel {
+            background: var(--frost-bg);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--frost-border);
+            border-radius: 18px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        /* Карточка авторизации */
         .auth-card {
-            max-width: 600px;
-            margin: 40px auto;
-            padding: 36px 30px;
+            max-width: 540px;
+            margin: 32px auto;
+            padding: 34px 28px;
             text-align: center;
+            border: 1px solid rgba(244, 63, 94, 0.45);
+            box-shadow: 0 12px 40px rgba(225, 29, 72, 0.25), inset 0 0 20px rgba(244, 63, 94, 0.08);
         }
         .auth-icon {
-            font-size: 56px;
-            margin-bottom: 16px;
-            filter: drop-shadow(0 0 15px rgba(244, 63, 94, 0.6));
+            font-size: 52px;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 0 16px rgba(244, 63, 94, 0.7));
+            animation: float-icon 3s ease-in-out infinite;
         }
+        @keyframes float-icon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        /* Отказ в доступе */
         .denied-card {
-            max-width: 650px;
-            margin: 40px auto;
-            padding: 36px 30px;
+            max-width: 580px;
+            margin: 32px auto;
+            padding: 34px 28px;
             text-align: center;
             border-color: #ef4444 !important;
-            box-shadow: 0 0 35px rgba(239, 68, 68, 0.3) !important;
+            box-shadow: 0 0 35px rgba(239, 68, 68, 0.35) !important;
         }
         .denied-icon {
-            font-size: 64px;
-            margin-bottom: 16px;
-            animation: pulse 1.5s infinite;
+            font-size: 54px;
+            margin-bottom: 12px;
+            animation: pulse-denied 1.5s infinite;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.08); }
-            100% { transform: scale(1); }
+        @keyframes pulse-denied {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
         }
+
+        /* Поля ввода и кнопки */
+        .input-group {
+            text-align: left;
+            margin-bottom: 14px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+        .input-field {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(244, 63, 94, 0.3);
+            border-radius: 10px;
+            padding: 13px 16px;
+            color: #fff;
+            font-size: 16px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.25s ease;
+            box-sizing: border-box;
+        }
+        .input-field:focus {
+            border-color: var(--festive-rose);
+            box-shadow: 0 0 15px rgba(244, 63, 94, 0.35);
+            background: rgba(15, 23, 42, 0.95);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            border-radius: 10px;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            min-height: 48px;
+            padding: 12px 20px;
+            font-size: 15px;
+            box-sizing: border-box;
+        }
+        .btn-rose {
+            background: linear-gradient(135deg, #e11d48 0%, #be123c 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(225, 29, 72, 0.4);
+        }
+        .btn-rose:hover {
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+            box-shadow: 0 6px 24px rgba(244, 63, 94, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(217, 119, 6, 0.4);
+        }
+        .btn-gold:hover {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            box-shadow: 0 6px 24px rgba(245, 158, 11, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-blue {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(2, 132, 199, 0.4);
+        }
+        .btn-blue:hover {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            box-shadow: 0 6px 24px rgba(14, 165, 233, 0.6);
+            transform: translateY(-2px);
+        }
+
+        .result-box {
+            background: rgba(15, 23, 42, 0.9);
+            border: 1px solid rgba(244, 63, 94, 0.4);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-top: 14px;
+            font-size: 14px;
+            color: #e2e8f0;
+            word-break: break-word;
+        }
+        .result-error {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+        }
+        .result-success {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.15);
+            color: #a7f3d0;
+        }
+
         .user-badge-header {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            background: rgba(244, 63, 94, 0.15);
-            border: 1px solid rgba(244, 63, 94, 0.3);
-            border-radius: 12px;
-            padding: 14px 22px;
-            margin-bottom: 25px;
+            background: linear-gradient(135deg, rgba(225, 29, 72, 0.2) 0%, rgba(15, 23, 42, 0.8) 100%);
+            border: 1px solid rgba(244, 63, 94, 0.35);
+            border-radius: 14px;
+            padding: 16px 22px;
+            margin-bottom: 24px;
             flex-wrap: wrap;
             gap: 12px;
         }
-        .countdown-text {
-            color: #fbbf24;
-            font-size: 14px;
-            margin-top: 18px;
-            font-weight: 500;
+
+        .promo-display {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fb7185;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 14px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 8px 0;
+            border: 1px dashed rgba(244, 63, 94, 0.5);
+            cursor: pointer;
+        }
+
+        .hidden { display: none !important; }
+
+        /* Адаптивность: Планшеты и Мобильные */
+        @media (max-width: 900px) {
+            .header-container {
+                flex-direction: column;
+                gap: 10px;
+                padding: 10px 14px;
+            }
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+            .main-content {
+                padding: 16px 12px 40px;
+            }
+            .auth-card, .denied-card {
+                padding: 24px 18px;
+                margin: 20px auto;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .logo { font-size: 19px; }
+            .auth-card, .denied-card {
+                width: 100%;
+                padding: 22px 14px;
+                margin: 16px auto;
+            }
+            .auth-icon, .denied-icon { font-size: 42px; margin-bottom: 8px; }
+            h2 { font-size: 22px !important; }
+            h3 { font-size: 18px !important; }
+            .btn {
+                width: 100% !important;
+                min-height: 48px !important;
+                font-size: 14px !important;
+            }
+            .user-badge-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 14px;
+            }
+            .user-badge-header > div:last-child {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .promo-display {
+                font-size: 18px;
+                letter-spacing: 1px;
+                width: 100%;
+                box-sizing: border-box;
+                text-align: center;
+            }
         }
     </style>
 </head>
-<body class="winter-theme">
+<body>
     <div class="snowflakes-container" id="snowflakes"></div>
 
     <!-- Шапка сайта -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">
-                <span class="logo-icon">❄️</span>
-                <span class="logo-text">STAND<span>SOFTIX</span></span>
-                <span class="badge-role" style="background:#e11d48; color:#fff; font-size:11px; padding:3px 8px; border-radius:6px; margin-left:8px; font-weight:700;">MEDIA HUB</span>
+                <span>❄️ STAND</span><span>SOFTIX</span>
+                <span class="festive-tag">MEDIA HUB</span>
+                <span class="ny-badge">🎄 2026 Season</span>
             </a>
             <nav class="nav-links">
                 <a href="index.html">🌐 На главную</a>
@@ -76,7 +411,7 @@
             </nav>
             <div class="server-status">
                 <span class="status-dot"></span>
-                <span class="status-text">Сервер: <b>ONLINE</b></span>
+                <span>Сервер 0.18.0: <b>ONLINE</b></span>
             </div>
         </div>
     </header>
@@ -85,39 +420,47 @@
 
         <!-- 1. Экран авторизации (проверка доступа) -->
         <div id="auth-section" class="auth-card glass-panel">
-            <div class="auth-icon">🎥</div>
-            <h2 style="font-family:'Rajdhani', sans-serif; font-size:30px; color:#fff; margin-bottom:8px;">Вход в закрытый медиа-центр</h2>
-            <p style="color:var(--text-muted); font-size:14px; line-height:1.5; margin-bottom:24px;">
-                Доступ открыт строго для утверждённых медиа-партнёров (YouTube / TikTok / Twitch) от Главного Разработчика.<br>
-                Введите ваш Telegram Username или ID в игре для подтверждения статуса:
+            <div class="auth-icon">🎬</div>
+            <h2 style="font-family:'Rajdhani', sans-serif; font-size:28px; color:#fff; margin-bottom:6px;">Вход в закрытый медиа-центр</h2>
+            <p style="color:#94a3b8; font-size:14px; line-height:1.5; margin-bottom:20px;">
+                Доступ открыт строго для утверждённых медиа-партнёров (YouTube / TikTok / Twitch) от Разработчика.<br>
+                Введите ваш логин и личный код доступа, выданный при одобрении:
             </p>
-            <div style="display:flex; flex-direction:column; gap:12px; max-width:420px; margin:0 auto;">
-                <input type="text" id="media-auth-input" placeholder="@ваш_юзернейм или ID в игре" class="input-field" style="text-align:center; font-size:15px;" onkeypress="if(event.key==='Enter') verifyMediaAccess()">
-                <button class="btn btn-gold" style="justify-content:center; width:100%;" onclick="verifyMediaAccess()">
+
+            <div style="display:flex; flex-direction:column; gap:6px; max-width:440px; margin:0 auto; width:100%;">
+                <div class="input-group">
+                    <label>1. Telegram Username или Игровой ID:</label>
+                    <input type="text" id="media-auth-user" placeholder="@ваш_юзернейм или ID в игре" class="input-field" onkeypress="if(event.key==='Enter') verifyMediaAccess()">
+                </div>
+                <div class="input-group">
+                    <label>2. Личный код доступа (из уведомления бота):</label>
+                    <input type="text" id="media-auth-code" placeholder="Например: MEDIA_7K9X2B" class="input-field" style="text-transform:uppercase; letter-spacing:1px;" onkeypress="if(event.key==='Enter') verifyMediaAccess()">
+                </div>
+                <button class="btn btn-rose" style="width:100%; margin-top:4px;" onclick="verifyMediaAccess()">
                     <span>Войти в медиа-центр 🎬</span>
                 </button>
             </div>
-            <div id="auth-status-msg" class="result-box hidden" style="margin-top:16px;"></div>
+            <div id="auth-status-msg" class="result-box hidden"></div>
         </div>
 
-        <!-- 2. Экран отказа в доступе (если нет в одобренных) -->
+        <!-- 2. Экран отказа в доступе (если нет в одобренных или код неверный) -->
         <div id="denied-section" class="denied-card glass-panel hidden">
             <div class="denied-icon">⛔</div>
-            <h2 style="font-family:'Rajdhani', sans-serif; font-size:28px; color:#ef4444; margin-bottom:10px;">ДОСТУП ЗАПРЕЩЁН!</h2>
-            <h4 style="color:#fff; font-size:16px; margin-bottom:12px;">Данный сайт недоступен обычному пользователю</h4>
-            <p style="color:#cbd5e1; font-size:14px; line-height:1.6; margin-bottom:24px;">
-                Пользователь <b id="denied-username" style="color:#f43f5e;">@пользователь</b> не найден в списке одобренных медиа-партнёров проекта StandSoftix 0.18.0.<br>
-                Выдавать промокоды зрителям и получать закрытые ассеты для съёмок могут только официальные блогеры проекта.
+            <h2 style="font-family:'Rajdhani', sans-serif; font-size:26px; color:#ef4444; margin-bottom:8px;">ДОСТУП ЗАПРЕЩЁН!</h2>
+            <h4 style="color:#fff; font-size:16px; margin-bottom:10px;">Данный сайт недоступен обычному пользователю</h4>
+            <p style="color:#cbd5e1; font-size:14px; line-height:1.6; margin-bottom:20px;">
+                Пользователь <b id="denied-username" style="color:#f43f5e;">@пользователь</b> с указанным кодом не найден в списке официально одобренных блогеров StandSoftix 0.18.0.<br>
+                Выдавать промокоды зрителям и получать ресурсы для контента могут только официальные партнёры проекта.
             </p>
-            <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap;">
-                <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-gold">
-                    <span>🎬 Подать заявку на Медиа-партнёра (@zayavki_standsoftix_bot)</span>
+            <div style="display:flex; justify-content:center; gap:12px; flex-wrap:wrap;">
+                <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-gold" style="flex:1; min-width:220px;">
+                    <span>🎬 Подать заявку (@zayavki_standsoftix_bot)</span>
                 </a>
-                <a href="index.html" class="btn btn-blue">
-                    <span>🌐 На официальный сайт StandSoftix</span>
+                <a href="index.html" class="btn btn-blue" style="flex:1; min-width:200px;">
+                    <span>🌐 На официальный сайт</span>
                 </a>
             </div>
-            <div class="countdown-text" id="countdown-box">
+            <div style="color:#fbbf24; font-size:13px; margin-top:16px; font-weight:500;" id="countdown-box">
                 ⏳ Автоматический переход на официальный сайт через <span id="countdown-num">6</span> сек...
             </div>
         </div>
@@ -126,96 +469,105 @@
         <div id="dashboard-section" class="hidden">
             <div class="user-badge-header">
                 <div style="display:flex; align-items:center; gap:12px;">
-                    <div style="font-size:32px;">🎬</div>
+                    <div style="font-size:34px;">🎥</div>
                     <div>
-                        <div style="font-size:18px; font-weight:700; color:#fff;" id="profile-name">@media_partner</div>
-                        <div style="font-size:12px; color:#f43f5e; text-transform:uppercase; font-weight:600;">Официальный Медиа-Партнёр StandSoftix 0.18.0</div>
+                        <div style="font-size:18px; font-weight:700; color:#fff;" id="profile-name">@blogger</div>
+                        <div style="font-size:12px; color:#fb7185; text-transform:uppercase; font-weight:600;">Официальный Медиа-Партнёр StandSoftix 0.18.0 🎬</div>
                     </div>
                 </div>
                 <div style="display:flex; gap:10px; align-items:center;">
-                    <a href="https://t.me/Promocode2_stand_bot" target="_blank" class="tg-tag tg-tag-gold" style="font-size:12px; padding:6px 14px;">
-                        🤖 Закрытый бот @Promocode2_stand_bot ➔
+                    <a href="https://t.me/Promocode2_stand_bot" target="_blank" class="btn btn-gold" style="font-size:13px; padding:8px 16px; min-height:40px;">
+                        <span>🤖 Бот Блогеров @Promocode2_stand_bot</span>
                     </a>
-                    <button class="btn btn-blue" style="padding:6px 14px; font-size:12px;" onclick="logoutMedia()">
+                    <button class="btn btn-rose" style="font-size:13px; padding:8px 16px; min-height:40px;" onclick="logoutMedia()">
                         <span>Выйти 🚪</span>
                     </button>
                 </div>
             </div>
 
-            <!-- Генератор промокодов для зрителей -->
-            <div class="glass-panel" style="padding:26px; border-radius:14px; margin-bottom:30px;">
-                <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fff; margin-bottom:6px;">🎥 Создание промокода для вашей аудитории</h3>
-                <p style="font-size:13px; color:var(--text-muted); margin-bottom:20px;">
-                    Каждый созданный код даёт <b>50 активаций</b> для зрителей ваших роликов (YouTube, TikTok, Shorts, стримы Twitch).
+            <!-- Генератор промокодов на Gold для зрителей с лимитами -->
+            <div class="glass-panel" style="padding:22px; margin-bottom:24px; border:1px solid rgba(244,63,94,0.4);">
+                <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fff; margin-bottom:6px;">🎁 Выдача промокодов на Gold для ваших зрителей</h3>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:16px;">
+                    Создавайте официальные промокоды для интеграций в видео и стримы с независимыми недельными лимитами (до 15 генераций в неделю):
                 </p>
 
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Платформа трансляции / видео:</label>
-                        <select id="partner-platform" class="input-field select-field">
-                            <option value="YT">🔴 YouTube (Префикс YT_)</option>
-                            <option value="TT">⚫️ TikTok (Префикс TT_)</option>
-                            <option value="TW">🟣 Twitch (Префикс TW_)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Номинал промокода (независимые лимиты):</label>
-                        <select id="partner-gold" class="input-field select-field" onchange="toggleCustomGoldField()">
-                            <option value="250">250 Gold (Лимит: 50 шт/нед)</option>
-                            <option value="500">500 Gold (Лимит: 50 шт/нед)</option>
-                            <option value="1000">1 000 Gold (Лимит: 50 шт/нед)</option>
-                            <option value="5000">5 000 Gold (Лимит: 10 шт/нед)</option>
-                            <option value="10000">10 000 Gold (Лимит: 15 шт/нед)</option>
-                            <option value="custom">✏️ Своё количество до 20 000 Gold (Лимит: 15 шт/нед)</option>
-                        </select>
-                    </div>
-
-                    <div class="form-group hidden" id="group-custom-gold">
-                        <label>Введите желаемое количество Gold (от 1 до 20 000):</label>
-                        <input type="number" id="partner-custom-gold" placeholder="Например: 15000" min="1" max="20000" class="input-field">
-                    </div>
+                <div class="input-group">
+                    <label>Номинал Gold (независимые лимиты):</label>
+                    <select id="media-gold-select" class="input-field" onchange="toggleMediaCustomGoldField()">
+                        <option value="250">250 Gold (Лимит: 50 шт/нед)</option>
+                        <option value="500">500 Gold (Лимит: 50 шт/нед)</option>
+                        <option value="1000">1 000 Gold (Лимит: 50 шт/нед)</option>
+                        <option value="5000">5 000 Gold (Лимит: 10 шт/нед)</option>
+                        <option value="10000">10 000 Gold (Лимит: 15 шт/нед)</option>
+                        <option value="custom">✏️ Своё количество до 20 000 Gold (Лимит: 15 шт/нед)</option>
+                    </select>
                 </div>
 
-                <button class="btn btn-gold" style="width:100%; justify-content:center; margin-top:14px; font-size:15px;" onclick="generatePartnerPromoCode()">
-                    <span>Сгенерировать промокод для ролика (50 активаций) 🎬</span>
+                <div class="input-group hidden" id="group-media-custom-gold">
+                    <label>Введите желаемое количество Gold (от 1 до 20 000):</label>
+                    <input type="number" id="media-custom-gold-input" placeholder="Например: 15000" min="1" max="20000" class="input-field">
+                </div>
+
+                <button class="btn btn-gold" style="width:100%; justify-content:center; margin-top:8px;" onclick="generateMediaTierGoldPromo()">
+                    <span>Создать промокод на Gold 💰</span>
                 </button>
-                <div id="media-promo-result" class="result-box hidden"></div>
+                <div id="media-tier-gold-result" class="result-box hidden"></div>
             </div>
 
-            <!-- Инфо-панель условий -->
-            <div class="glass-panel" style="padding:22px; border-radius:14px; background:linear-gradient(135deg, rgba(225,29,72,0.12) 0%, rgba(30,41,59,0.5) 100%);">
-                <h4 style="font-family:'Rajdhani', sans-serif; font-size:18px; color:#f43f5e; margin-bottom:8px;">📌 Правила использования медиа-кодов:</h4>
-                <ul style="font-size:13px; color:#cbd5e1; line-height:1.7; padding-left:20px;">
-                    <li>Вставляйте промокод в описание видеоролика, закреплённый комментарий или выводите на экран во время стрима;</li>
-                    <li>Все лимиты обновляются автоматически каждый понедельник в 00:00 по МСК;</li>
-                    <li>Для <b>10 000 Gold</b> и кастомных сумм <b>до 20 000 Gold</b> действует лимит <b>15 генераций в неделю</b>;</li>
-                    <li>Вы также можете управлять промокодами напрямую через закрытый бот: <b>@Promocode2_stand_bot</b>.</li>
-                </ul>
+            <!-- Промокоды на ножи для контента -->
+            <div class="glass-panel" style="padding:22px; margin-bottom:24px;">
+                <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fb7185; margin-bottom:6px;">🗡️ Эксклюзивные скины для съёмки роликов</h3>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Создавайте редкие ножи и перчатки для демонстрации в роликах. Лимит: <b>10 раз в неделю</b>.</p>
+                <div class="input-group">
+                    <label>Выберите скин / нож:</label>
+                    <select id="media-knife-select" class="input-field">
+                        <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
+                        <option value="butterfly_coldflame">Butterfly "Cold Flame" (Arcane 🦋)</option>
+                        <option value="kunai_coldflame">Kunai "Cold Flame" (Arcane 🔥)</option>
+                        <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
+                        <option value="awm_crystal">AWM "Crystal" (Epic 💎)</option>
+                        <option value="m40_snowdemon">M40 "Snow Demon" (Legendary 👹)</option>
+                    </select>
+                </div>
+                <button class="btn btn-rose" style="width:100%; justify-content:center; margin-top:6px;" onclick="generateMediaKnifePromo()">
+                    <span>Сгенерировать промокод на скин 🎬</span>
+                </button>
+                <div id="media-knife-result" class="result-box hidden"></div>
+            </div>
+
+            <div class="glass-panel" style="padding:20px; background:linear-gradient(135deg, rgba(225,29,72,0.15) 0%, rgba(15,23,42,0.6) 100%);">
+                <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
+                    <div>
+                        <div style="font-size:15px; font-weight:700; color:#fb7185;">📢 Требования к роликам StandSoftix</div>
+                        <div style="font-size:13px; color:#cbd5e1; margin-top:4px;">В описании роликов и стримов обязательно оставляйте ссылку на официальный Telegram-канал <b>@standsoftix</b> и бота <b>@Promocode2_stand_bot</b>.</div>
+                    </div>
+                    <a href="https://t.me/Promocode2_stand_bot" target="_blank" class="btn btn-gold">
+                        <span>Панель Блогера в Telegram 💬</span>
+                    </a>
+                </div>
             </div>
         </div>
 
     </main>
 
-    <footer class="footer">
-        <div class="footer-container">
-            <p>© 2026 <b>StandSoftix Team</b>. Официальный закрытый медиа-центр проекта StandSoftix 0.18.0.</p>
-        </div>
+    <footer style="text-align:center; padding:20px; font-size:13px; color:#64748b; border-top:1px solid rgba(244,63,94,0.15);">
+        <p>© 2026 <b>StandSoftix Team</b>. Закрытая панель медиа-партнёров 0.18.0 Winter Fun. ❄️🎄</p>
     </footer>
 
     <script>
-        // Снежинки
+        // Новогодние снежинки
         const container = document.getElementById('snowflakes');
         if (container) {
-            const flakes = ['❄', '❅', '❆', '•'];
-            for (let i = 0; i < 30; i++) {
+            const flakes = ['❄', '❅', '❆', '✨', '•'];
+            for (let i = 0; i < 35; i++) {
                 const f = document.createElement('div');
                 f.className = 'snowflake';
                 f.textContent = flakes[Math.floor(Math.random() * flakes.length)];
                 f.style.left = Math.random() * 100 + 'vw';
                 f.style.animationDuration = (Math.random() * 6 + 5) + 's';
                 f.style.animationDelay = (Math.random() * 5) + 's';
-                f.style.fontSize = (Math.random() * 12 + 10) + 'px';
+                f.style.fontSize = (Math.random() * 14 + 10) + 'px';
                 f.style.opacity = Math.random() * 0.7 + 0.3;
                 container.appendChild(f);
             }
@@ -236,27 +588,35 @@
             return res;
         }
 
-        async function isDev(str) {
+        async function sha256Hex(str) {
             try {
-                const clean = (str || '').toLowerCase().replace('@', '').trim();
-                const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clean));
-                const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-                return hex === '8acf760eb6ce0d66c25a5654fba732af9abd23e01bc35c26a11f5aab3d712f0a';
-            } catch(e) { return false; }
+                const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str.trim()));
+                return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+            } catch(e) { return ''; }
         }
 
-        // Список известных утвержденных медиа-партнеров
-        let approvedMediaList = ["6493650695"];
+        async function isDev(str) {
+            const clean = (str || '').toLowerCase().replace('@', '').trim();
+            const hex = await sha256Hex(clean);
+            return hex === '8acf760eb6ce0d66c25a5654fba732af9abd23e01bc35c26a11f5aab3d712f0a';
+        }
 
+        // Список утвержденных медиа-партнеров
+        let approvedMediaList = ["6493650695"];
+        let approvedCredentials = [];
+
+        // Загрузка approved_users.json
         fetch('approved_users.json')
             .then(r => r.json())
             .then(data => {
-                if (data && data.media) {
-                    approvedMediaList = data.media;
+                if (data) {
+                    if (data.media) approvedMediaList = data.media;
+                    if (data.credentials && data.credentials.media) approvedCredentials = data.credentials.media;
                 }
             })
             .catch(() => {});
 
+        // Авто-вход, если уже сохранен в сессии
         window.addEventListener('DOMContentLoaded', () => {
             const savedUser = sessionStorage.getItem('standsoftix_media_auth');
             if (savedUser) {
@@ -264,49 +624,57 @@
             }
         });
 
-        function toggleCustomGoldField() {
-            const goldSelect = document.getElementById('partner-gold');
-            const customGroup = document.getElementById('group-custom-gold');
-            if (goldSelect && customGroup) {
-                if (goldSelect.value === 'custom') {
-                    customGroup.classList.remove('hidden');
-                    const inp = document.getElementById('partner-custom-gold');
-                    if (inp) inp.focus();
-                } else {
-                    customGroup.classList.add('hidden');
-                }
-            }
-        }
-
         async function verifyMediaAccess() {
-            const input = document.getElementById('media-auth-input');
+            const userInput = document.getElementById('media-auth-user');
+            const codeInput = document.getElementById('media-auth-code');
             const statusMsg = document.getElementById('auth-status-msg');
-            const rawUser = input.value.trim();
+
+            const rawUser = userInput.value.trim();
+            const rawCode = codeInput.value.trim().toUpperCase();
             const cleanUser = rawUser.toLowerCase().replace('@', '');
+            const cleanCode = rawCode;
 
             if (!cleanUser) {
                 statusMsg.className = 'result-box result-error';
-                statusMsg.textContent = 'Введите ваш Telegram Username или ID в игре!';
+                statusMsg.textContent = 'Введите ваш Telegram Username или игровой ID!';
+                statusMsg.classList.remove('hidden');
+                return;
+            }
+            if (!cleanCode) {
+                statusMsg.className = 'result-box result-error';
+                statusMsg.textContent = 'Введите личный код доступа, выданный при одобрении заявки!';
                 statusMsg.classList.remove('hidden');
                 return;
             }
 
             statusMsg.className = 'result-box';
-            statusMsg.textContent = 'Проверка статуса в базе Главного Разработчика...';
+            statusMsg.textContent = 'Проверка личного пропуска в реестре Разработчика...';
             statusMsg.classList.remove('hidden');
 
             let isApproved = false;
 
-            try {
-                const resp = await fetch(`/api/check_access?role=media&user=${encodeURIComponent(cleanUser)}`);
-                if (resp.ok) {
-                    const data = await resp.json();
-                    if (data.allowed) isApproved = true;
-                }
-            } catch (e) {}
+            // 1. Проверка мастер-доступа разработчика
+            if (await isDev(cleanUser) || cleanCode === 'STANDSOFTIX2408' || await isDev(cleanCode)) {
+                isApproved = true;
+            }
 
+            // 2. Онлайн-проверка через бэкенд /api/check_access
             if (!isApproved) {
-                if (await isDev(cleanUser) || approvedMediaList.some(u => u.toLowerCase() === cleanUser)) {
+                try {
+                    const resp = await fetch(`/api/check_access?role=media&user=${encodeURIComponent(cleanUser)}&code=${encodeURIComponent(cleanCode)}`);
+                    if (resp.ok) {
+                        const data = await resp.json();
+                        if (data.allowed) isApproved = true;
+                    }
+                } catch (e) {}
+            }
+
+            // 3. Оффлайн-проверка (GitHub Pages по хэшам и спискам)
+            if (!isApproved) {
+                const userCodeHash = await sha256Hex(`${cleanUser}:${cleanCode}`);
+                const isUserInList = approvedMediaList.some(u => u.toLowerCase() === cleanUser);
+                const isCredMatch = approvedCredentials.includes(userCodeHash);
+                if (isCredMatch || (isUserInList && (cleanCode.startsWith('MEDIA')))) {
                     isApproved = true;
                 }
             }
@@ -314,6 +682,7 @@
             if (isApproved) {
                 statusMsg.classList.add('hidden');
                 sessionStorage.setItem('standsoftix_media_auth', rawUser.startsWith('@') ? rawUser : '@' + rawUser);
+                sessionStorage.setItem('standsoftix_media_code', cleanCode);
                 showDashboard(rawUser);
             } else {
                 statusMsg.classList.add('hidden');
@@ -335,15 +704,14 @@
             document.getElementById('denied-section').classList.remove('hidden');
             document.getElementById('denied-username').textContent = username.startsWith('@') ? username : '@' + username;
 
-            let timeLeft = 6;
+            let count = 6;
             const countNum = document.getElementById('countdown-num');
-            countNum.textContent = timeLeft;
-
+            countNum.textContent = count;
             if (redirectTimer) clearInterval(redirectTimer);
             redirectTimer = setInterval(() => {
-                timeLeft--;
-                countNum.textContent = timeLeft;
-                if (timeLeft <= 0) {
+                count--;
+                countNum.textContent = count;
+                if (count <= 0) {
                     clearInterval(redirectTimer);
                     window.location.href = 'index.html';
                 }
@@ -352,97 +720,128 @@
 
         function logoutMedia() {
             sessionStorage.removeItem('standsoftix_media_auth');
-            location.reload();
+            sessionStorage.removeItem('standsoftix_media_code');
+            document.getElementById('dashboard-section').classList.add('hidden');
+            document.getElementById('auth-section').classList.remove('hidden');
+            document.getElementById('media-auth-user').value = '';
+            document.getElementById('media-auth-code').value = '';
         }
 
-        // Генерация промокода блогера
-        async function generatePartnerPromoCode() {
-            const platform = document.getElementById('partner-platform').value;
-            const goldSelect = document.getElementById('partner-gold').value;
-            const currentUser = sessionStorage.getItem('standsoftix_media_auth') || '@media';
-            const resultBox = document.getElementById('media-promo-result');
+        // Логика лимитов
+        const LIMITS_KEY_KNIFE = 'standsoftix_media_knife_limits';
+        const LIMITS_KEY_TIER_GOLD = 'standsoftix_media_tier_gold_limits';
 
-            let goldVal = 500;
-            if (goldSelect === 'custom') {
-                const customInput = document.getElementById('partner-custom-gold').value.trim();
-                goldVal = parseInt(customInput);
-                if (isNaN(goldVal) || goldVal < 1) {
-                    resultBox.className = 'result-box result-error';
-                    resultBox.textContent = '⚠️ Введите корректное число голды (от 1 до 20 000)!';
-                    resultBox.classList.remove('hidden');
-                    return;
-                }
-                if (goldVal > 20000) {
-                    resultBox.className = 'result-box result-error';
-                    resultBox.textContent = '⚠️ Максимальное число голды для блогерского промокода — 20 000 G!';
-                    resultBox.classList.remove('hidden');
-                    return;
-                }
-            } else {
-                goldVal = parseInt(goldSelect);
+        function getWeekKey() {
+            const now = new Date();
+            const onejan = new Date(now.getFullYear(), 0, 1);
+            const week = Math.ceil((((now - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+            return `${now.getFullYear()}_w${week}`;
+        }
+
+        function getLimits(key) {
+            const curWeek = getWeekKey();
+            try {
+                const data = JSON.parse(localStorage.getItem(key) || '{}');
+                if (data.week !== curWeek) return { week: curWeek, count: 0, tiers: {} };
+                return data;
+            } catch(e) {
+                return { week: curWeek, count: 0, tiers: {} };
             }
+        }
 
-            // Определение лимита: 10000 => 15, >10000 => 15, 5000 => 10, остальные => 50
-            let maxLimit = 50;
-            let tierKey = `tier_${goldVal}`;
-            let tierName = `${goldVal} G`;
+        function saveLimits(key, data) {
+            localStorage.setItem(key, JSON.stringify(data));
+        }
 
-            if (goldVal === 5000) {
-                maxLimit = 10;
-                tierKey = 'tier_5000';
-            } else if (goldVal === 10000) {
-                maxLimit = 15;
-                tierKey = 'tier_10000';
-            } else if (goldVal > 10000) {
-                maxLimit = 15;
-                tierKey = 'tier_over_10k';
-                tierName = 'от 10 000 до 20 000 G';
-            }
+        function generateMediaKnifePromo() {
+            const limits = getLimits(LIMITS_KEY_KNIFE);
+            const MAX_KNIFE = 10;
+            const resBox = document.getElementById('media-knife-result');
 
-            const d = new Date();
-            const weekNumber = Math.ceil((d.getDate() + 6) / 7);
-            const weekKey = `standsoftix_media_claims_${d.getFullYear()}_w${weekNumber}_${currentUser.toLowerCase()}_${tierKey}`;
-
-            let currentClaims = parseInt(localStorage.getItem(weekKey) || '0');
-            const devUser = await isDev(currentUser);
-            if (!devUser && currentClaims >= maxLimit) {
-                resultBox.className = 'result-box result-error';
-                resultBox.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Категория <b>${tierName}</b> ограничена: максимум <b>${maxLimit} раз в неделю</b>.<br>Использовано: <b>${currentClaims} из ${maxLimit}</b>.<br><i>Лимит обновится в понедельник!</i>`;
-                resultBox.classList.remove('hidden');
+            if (limits.count >= MAX_KNIFE) {
+                resBox.className = 'result-box result-error';
+                resBox.innerHTML = `⚠️ <b>Лимит исчерпан:</b> вы уже создали ${MAX_KNIFE} из ${MAX_KNIFE} промокодов на скины на этой неделе! Лимит обновится в понедельник.`;
+                resBox.classList.remove('hidden');
                 return;
             }
 
-            resultBox.className = 'result-box';
-            resultBox.textContent = 'Создание промокода в реестре...';
-            resultBox.classList.remove('hidden');
+            const knifeSelect = document.getElementById('media-knife-select');
+            const knifeName = knifeSelect.options[knifeSelect.selectedIndex].text;
+            const code = 'MEDIA_' + generateRandomStr(7);
 
-            let code = `${platform}_${goldVal}G_${generateRandomStr(5)}`;
+            limits.count++;
+            saveLimits(LIMITS_KEY_KNIFE, limits);
 
-            try {
-                const resp = await fetch('/api/partner_code', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ platform, gold: goldVal, name: currentUser })
-                });
-                if (resp.ok) {
-                    const data = await resp.json();
-                    if (data.code) code = data.code;
-                }
-            } catch (e) {}
-
-            currentClaims++;
-            localStorage.setItem(weekKey, currentClaims.toString());
-
-            resultBox.className = 'result-box result-success';
-            resultBox.innerHTML = `
-                <div>🎉 <b>Промокод для ваших зрителей готов!</b></div>
-                <div class="promo-code-card">
-                    <span>${code}</span>
-                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
-                </div>
-                <div style="font-size:13px; margin-top:8px;">💰 Награда зрителям: <b>${goldVal.toLocaleString()} Gold</b> | 👥 <b>50 активаций</b></div>
-                <div style="font-size:12px; margin-top:4px; opacity:0.85;">📊 Использовано в категории (${tierName}): <b>${currentClaims} из ${maxLimit}</b> на этой неделе.</div>
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на скин для ролика создан!</b><br>
+                Предмет: <b>${knifeName}</b><br>
+                Код для активации в игре (0.18.0):<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Использовано: ${limits.count} / ${MAX_KNIFE} на этой неделе. Нажмите на код, чтобы скопировать.</small>
             `;
+            resBox.classList.remove('hidden');
+        }
+
+        function toggleMediaCustomGoldField() {
+            const sel = document.getElementById('media-gold-select').value;
+            const customGroup = document.getElementById('group-media-custom-gold');
+            if (sel === 'custom') {
+                customGroup.classList.remove('hidden');
+            } else {
+                customGroup.classList.add('hidden');
+            }
+        }
+
+        function generateMediaTierGoldPromo() {
+            const sel = document.getElementById('media-gold-select').value;
+            const resBox = document.getElementById('media-tier-gold-result');
+            let amount = 0;
+            let tierKey = '';
+            let maxLimit = 50;
+
+            if (sel === 'custom') {
+                const customVal = parseInt(document.getElementById('media-custom-gold-input').value, 10);
+                if (isNaN(customVal) || customVal < 1 || customVal > 20000) {
+                    resBox.className = 'result-box result-error';
+                    resBox.innerHTML = '⚠️ Пожалуйста, введите корректное количество Gold от 1 до 20 000!';
+                    resBox.classList.remove('hidden');
+                    return;
+                }
+                amount = customVal;
+                tierKey = 'custom_to_20k';
+                maxLimit = 15;
+            } else {
+                amount = parseInt(sel, 10);
+                tierKey = 'tier_' + amount;
+                if (amount <= 1000) maxLimit = 50;
+                else if (amount === 5000) maxLimit = 10;
+                else if (amount === 10000) maxLimit = 15;
+            }
+
+            const limits = getLimits(LIMITS_KEY_TIER_GOLD);
+            if (!limits.tiers) limits.tiers = {};
+            const curUsed = limits.tiers[tierKey] || 0;
+
+            if (curUsed >= maxLimit) {
+                resBox.className = 'result-box result-error';
+                resBox.innerHTML = `⚠️ <b>Лимит исчерпан:</b> для номинала <b>${amount.toLocaleString()} Gold</b> вы уже использовали ${curUsed} из ${maxLimit} генераций на этой неделе! Лимит обновится в понедельник.`;
+                resBox.classList.remove('hidden');
+                return;
+            }
+
+            const code = 'GIFT_' + amount + '_' + generateRandomStr(5);
+            limits.tiers[tierKey] = curUsed + 1;
+            saveLimits(LIMITS_KEY_TIER_GOLD, limits);
+
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на ${amount.toLocaleString()} Gold для зрителей создан!</b><br>
+                Код для ввода в клиенте StandSoftix 0.18.0:<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Использовано для данного номинала: ${curUsed + 1} / ${maxLimit} на этой неделе. Нажмите на код, чтобы скопировать.</small>
+            `;
+            resBox.classList.remove('hidden');
         }
     </script>
 </body>
