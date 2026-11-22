@@ -257,12 +257,12 @@ async function generatePartnerPromo() {
 
 // 5. Админ-панель разработчика
 function authDev() {
-    const pass = document.getElementById('dev-password').value;
-    if (pass === 'dev777' || pass === 'admin' || pass === 'standsoftix') {
+    const pass = document.getElementById('dev-password').value.trim();
+    if (pass === 'standsoftix2408') {
         document.getElementById('dev-auth-block').classList.add('hidden');
         document.getElementById('dev-controls-block').classList.remove('hidden');
     } else {
-        alert('Неверный пароль доступа!');
+        alert('Неверный мастер-пароль разработчика!');
     }
 }
 
