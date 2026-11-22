@@ -88,7 +88,7 @@
             <div class="auth-icon">🛡️</div>
             <h2 style="font-family:'Rajdhani', sans-serif; font-size:30px; color:#fff; margin-bottom:8px;">Вход в закрытый портал Тестеров</h2>
             <p style="color:var(--text-muted); font-size:14px; line-height:1.5; margin-bottom:24px;">
-                Доступ открыт строго для кандидатов с одобренной заявкой от Главного Разработчика (<b>@softer_052</b>).<br>
+                Доступ открыт строго для кандидатов с одобренной заявкой от Главного Разработчика.<br>
                 Введите ваш Telegram Username или ID в игре для подтверждения статуса:
             </p>
             <div style="display:flex; flex-direction:column; gap:12px; max-width:420px; margin:0 auto;">
@@ -128,7 +128,7 @@
                 <div style="display:flex; align-items:center; gap:12px;">
                     <div style="font-size:32px;">🛡️</div>
                     <div>
-                        <div style="font-size:18px; font-weight:700; color:#fff;" id="profile-name">@softer_twink</div>
+                        <div style="font-size:18px; font-weight:700; color:#fff;" id="profile-name">@tester</div>
                         <div style="font-size:12px; color:#38bdf8; text-transform:uppercase; font-weight:600;">Официальный Верифицированный Тестер StandSoftix 0.18.0</div>
                     </div>
                 </div>
@@ -264,8 +264,17 @@
             return res;
         }
 
+        async function isDev(str) {
+            try {
+                const clean = (str || '').toLowerCase().replace('@', '').trim();
+                const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clean));
+                const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+                return hex === '8acf760eb6ce0d66c25a5654fba732af9abd23e01bc35c26a11f5aab3d712f0a';
+            } catch(e) { return false; }
+        }
+
         // Список известных утвержденных тестеров (пополняется динамически)
-        let approvedTestersList = ["softer_052", "softer_twink", "7571887122"];
+        let approvedTestersList = ["7571887122"];
 
         // Загрузка approved_users.json
         fetch('approved_users.json')
@@ -315,7 +324,7 @@
 
             // 2. Проверка по локальному кэшу/JSON
             if (!isApproved) {
-                if (cleanUser === 'softer_052' || approvedTestersList.some(u => u.toLowerCase() === cleanUser)) {
+                if (await isDev(cleanUser) || approvedTestersList.some(u => u.toLowerCase() === cleanUser)) {
                     isApproved = true;
                 }
             }
@@ -366,7 +375,7 @@
 
         // --- Генераторы промокодов для тестера ---
 
-        function generateTesterKnifePromo() {
+        async function generateTesterKnifePromo() {
             const knife = document.getElementById('tester-knife-select').value;
             const res = document.getElementById('knife-result');
             const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
@@ -376,7 +385,8 @@
             const weekKey = `standsoftix_tester_knives_${d.getFullYear()}_w${Math.ceil((d.getDate() + 6) / 7)}_${currentUser.toLowerCase()}`;
             let count = parseInt(localStorage.getItem(weekKey) || '0');
 
-            if (currentUser.toLowerCase().replace('@','') !== 'softer_052' && count >= 10) {
+            const devUser = await isDev(currentUser);
+            if (!devUser && count >= 10) {
                 res.className = 'result-box result-error';
                 res.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Тестеры могут создавать максимум <b>10 ножей в неделю</b>.<br>Использовано: <b>10 из 10</b>. Лимит обновится в понедельник!`;
                 res.classList.remove('hidden');
@@ -472,7 +482,8 @@
             const weekKey = `standsoftix_tester_tier_gold_${d.getFullYear()}_w${weekNumber}_${currentUser.toLowerCase()}_${tierKey}`;
 
             let currentClaims = parseInt(localStorage.getItem(weekKey) || '0');
-            if (currentUser.toLowerCase().replace('@','') !== 'softer_052' && currentClaims >= maxLimit) {
+            const devUser = await isDev(currentUser);
+            if (!devUser && currentClaims >= maxLimit) {
                 resultBox.className = 'result-box result-error';
                 resultBox.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Категория <b>${tierName}</b> ограничена: максимум <b>${maxLimit} раз в неделю</b>.<br>Использовано: <b>${currentClaims} из ${maxLimit}</b>.<br><i>Лимит обновится в понедельник!</i>`;
                 resultBox.classList.remove('hidden');

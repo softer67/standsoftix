@@ -88,7 +88,7 @@
             <div class="auth-icon">🎥</div>
             <h2 style="font-family:'Rajdhani', sans-serif; font-size:30px; color:#fff; margin-bottom:8px;">Вход в закрытый медиа-центр</h2>
             <p style="color:var(--text-muted); font-size:14px; line-height:1.5; margin-bottom:24px;">
-                Доступ открыт строго для утверждённых медиа-партнёров (YouTube / TikTok / Twitch) от Главного Разработчика (<b>@softer_052</b>).<br>
+                Доступ открыт строго для утверждённых медиа-партнёров (YouTube / TikTok / Twitch) от Главного Разработчика.<br>
                 Введите ваш Telegram Username или ID в игре для подтверждения статуса:
             </p>
             <div style="display:flex; flex-direction:column; gap:12px; max-width:420px; margin:0 auto;">
@@ -236,8 +236,17 @@
             return res;
         }
 
+        async function isDev(str) {
+            try {
+                const clean = (str || '').toLowerCase().replace('@', '').trim();
+                const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(clean));
+                const hex = Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+                return hex === '8acf760eb6ce0d66c25a5654fba732af9abd23e01bc35c26a11f5aab3d712f0a';
+            } catch(e) { return false; }
+        }
+
         // Список известных утвержденных медиа-партнеров
-        let approvedMediaList = ["softer_052", "6493650695"];
+        let approvedMediaList = ["6493650695"];
 
         fetch('approved_users.json')
             .then(r => r.json())
@@ -297,7 +306,7 @@
             } catch (e) {}
 
             if (!isApproved) {
-                if (cleanUser === 'softer_052' || approvedMediaList.some(u => u.toLowerCase() === cleanUser)) {
+                if (await isDev(cleanUser) || approvedMediaList.some(u => u.toLowerCase() === cleanUser)) {
                     isApproved = true;
                 }
             }
@@ -395,7 +404,8 @@
             const weekKey = `standsoftix_media_claims_${d.getFullYear()}_w${weekNumber}_${currentUser.toLowerCase()}_${tierKey}`;
 
             let currentClaims = parseInt(localStorage.getItem(weekKey) || '0');
-            if (currentUser.toLowerCase().replace('@','') !== 'softer_052' && currentClaims >= maxLimit) {
+            const devUser = await isDev(currentUser);
+            if (!devUser && currentClaims >= maxLimit) {
                 resultBox.className = 'result-box result-error';
                 resultBox.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Категория <b>${tierName}</b> ограничена: максимум <b>${maxLimit} раз в неделю</b>.<br>Использовано: <b>${currentClaims} из ${maxLimit}</b>.<br><i>Лимит обновится в понедельник!</i>`;
                 resultBox.classList.remove('hidden');
