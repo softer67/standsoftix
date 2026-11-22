@@ -317,23 +317,23 @@ function toggleWebRoleFields() {
     const q4 = document.getElementById('web-app-q4');
 
     if (role === 'tester') {
-        l1.textContent = 'Игровой ник и реальный возраст:';
-        q1.placeholder = 'Пример: Frosty / 16 лет';
-        l2.textContent = 'Характеристики устройства (ПК или модель телефона):';
-        q2.placeholder = 'Пример: Xiaomi Redmi Note 12 / ПК Win 11';
-        l3.textContent = 'Опыт тестирования / поиска багов:';
-        q3.placeholder = 'Пример: Был тестером на приватках, умею писать репорты';
-        l4.textContent = 'Сколько часов в день готовы уделять:';
-        q4.placeholder = 'Пример: 2-3 часа каждый вечер';
+        l1.textContent = 'Игровой никнейм (возраст не важен):';
+        q1.placeholder = 'Пример: Frosty';
+        l2.textContent = 'На каком устройстве играете (ПК или Android):';
+        q2.placeholder = 'Главное, чтоб можно было установить игру';
+        l3.textContent = 'Умеете ли записывать видео с багами:';
+        q3.placeholder = 'Пример: Да, умею делать запись экрана / OBS';
+        l4.textContent = 'Дополнительно (активность пока не важна):';
+        q4.placeholder = 'Любые комментарии (необязательно)';
     } else {
         l1.textContent = 'Ссылка на ваш канал (YouTube/TikTok/Twitch):';
         q1.placeholder = 'https://youtube.com/@my_channel';
-        l2.textContent = 'Количество подписчиков и средний актив:';
-        q2.placeholder = 'Пример: 3 500 подписчиков, ~2 000 просмотров';
-        l3.textContent = 'Формат планируемого контента:';
-        q3.placeholder = 'Пример: Стримы, обзоры ножей и зимних скинов 0.18.0';
-        l4.textContent = 'Контакт для сотрудничества (Discord/VK):';
-        q4.placeholder = 'Пример: @discord_tag или ссылка VK';
+        l2.textContent = 'Готовность снимать контент по StandSoftix:';
+        q2.placeholder = 'Снимать чаще всего (желательно только) нашу приватку StandSoftix';
+        l3.textContent = 'Ваш контакт для связи (Telegram/Discord):';
+        q3.placeholder = '@my_tag';
+        l4.textContent = 'Дополнительно (пожелания к скинам):';
+        q4.placeholder = 'Любые пожелания для роликов';
     }
 }
 
@@ -344,14 +344,19 @@ async function submitWebApplication() {
     const q2 = document.getElementById('web-app-q2').value.trim();
     const q3 = document.getElementById('web-app-q3').value.trim();
     const q4 = document.getElementById('web-app-q4').value.trim();
+    const subCheck = document.getElementById('web-app-sub');
     const resBox = document.getElementById('web-app-result');
 
+    if (subCheck && !subCheck.checked) {
+        alert('⚠️ Сначала подпишитесь на официальный Telegram-канал приватки @standsoftix!');
+        return;
+    }
     if (!tg) {
         alert('Пожалуйста, укажите ваш Telegram для связи (@username)!');
         return;
     }
-    if (!q1 || !q2) {
-        alert('Пожалуйста, заполните основные поля анкеты!');
+    if (!q1) {
+        alert('Пожалуйста, укажите ваш ник или ссылку на канал!');
         return;
     }
 
@@ -365,12 +370,13 @@ async function submitWebApplication() {
     const tgMessage = 
         `🌐 <b>НОВАЯ ЗАЯВКА С ОФИЦИАЛЬНОГО САЙТА!</b>\n\n` +
         `🏷 Роль: <b>${roleTitle}</b>\n` +
-        `👤 Telegram: <b>@${cleanNick}</b>\n\n` +
+        `👤 Telegram: <b>@${cleanNick}</b>\n` +
+        `📢 Подписка на @standsoftix: <b>Подтверждена кандидатом</b>\n\n` +
         `<b>Ответы кандидата:</b>\n` +
         `• Ник/Канал: <b>${q1}</b>\n` +
-        `• Устройство/Стата: <b>${q2}</b>\n` +
-        `• Опыт/Формат: <b>${q3 || '-'}</b>\n` +
-        `• Время/Контакт: <b>${q4 || '-'}</b>`;
+        `• Устройство/Контент: <b>${q2 || 'Любое'}</b>\n` +
+        `• Запись видео багов/Связь: <b>${q3 || '-'}</b>\n` +
+        `• Дополнительно: <b>${q4 || '-'}</b>`;
 
     const inlineKeyboard = {
         inline_keyboard: [
@@ -381,10 +387,9 @@ async function submitWebApplication() {
         ]
     };
 
-    let sent = false;
     try {
         // Прямая отправка в Telegram-панель разработчика (чат_id: 6493650695)
-        const tgResp = await fetch('https://api.telegram.org/bot9240577854:AAFE4L1q0-KZ2Z09M9xF7LSdczEHnppZ9cE/sendMessage', {
+        await fetch('https://api.telegram.org/bot9240577854:AAFE4L1q0-KZ2Z09M9xF7LSdczEHnppZ9cE/sendMessage', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -394,13 +399,11 @@ async function submitWebApplication() {
                 reply_markup: inlineKeyboard
             })
         });
-        if (tgResp.ok) sent = true;
     } catch (e) {
         console.warn('TG API direct send notice:', e);
     }
 
     try {
-        // Также отправляем на локальный сервер если доступен
         await fetch('/api/apply', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -417,11 +420,10 @@ async function submitWebApplication() {
         <div style="font-size: 16px; font-weight: 700; color: #4dc7ff; margin-bottom: 6px;">🎉 Заявка успешно отправлена!</div>
         <p style="margin: 0; font-size: 13px; color: #e2e8f0;">
             Ваша анкета кандидата на роль <b>${roleTitle}</b> направлена в закрытую панель Главного Разработчика.<br>
-            Как только разработчик нажмёт кнопку <b>«Одобрить»</b> в Telegram, ваш аккаунт <b>@${cleanNick}</b> получит статус тестера, значок рядом с ID и доступ к закрытому боту <b>@Promocode1_stand_bot</b>!
+            Как только разработчик нажмёт кнопку <b>«Одобрить»</b> в Telegram, ваш аккаунт <b>@${cleanNick}</b> получит значок рядом с ID в игре, кастомный ID и доступ к боту <b>@Promocode1_stand_bot</b>!
         </p>
     `;
 
-    // Очистка полей
     document.getElementById('web-app-q1').value = '';
     document.getElementById('web-app-q2').value = '';
     document.getElementById('web-app-q3').value = '';

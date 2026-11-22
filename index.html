@@ -194,32 +194,53 @@
                 <p>Станьте официальным тестером приватного сервера или медиа-партнёром проекта!</p>
             </div>
             <div class="apply-container glass-panel">
+                
+                <!-- Обязательное условие: подписка на канал -->
+                <div class="sub-channel-banner" style="background: linear-gradient(135deg, rgba(0, 136, 204, 0.25) 0%, rgba(0, 217, 255, 0.15) 100%); border: 1px solid var(--accent-blue); border-radius: 12px; padding: 16px 22px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px;">
+                    <div>
+                        <div style="font-size: 15px; font-weight: 700; color: #4dc7ff; display: flex; align-items: center; gap: 8px;">
+                            <span>📢</span> ОБЯЗАТЕЛЬНОЕ УСЛОВИЕ ДЛЯ ВСЕХ КАНДИДАТОВ:
+                        </div>
+                        <div style="font-size: 13px; color: #e2e8f0; margin-top: 4px;">
+                            Для подачи заявки необходимо быть подписанным на официальный канал приватки: <b>@standsoftix</b>
+                        </div>
+                    </div>
+                    <a href="https://t.me/standsoftix" target="_blank" class="tg-tag tg-tag-gold" style="font-size: 13px; padding: 8px 18px;">
+                        📢 Подписаться на @standsoftix ➔
+                    </a>
+                </div>
+
                 <div class="apply-cards">
                     <div class="apply-card">
                         <div class="apply-badge">🎯 Роль Тестера</div>
                         <h3>Бета-тестирование 0.18.0</h3>
-                        <p>Тестируйте закрытые сборки с новой физикой и ножами, ищите баги и получайте эксклюзивные привилегии проекта.</p>
+                        <p>Тестируйте закрытые зимние билды игры, находите баги и получайте эксклюзивные привилегии проекта.</p>
+                        <div style="font-size: 12px; color: #38bdf8; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">Требования:</div>
                         <ul class="apply-perks">
-                            <li>🔢 Возможность получить кастомный ID в игре</li>
-                            <li>🛡️ Официальный значок тестера рядом с ID</li>
-                            <li>🤖 Доступ к закрытому боту для тестеров (@Promocode1_stand_bot)</li>
+                            <li>👶 <b>Возраст:</b> не важен (главное — адекватность)</li>
+                            <li>📱 <b>Устройство:</b> не важно (главное, чтоб можно было установить игру)</li>
+                            <li>🎥 <b>Опыт:</b> умение записывать видео с багами</li>
+                            <li>⏱ <b>Активность:</b> пока не важно</li>
+                            <li>🛡️ <b>Награда:</b> Значок тестера + Кастомный ID + Доступ к боту @Promocode1_stand_bot</li>
                         </ul>
                         <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-blue" style="width:100%; justify-content:center;">
-                            <span>Подать через Telegram-бота 🚀</span>
+                            <span>Подать через бота @zayavki_standsoftix_bot 🚀</span>
                         </a>
                     </div>
 
                     <div class="apply-card">
                         <div class="apply-badge apply-badge-media">🎥 Медиа-партнёр</div>
                         <h3>YouTube / TikTok / Twitch</h3>
-                        <p>Выпускайте видео и стримы по StandSoftix. Мы обеспечим вас скинами, ножами и персональными промокодами для зрителей.</p>
+                        <p>Выпускайте видео и стримы по StandSoftix. Мы обеспечим вас скинами, ножами и промокодами для аудитории.</p>
+                        <div style="font-size: 12px; color: #f43f5e; font-weight: 700; margin-bottom: 8px; text-transform: uppercase;">Требования:</div>
                         <ul class="apply-perks">
-                            <li>💰 Личный промокод до 25 000 Gold для аудитории</li>
-                            <li>🔥 Доступ ко всем скинам коллекции Winter Fun</li>
-                            <li>📢 Репосты лучших роликов в наших ресурсах</li>
+                            <li>🎬 <b>Канал:</b> просто иметь YouTube / TikTok / Twitch</li>
+                            <li>❄️ <b>Контент:</b> снимать чаще всего (желательно только) нашу приватку StandSoftix</li>
+                            <li>💰 <b>Бонус:</b> личные промокоды до 25 000 Gold для ваших зрителей</li>
+                            <li>🎁 Доступ ко всем скинам коллекции Winter Fun для съёмок</li>
                         </ul>
                         <a href="https://t.me/zayavki_standsoftix_bot" target="_blank" class="btn btn-gold" style="width:100%; justify-content:center;">
-                            <span>Подать через Telegram-бота 🎬</span>
+                            <span>Подать через бота @zayavki_standsoftix_bot 🎬</span>
                         </a>
                     </div>
                 </div>
@@ -243,21 +264,27 @@
                             <input type="text" id="web-app-tg" placeholder="@ваш_юзернейм" class="input-field">
                         </div>
                         <div class="form-group">
-                            <label id="lbl-q1">Игровой ник и реальный возраст:</label>
-                            <input type="text" id="web-app-q1" placeholder="Пример: Frosty / 16 лет" class="input-field">
+                            <label id="lbl-q1">Игровой никнейм (возраст не важен):</label>
+                            <input type="text" id="web-app-q1" placeholder="Пример: Frosty" class="input-field">
                         </div>
                         <div class="form-group">
-                            <label id="lbl-q2">Характеристики устройства (ПК или модель телефона):</label>
-                            <input type="text" id="web-app-q2" placeholder="Пример: Xiaomi Redmi Note 12 / ПК Win 11" class="input-field">
+                            <label id="lbl-q2">На каком устройстве играете (ПК или Android):</label>
+                            <input type="text" id="web-app-q2" placeholder="Пример: Телефон Android / ПК Windows 11" class="input-field">
                         </div>
                         <div class="form-group">
-                            <label id="lbl-q3">Опыт тестирования / поиска багов:</label>
-                            <input type="text" id="web-app-q3" placeholder="Пример: Был тестером на приватках, умею писать репорты" class="input-field">
+                            <label id="lbl-q3">Умеете ли записывать видео с багами:</label>
+                            <input type="text" id="web-app-q3" placeholder="Пример: Да, умею делать запись экрана / OBS" class="input-field">
                         </div>
                         <div class="form-group">
-                            <label id="lbl-q4">Сколько часов в день готовы уделять:</label>
-                            <input type="text" id="web-app-q4" placeholder="Пример: 2-3 часа каждый вечер" class="input-field">
+                            <label id="lbl-q4">Дополнительно (или ссылка на канал для медиа):</label>
+                            <input type="text" id="web-app-q4" placeholder="Любые пожелания или ссылка на канал" class="input-field">
                         </div>
+                    </div>
+                    <div style="margin-top: 12px; display: flex; align-items: center; gap: 8px;">
+                        <input type="checkbox" id="web-app-sub" checked style="width: 18px; height: 18px; cursor: pointer;">
+                        <label for="web-app-sub" style="font-size: 13px; color: #e2e8f0; cursor: pointer;">
+                            Я подписан(а) на официальный канал приватки <b>@standsoftix</b>
+                        </label>
                     </div>
                     <button class="btn btn-gold" style="width: 100%; justify-content: center; margin-top: 14px;" onclick="submitWebApplication()">
                         <span>Отправить заявку в панель разработчику 🚀</span>
