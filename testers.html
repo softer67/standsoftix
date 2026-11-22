@@ -182,6 +182,38 @@
                 </div>
             </div>
 
+            <!-- Новый генератор Gold для тестеров с лимитами как для медиа -->
+            <div class="glass-panel" style="padding:24px; border-radius:14px; margin-bottom:30px; border:1px solid rgba(56,189,248,0.4);">
+                <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fff; margin-bottom:6px;">💰 Генератор Gold для Тестеров (номиналы до 20 000G)</h3>
+                <p style="font-size:13px; color:var(--text-muted); margin-bottom:18px;">
+                    Выдача промокодов на золото с независимыми недельными лимитами (до 15 генераций в неделю):
+                </p>
+
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Номинал Gold (независимые лимиты):</label>
+                        <select id="tester-gold-select" class="input-field select-field" onchange="toggleTesterCustomGoldField()">
+                            <option value="250">250 Gold (Лимит: 50 шт/нед)</option>
+                            <option value="500">500 Gold (Лимит: 50 шт/нед)</option>
+                            <option value="1000">1 000 Gold (Лимит: 50 шт/нед)</option>
+                            <option value="5000">5 000 Gold (Лимит: 10 шт/нед)</option>
+                            <option value="10000">10 000 Gold (Лимит: 15 шт/нед)</option>
+                            <option value="custom">✏️ Своё количество до 20 000 Gold (Лимит: 15 шт/нед)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group hidden" id="group-tester-custom-gold">
+                        <label>Введите желаемое количество Gold (от 1 до 20 000):</label>
+                        <input type="number" id="tester-custom-gold-input" placeholder="Например: 15000" min="1" max="20000" class="input-field">
+                    </div>
+                </div>
+
+                <button class="btn btn-gold" style="width:100%; justify-content:center; margin-top:12px; font-size:15px;" onclick="generateTesterTierGoldPromo()">
+                    <span>Сгенерировать промокод на Gold 💰</span>
+                </button>
+                <div id="tester-tier-gold-result" class="result-box hidden"></div>
+            </div>
+
             <!-- Дополнительно: 1000G и привилегии профиля -->
             <div class="glass-panel" style="padding:22px; border-radius:14px; margin-bottom:30px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
@@ -430,6 +462,111 @@
                 <div style="font-size:12px; margin-top:6px;">Награда: <b>10 000 Gold</b> | Использовано: <b>1 из 1</b> на этой неделе.</div>
             `;
             res.classList.remove('hidden');
+        }
+
+        function toggleTesterCustomGoldField() {
+            const goldSelect = document.getElementById('tester-gold-select');
+            const customGroup = document.getElementById('group-tester-custom-gold');
+            if (goldSelect && customGroup) {
+                if (goldSelect.value === 'custom') {
+                    customGroup.classList.remove('hidden');
+                    const inp = document.getElementById('tester-custom-gold-input');
+                    if (inp) inp.focus();
+                } else {
+                    customGroup.classList.add('hidden');
+                }
+            }
+        }
+
+        async function generateTesterTierGoldPromo() {
+            const goldSelect = document.getElementById('tester-gold-select').value;
+            const currentUser = sessionStorage.getItem('standsoftix_tester_auth') || '@tester';
+            const resultBox = document.getElementById('tester-tier-gold-result');
+
+            let goldVal = 500;
+            if (goldSelect === 'custom') {
+                const customInput = document.getElementById('tester-custom-gold-input').value.trim();
+                goldVal = parseInt(customInput);
+                if (isNaN(goldVal) || goldVal < 1) {
+                    resultBox.className = 'result-box result-error';
+                    resultBox.textContent = '⚠️ Введите корректное число голды (от 1 до 20 000)!';
+                    resultBox.classList.remove('hidden');
+                    return;
+                }
+                if (goldVal > 20000) {
+                    resultBox.className = 'result-box result-error';
+                    resultBox.textContent = '⚠️ Максимальное число голды — 20 000 G!';
+                    resultBox.classList.remove('hidden');
+                    return;
+                }
+            } else {
+                goldVal = parseInt(goldSelect);
+            }
+
+            // Лимиты как для медиа:
+            // 250, 500, 1000 => 50
+            // 5000 => 10
+            // 10000 => 15
+            // > 10000 (до 20000) => 15
+            let maxLimit = 50;
+            let tierKey = `tier_${goldVal}`;
+            let tierName = `${goldVal} G`;
+
+            if (goldVal === 5000) {
+                maxLimit = 10;
+                tierKey = 'tier_5000';
+            } else if (goldVal === 10000) {
+                maxLimit = 15;
+                tierKey = 'tier_10000';
+            } else if (goldVal > 10000) {
+                maxLimit = 15;
+                tierKey = 'tier_over_10k';
+                tierName = 'от 10 000 до 20 000 G';
+            }
+
+            const d = new Date();
+            const weekNumber = Math.ceil((d.getDate() + 6) / 7);
+            const weekKey = `standsoftix_tester_tier_gold_${d.getFullYear()}_w${weekNumber}_${currentUser.toLowerCase()}_${tierKey}`;
+
+            let currentClaims = parseInt(localStorage.getItem(weekKey) || '0');
+            if (currentUser.toLowerCase().replace('@','') !== 'softer_052' && currentClaims >= maxLimit) {
+                resultBox.className = 'result-box result-error';
+                resultBox.innerHTML = `⚠️ <b>Лимит на эту неделю исчерпан!</b><br>Категория <b>${tierName}</b> ограничена: максимум <b>${maxLimit} раз в неделю</b>.<br>Использовано: <b>${currentClaims} из ${maxLimit}</b>.<br><i>Лимит обновится в понедельник!</i>`;
+                resultBox.classList.remove('hidden');
+                return;
+            }
+
+            resultBox.className = 'result-box';
+            resultBox.textContent = 'Создание промокода в реестре...';
+            resultBox.classList.remove('hidden');
+
+            let code = `TESTER_${goldVal}G_${generateRandomStr(5)}`;
+
+            try {
+                const resp = await fetch('/api/tester_gold_code', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role: 'tester', platform: 'TESTER', gold: goldVal, name: currentUser })
+                });
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data.code) code = data.code;
+                }
+            } catch (e) {}
+
+            currentClaims++;
+            localStorage.setItem(weekKey, currentClaims.toString());
+
+            resultBox.className = 'result-box result-success';
+            resultBox.innerHTML = `
+                <div>🎉 <b>Промокод для тестера создан!</b></div>
+                <div class="promo-code-card">
+                    <span>${code}</span>
+                    <button class="copy-btn" onclick="copyCode('${code}')">Скопировать 📋</button>
+                </div>
+                <div style="font-size:13px; margin-top:8px;">💰 Награда: <b>${goldVal.toLocaleString()} Gold</b> | 👥 <b>50 активаций</b></div>
+                <div style="font-size:12px; margin-top:4px; opacity:0.85;">📊 Использовано в категории (${tierName}): <b>${currentClaims} из ${maxLimit}</b> на этой неделе.</div>
+            `;
         }
 
         function generateTesterGold1k() {
