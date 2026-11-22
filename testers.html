@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700;800&family=Rubik:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --frost-bg: rgba(10, 20, 36, 0.78);
@@ -77,11 +77,15 @@
             text-decoration: none;
             color: #fff;
             font-family: 'Rajdhani', sans-serif;
-            font-weight: 700;
+            font-weight: 800;
             font-size: 22px;
-            letter-spacing: 1px;
+            letter-spacing: 1.2px;
         }
-        .logo span { color: var(--festive-cyan); }
+        .logo-title {
+            color: #fff;
+            text-shadow: 0 0 12px rgba(56, 189, 248, 0.5);
+            font-weight: 800;
+        }
         .festive-tag {
             background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
             color: #fff;
@@ -155,7 +159,7 @@
             z-index: 20;
         }
 
-        /* Стеклянные карточки с эффектом мороза */
+        /* Стеклянные карточки */
         .glass-panel {
             background: var(--frost-bg);
             backdrop-filter: blur(18px);
@@ -234,6 +238,15 @@
             box-shadow: 0 0 15px rgba(56, 189, 248, 0.35);
             background: rgba(15, 23, 42, 0.95);
         }
+        .select-field optgroup {
+            background: #0f172a;
+            color: #38bdf8;
+            font-weight: 700;
+        }
+        .select-field option {
+            background: #1e293b;
+            color: #fff;
+        }
 
         .btn {
             display: inline-flex;
@@ -262,6 +275,16 @@
         .btn-blue:hover {
             background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
             box-shadow: 0 6px 24px rgba(14, 165, 233, 0.6);
+            transform: translateY(-2px);
+        }
+        .btn-purple {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+            color: #fff;
+            box-shadow: 0 4px 18px rgba(124, 58, 237, 0.4);
+        }
+        .btn-purple:hover {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            box-shadow: 0 6px 24px rgba(139, 92, 246, 0.6);
             transform: translateY(-2px);
         }
         .btn-gold {
@@ -326,7 +349,7 @@
 
         .hidden { display: none !important; }
 
-        /* Адаптивность: Планшеты и Мобильные */
+        /* Адаптивность */
         @media (max-width: 900px) {
             .header-container {
                 flex-direction: column;
@@ -386,11 +409,11 @@
 <body>
     <div class="snowflakes-container" id="snowflakes"></div>
 
-    <!-- Шапка сайта -->
+    <!-- Шапка сайта (STANDSOFTIX слитно) -->
     <header class="header">
         <div class="header-container">
             <a href="index.html" class="logo">
-                <span>❄️ STAND</span><span>SOFTIX</span>
+                <span class="logo-title">❄️ STANDSOFTIX</span>
                 <span class="festive-tag">TESTER HUB</span>
                 <span class="ny-badge">🎄 2026 Season</span>
             </a>
@@ -475,29 +498,215 @@
                 </div>
             </div>
 
-            <!-- Промокоды на ножи тестера -->
+            <!-- БЛОК 1: Промокоды на ВСЕ НОЖИ игры (Лимит: 10 раз в неделю) -->
             <div class="glass-panel" style="padding:22px; margin-bottom:24px;">
-                <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#38bdf8; margin-bottom:6px;">🗡️ Промокоды на эксклюзивные ножи и скины</h3>
-                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Генерируйте уникальные скины коллекции Winter Fun для проверки анимаций и рендера. Лимит: <b>17 раз в неделю</b>.</p>
+                <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#38bdf8; margin-bottom:6px;">🗡️ Генератор промокодов на ВСЕ Ножи в игре</h3>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Выберите абсолютно любой нож из всех существующих коллекций игры StandSoftix 0.18.0. Лимит: <b>10 раз в неделю</b>.</p>
                 <div class="input-group">
-                    <label>Выберите скин / нож:</label>
-                    <select id="tester-knife-select" class="input-field">
-                        <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
-                        <option value="kunai_coldflame">Kunai "Cold Flame" (Arcane 🔥)</option>
-                        <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
-                        <option value="awm_crystal">AWM "Crystal" (Epic 💎)</option>
-                        <option value="m40_snowdemon">M40 "Snow Demon" (Legendary 👹)</option>
-                        <option value="akr_nano">AKR "Nano" (Arcane ⚡)</option>
-                        <option value="butterfly_coldflame">Butterfly "Cold Flame" 🦋</option>
+                    <label>Выберите нож из игры (полный каталог):</label>
+                    <select id="tester-knife-select" class="input-field select-field">
+                        <optgroup label="🗡️ Керамбиты (Karambit)">
+                            <option value="karambit_icedragon">Karambit "Ice Dragon" (Nameless ❄️)</option>
+                            <option value="karambit_gold">Karambit "Gold" (Arcane 🏆)</option>
+                            <option value="karambit_universe">Karambit "Universe" (Arcane 🌌)</option>
+                            <option value="karambit_claw">Karambit "Claw" (Arcane 🦅)</option>
+                            <option value="karambit_dragonglass">Karambit "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="karambit_coldflame">Karambit "Cold Flame" (Arcane 🔥)</option>
+                            <option value="karambit_nebula">Karambit "Nebula" (Arcane 🪐)</option>
+                            <option value="karambit_tiger">Karambit "Year of the Tiger" (Arcane 🐅)</option>
+                            <option value="karambit_scratch">Karambit "Scratch" (Arcane ⚡)</option>
+                        </optgroup>
+                        <optgroup label="🦋 Ножи-бабочки (Butterfly)">
+                            <option value="butterfly_coldflame">Butterfly "Cold Flame" (Arcane 🔥)</option>
+                            <option value="butterfly_starfall">Butterfly "Starfall" (Arcane ⭐)</option>
+                            <option value="butterfly_dragonglass">Butterfly "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="butterfly_legacy">Butterfly "Legacy" (Arcane 🏛️)</option>
+                            <option value="butterfly_firestorm">Butterfly "Fire Storm" (Arcane 🌪️)</option>
+                            <option value="butterfly_blackwidow">Butterfly "Black Widow" (Arcane 🕷️)</option>
+                            <option value="butterfly_kumo">Butterfly "Kumo" (Arcane 🕸️)</option>
+                        </optgroup>
+                        <optgroup label="🗡️ M9 Bayonet">
+                            <option value="m9_dragonglass">M9 "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="m9_ancient">M9 "Ancient" (Arcane 🗿)</option>
+                            <option value="m9_universe">M9 "Universe" (Arcane 🌌)</option>
+                            <option value="m9_frozen">M9 "Frozen" (Arcane ❄️)</option>
+                            <option value="m9_blueblood">M9 "Blue Blood" (Arcane 🩸)</option>
+                            <option value="m9_scratch">M9 "Scratch" (Arcane ⚡)</option>
+                            <option value="m9_kumo">M9 "Kumo" (Arcane 🕸️)</option>
+                        </optgroup>
+                        <optgroup label="🎯 Кунаи (Kunai)">
+                            <option value="kunai_coldflame">Kunai "Cold Flame" (Arcane 🔥)</option>
+                            <option value="kunai_poison">Kunai "Poison" (Arcane ☠️)</option>
+                            <option value="kunai_luxury">Kunai "Luxury" (Arcane 💎)</option>
+                            <option value="kunai_bone">Kunai "Bone" (Arcane 🦴)</option>
+                            <option value="kunai_radiation">Kunai "Radiation" (Arcane ☢️)</option>
+                            <option value="kunai_reaper">Kunai "Reaper" (Arcane 💀)</option>
+                            <option value="kunai_snowcamo">Kunai "Snow Camo" (Arcane ❄️)</option>
+                        </optgroup>
+                        <optgroup label="⚔️ jKommando">
+                            <option value="jkommando_ancient">jKommando "Ancient" (Arcane 🗿)</option>
+                            <option value="jkommando_reaper">jKommando "Reaper" (Arcane 💀)</option>
+                            <option value="jkommando_prism">jKommando "Prism" (Arcane 🌈)</option>
+                            <option value="jkommando_floral">jKommando "Floral" (Arcane 🌺)</option>
+                            <option value="jkommando_frosted">jKommando "Frosted" (Arcane ❄️)</option>
+                            <option value="jkommando_sour">jKommando "Sour" (Arcane 🍋)</option>
+                        </optgroup>
+                        <optgroup label="🦂 Скорпионы (Scorpion)">
+                            <option value="scorpion_coldflame">Scorpion "Cold Flame" (Arcane 🔥)</option>
+                            <option value="scorpion_starfall">Scorpion "Starfall" (Arcane ⭐)</option>
+                            <option value="scorpion_holiday">Scorpion "Holiday Frost" (Arcane ❄️)</option>
+                            <option value="scorpion_scratch">Scorpion "Scratch" (Arcane ⚡)</option>
+                            <option value="scorpion_seafoam">Scorpion "Sea Foam" (Arcane 🌊)</option>
+                            <option value="scorpion_veil">Scorpion "Veil" (Arcane 🌙)</option>
+                        </optgroup>
+                        <optgroup label="🥊 Тычковые ножи (Dual Daggers)">
+                            <option value="dualdaggers_blizzard">Dual Daggers "Blizzard" (Arcane ❄️)</option>
+                            <option value="dualdaggers_demonic">Dual Daggers "Demonic Steel" (Arcane 😈)</option>
+                            <option value="dualdaggers_harmony">Dual Daggers "Harmony" (Arcane ☯️)</option>
+                            <option value="dualdaggers_griffin">Dual Daggers "Griffin" (Arcane 🦅)</option>
+                            <option value="dualdaggers_acid">Dual Daggers "Acid" (Arcane 🧪)</option>
+                        </optgroup>
+                        <optgroup label="🔪 Складные ножи (Flip Knife)">
+                            <option value="flipknife_arctic">Flip Knife "Arctic" (Arcane ❄️)</option>
+                            <option value="flipknife_dragonglass">Flip Knife "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="flipknife_vortex">Flip Knife "Vortex" (Arcane 🌀)</option>
+                            <option value="flipknife_darkshiver">Flip Knife "Dark Shiver" (Arcane 🌑)</option>
+                            <option value="flipknife_holiday">Flip Knife "Holiday" (Arcane 🎄)</option>
+                        </optgroup>
+                        <optgroup label="⚔️ Танто (Tanto)">
+                            <option value="tanto_flow">Tanto "Flow" (Arcane 🌊)</option>
+                            <option value="tanto_yakuza">Tanto "Yakuza" (Arcane 🐉)</option>
+                            <option value="tanto_translucent">Tanto "Translucent" (Arcane 💎)</option>
+                            <option value="tanto_malachite">Tanto "Malachite" (Arcane 🟢)</option>
+                            <option value="tanto_frostwyrm">Tanto "Frost Wyrm" (Arcane ❄️)</option>
+                        </optgroup>
+                        <optgroup label="🪓 Кукри (Kukri)">
+                            <option value="kukri_ares">Kukri "Ares" (Arcane ⚔️)</option>
+                            <option value="kukri_constellation">Kukri "Constellation" (Arcane 🌌)</option>
+                            <option value="kukri_divine">Kukri "Divine" (Arcane 👑)</option>
+                            <option value="kukri_snowdrift">Kukri "Snowdrift" (Arcane ❄️)</option>
+                        </optgroup>
+                        <optgroup label="🐺 Клык (Fang)">
+                            <option value="fang_obsidian">Fang "Obsidian" (Arcane 🖤)</option>
+                            <option value="fang_icefang">Fang "Ice Fang" (Arcane ❄️)</option>
+                            <option value="fang_autumn">Fang "Autumn" (Arcane 🍂)</option>
+                        </optgroup>
+                        <optgroup label="🗡️ Стилет (Stiletto)">
+                            <option value="stiletto_damascus">Stiletto "Damascus" (Arcane 🗡️)</option>
+                            <option value="stiletto_viper">Stiletto "Viper" (Arcane 🐍)</option>
+                            <option value="stiletto_coldice">Stiletto "Cold Ice" (Arcane ❄️)</option>
+                        </optgroup>
                     </select>
                 </div>
                 <button class="btn btn-blue" style="width:100%; justify-content:center; margin-top:6px;" onclick="generateTesterKnifePromo()">
-                    <span>Сгенерировать промокод на скин ❄️</span>
+                    <span>Сгенерировать промокод на нож 🗡️</span>
                 </button>
                 <div id="knife-result" class="result-box hidden"></div>
             </div>
 
-            <!-- Генератор Gold для тестеров с лимитами как для медиа -->
+            <!-- БЛОК 2: Промокоды на ВСЕ СКИНЫ (Пушки, Перчатки, Наклейки, кроме ножей) (Лимит: 15 раз в неделю) -->
+            <div class="glass-panel" style="padding:22px; margin-bottom:24px; border:1px solid rgba(168,85,247,0.4);">
+                <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#c084fc; margin-bottom:6px;">🔫 Генератор Скинов, Перчаток и Наклеек (кроме ножей)</h3>
+                <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">Выбирайте любые пушки, легендарные перчатки и коллекционные наклейки StandSoftix. Лимит: <b>15 раз в неделю</b>.</p>
+                <div class="input-group">
+                    <label>Выберите предмет (оружие / перчатки / наклейки):</label>
+                    <select id="tester-skin-select" class="input-field select-field">
+                        <optgroup label="🧤 Перчатки (Gloves)">
+                            <option value="gloves_winterfun">Gloves "Winter Fun" (Exclusive 0.18.0 ❄️)</option>
+                            <option value="gloves_dragonglass">Gloves "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="gloves_champion">Gloves "Champion" (Arcane 🏆)</option>
+                            <option value="gloves_autumn">Gloves "Autumn" (Arcane 🍂)</option>
+                            <option value="gloves_phoenix">Gloves "Phoenix" (Arcane 🔥)</option>
+                            <option value="gloves_retrowave">Gloves "Retro Wave" (Arcane 🌆)</option>
+                            <option value="gloves_camo">Gloves "Camo" (Arcane 🪖)</option>
+                            <option value="gloves_geometric">Gloves "Geometric" (Arcane 📐)</option>
+                            <option value="gloves_acid">Gloves "Acid" (Arcane 🧪)</option>
+                            <option value="gloves_neuro">Gloves "Neuro" (Arcane 🧠)</option>
+                            <option value="gloves_thug">Gloves "Thug" (Arcane 💀)</option>
+                            <option value="gloves_tiger">Gloves "Year of the Tiger" (Arcane 🐅)</option>
+                        </optgroup>
+                        <optgroup label="🎯 Снайперские винтовки (AWM & M40)">
+                            <option value="awm_treasure">AWM "Treasure Hunter" (Nameless 💰)</option>
+                            <option value="awm_wintersport">AWM "Winter Sport" (Winter Fun 0.18.0 ❄️)</option>
+                            <option value="awm_genesis">AWM "Genesis" (Arcane 🌟)</option>
+                            <option value="awm_sport">AWM "Sport" (Legendary 🎯)</option>
+                            <option value="awm_scratch">AWM "Scratch" (Legendary ⚡)</option>
+                            <option value="awm_crystal">AWM "Crystal" (Epic 💎)</option>
+                            <option value="awm_gear">AWM "Gear" (Epic ⚙️)</option>
+                            <option value="m40_wintertrack">M40 "Winter Track" (Winter Fun 0.18.0 ❄️)</option>
+                            <option value="m40_monster">M40 "Monster" (Arcane 👹)</option>
+                            <option value="m40_snowdemon">M40 "Snow Demon" (Legendary 👹)</option>
+                            <option value="m40_grip">M40 "Grip" (Legendary 🦾)</option>
+                            <option value="m40_quake">M40 "Quake" (Epic 💥)</option>
+                        </optgroup>
+                        <optgroup label="⚡ Штурмовые винтовки (AKR, M4, M4A1, FAMAS)">
+                            <option value="akr_treasure">AKR "Treasure Hunter" (Nameless 💰)</option>
+                            <option value="akr_necromancer">AKR "Necromancer" (Arcane 💀)</option>
+                            <option value="akr_nano">AKR "Nano" (Arcane ⚡)</option>
+                            <option value="akr_dragon">AKR "Dragon" (Legendary 🐉)</option>
+                            <option value="akr_carbon">AKR "Carbon" (Epic 🖤)</option>
+                            <option value="akr_nightterror">AKR "Night Terror" (Legendary 👻)</option>
+                            <option value="akr12_railgun">AKR12 "Railgun" (Arcane 🚀)</option>
+                            <option value="akr12_roar">AKR12 "Roar" (Arcane 🦁)</option>
+                            <option value="akr12_aurora">AKR12 "Aurora" (Legendary 🌌)</option>
+                            <option value="m4_samurai">M4 "Samurai" (Arcane ⚔️)</option>
+                            <option value="m4_nightwolf">M4 "Night Wolf" (Arcane 🐺)</option>
+                            <option value="m4_necromancer">M4 "Necromancer" (Arcane 💀)</option>
+                            <option value="m4_grandprix">M4 "Grand Prix" (Legendary 🏎️)</option>
+                            <option value="m4a1_bubblegum">M4A1 "Bubblegum" (Arcane 🍬)</option>
+                            <option value="m4a1_king">M4A1 "King" (Arcane 👑)</option>
+                            <option value="m4a1_paladin">M4A1 "Paladin" (Legendary 🛡️)</option>
+                            <option value="famas_fury">FAMAS "Fury" (Arcane 🌋)</option>
+                            <option value="famas_beagle">FAMAS "Beagle" (Legendary 🐾)</option>
+                            <option value="famas_hull">FAMAS "Hull" (Epic 🚢)</option>
+                        </optgroup>
+                        <optgroup label="🔫 Пистолеты (Deagle, USP, Glock, P350)">
+                            <option value="deagle_dragonglass">Desert Eagle "Dragon Glass" (Arcane 🐉)</option>
+                            <option value="deagle_aureus">Desert Eagle "Aureus" (Arcane 🏆)</option>
+                            <option value="deagle_predator">Desert Eagle "Predator" (Legendary 🦖)</option>
+                            <option value="deagle_blood">Desert Eagle "Blood" (Legendary 🩸)</option>
+                            <option value="usp_genesis">USP "Genesis" (Arcane 🌟)</option>
+                            <option value="usp_fiend">USP "Fiend" (Arcane 😈)</option>
+                            <option value="usp_2years">USP "2 Years" (Arcane 🎂)</option>
+                            <option value="glock_nest">Glock "Nest" (Arcane 🪺)</option>
+                            <option value="glock_genesis">Glock "Genesis" (Legendary 🌟)</option>
+                            <option value="p350_forestspirit">P350 "Forest Spirit" (Arcane 🌲)</option>
+                            <option value="p350_neon">P350 "Neon" (Arcane 💡)</option>
+                            <option value="p350_rally">P350 "Rally" (Legendary 🏁)</option>
+                            <option value="berettas_royal">Dual Berettas "Royal" (Arcane 👑)</option>
+                        </optgroup>
+                        <optgroup label="💥 ПП и Дробовики (MP7, UMP45, P90, SPAS)">
+                            <option value="mp7_offroad">MP7 "Offroad" (Arcane 🚜)</option>
+                            <option value="mp7_lich">MP7 "Lich" (Arcane 💀)</option>
+                            <option value="mp7_graffiti">MP7 "Graffiti" (Legendary 🎨)</option>
+                            <option value="ump45_cerberus">UMP45 "Cerberus" (Arcane 🐕‍🦺)</option>
+                            <option value="ump45_beast">UMP45 "Beast" (Arcane 🐺)</option>
+                            <option value="p90_ghoul">P90 "Ghoul" (Arcane 🧟)</option>
+                            <option value="p90_samurai">P90 "Samurai" (Legendary ⚔️)</option>
+                            <option value="spas_arctic">SPAS "Arctic" (Winter Fun ❄️)</option>
+                            <option value="fabm_parrot">FABM "Parrot" (Arcane 🦜)</option>
+                        </optgroup>
+                        <optgroup label="✨ Наклейки (Stickers)">
+                            <option value="sticker_winterfun">Sticker "Winter Fun 2026" (Exclusive ❄️)</option>
+                            <option value="sticker_icedragon">Sticker "Ice Dragon" (Nameless 🐉)</option>
+                            <option value="sticker_coldflame">Sticker "Cold Flame" (Arcane 🔥)</option>
+                            <option value="sticker_snowmanboss">Sticker "Snowman Boss" (Legendary ⛄)</option>
+                            <option value="sticker_goldskull">Sticker "Gold Skull" (Arcane 💀)</option>
+                            <option value="sticker_neonrider">Sticker "Neon Rider" (Epic 🏍️)</option>
+                            <option value="sticker_frostbite">Sticker "Frostbite" (Legendary ❄️)</option>
+                            <option value="sticker_cyberwolf">Sticker "Cyber Wolf" (Epic 🐺)</option>
+                            <option value="sticker_aceofspades">Sticker "Ace of Spades" (Rare ♠️)</option>
+                            <option value="sticker_5years">Sticker "Standoff 5 Years" (Arcane ⭐)</option>
+                        </optgroup>
+                    </select>
+                </div>
+                <button class="btn btn-purple" style="width:100%; justify-content:center; margin-top:6px;" onclick="generateTesterSkinPromo()">
+                    <span>Сгенерировать промокод на скин / перчатки / стикер ✨</span>
+                </button>
+                <div id="skin-result" class="result-box hidden"></div>
+            </div>
+
+            <!-- БЛОК 3: Генератор Gold для тестеров с лимитами как для медиа -->
             <div class="glass-panel" style="padding:22px; margin-bottom:24px; border:1px solid rgba(56,189,248,0.4);">
                 <h3 style="font-family:'Rajdhani', sans-serif; font-size:22px; color:#fff; margin-bottom:6px;">💰 Генератор Gold для Тестеров (номиналы до 20 000G)</h3>
                 <p style="font-size:13px; color:#94a3b8; margin-bottom:16px;">
@@ -732,8 +941,9 @@
             document.getElementById('tester-auth-code').value = '';
         }
 
-        // Логика лимитов и генерации
+        // Логика лимитов
         const LIMITS_KEY_KNIFE = 'standsoftix_tester_knife_limits';
+        const LIMITS_KEY_SKINS = 'standsoftix_tester_skins_limits';
         const LIMITS_KEY_GOLD1K = 'standsoftix_tester_gold1k_limits';
         const LIMITS_KEY_TIER_GOLD = 'standsoftix_tester_tier_gold_limits';
 
@@ -759,32 +969,64 @@
             localStorage.setItem(key, JSON.stringify(data));
         }
 
+        // Генерация промокодов на ножи (обратно 10 в неделю)
         function generateTesterKnifePromo() {
             const limits = getLimits(LIMITS_KEY_KNIFE);
-            const MAX_KNIFE = 17;
+            const MAX_KNIFE = 10;
             const resBox = document.getElementById('knife-result');
 
             if (limits.count >= MAX_KNIFE) {
                 resBox.className = 'result-box result-error';
-                resBox.innerHTML = `⚠️ <b>Лимит исчерпан:</b> вы уже создали ${MAX_KNIFE} из ${MAX_KNIFE} промокодов на скины на этой неделе! Лимит обновится в понедельник.`;
+                resBox.innerHTML = `⚠️ <b>Лимит исчерпан:</b> вы уже создали ${MAX_KNIFE} из ${MAX_KNIFE} промокодов на ножи на этой неделе! Лимит обновится в понедельник.`;
                 resBox.classList.remove('hidden');
                 return;
             }
 
             const knifeSelect = document.getElementById('tester-knife-select');
             const knifeName = knifeSelect.options[knifeSelect.selectedIndex].text;
-            const code = 'TEST_' + generateRandomStr(7);
+            const code = 'KNIFE_' + generateRandomStr(7);
 
             limits.count++;
             saveLimits(LIMITS_KEY_KNIFE, limits);
 
             resBox.className = 'result-box result-success';
             resBox.innerHTML = `
-                🎉 <b>Промокод на скин успешно создан!</b><br>
+                🎉 <b>Промокод на нож успешно создан!</b><br>
                 Предмет: <b>${knifeName}</b><br>
                 Код для активации в игре (0.18.0):<br>
                 <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
                 <small style="color:#94a3b8;">Использовано: ${limits.count} / ${MAX_KNIFE} на этой неделе. Нажмите на код, чтобы скопировать.</small>
+            `;
+            resBox.classList.remove('hidden');
+        }
+
+        // Генерация промокодов на пушки, перчатки, наклейки (15 раз в неделю)
+        function generateTesterSkinPromo() {
+            const limits = getLimits(LIMITS_KEY_SKINS);
+            const MAX_SKINS = 15;
+            const resBox = document.getElementById('skin-result');
+
+            if (limits.count >= MAX_SKINS) {
+                resBox.className = 'result-box result-error';
+                resBox.innerHTML = `⚠️ <b>Лимит исчерпан:</b> вы уже создали ${MAX_SKINS} из ${MAX_SKINS} промокодов на скины/перчатки/наклейки на этой неделе! Лимит обновится в понедельник.`;
+                resBox.classList.remove('hidden');
+                return;
+            }
+
+            const skinSelect = document.getElementById('tester-skin-select');
+            const skinName = skinSelect.options[skinSelect.selectedIndex].text;
+            const code = 'SKIN_' + generateRandomStr(7);
+
+            limits.count++;
+            saveLimits(LIMITS_KEY_SKINS, limits);
+
+            resBox.className = 'result-box result-success';
+            resBox.innerHTML = `
+                🎉 <b>Промокод на предмет успешно создан!</b><br>
+                Предмет: <b>${skinName}</b><br>
+                Код для активации в игре (0.18.0):<br>
+                <div class="promo-display" onclick="copyCode('${code}')">${code} 📋</div><br>
+                <small style="color:#94a3b8;">Использовано: ${limits.count} / ${MAX_SKINS} на этой неделе. Нажмите на код, чтобы скопировать.</small>
             `;
             resBox.classList.remove('hidden');
         }
