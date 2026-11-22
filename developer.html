@@ -539,17 +539,65 @@
                             <p style="font-size:13px; color:#94a3b8; margin-top:2px;">Мониторинг серверов StandSoftix в реальном времени, настройка вместимости (слотов), кик/бан и общеигровые оповещения.</p>
                         </div>
                     </div>
-                    <div style="display:flex; gap:8px;">
-                        <button class="btn btn-blue" style="font-size:13px; padding:8px 14px; min-height:38px; background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" onclick="triggerServerAction('hot_reload', {})">
-                            <span>⚡ Zero-Downtime Hot-Reload</span>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-blue" style="font-size:12px; padding:6px 12px; min-height:34px; background:#16a34a;" onclick="triggerServerAction('start_server', {server_id:'all'})">
+                            <span>▶️ Включить все</span>
                         </button>
-                        <button class="btn btn-gold" style="font-size:13px; padding:8px 14px; min-height:38px;" onclick="runHealthCheckQuick()">
-                            <span>🩺 Health-Check</span>
+                        <button class="btn btn-rose" style="font-size:12px; padding:6px 12px; min-height:34px;" onclick="triggerServerAction('stop_server', {server_id:'all'})">
+                            <span>⏹ Выключить все</span>
                         </button>
-                        <button class="btn btn-rose" style="font-size:13px; padding:8px 14px; min-height:38px;" onclick="triggerServerAction('restart', {server_id:'all'})">
-                            <span>🔄 Перезапустить</span>
+                        <button class="btn btn-gold" style="font-size:12px; padding:6px 12px; min-height:34px;" onclick="toggleCreateServerForm()">
+                            <span>➕ Создать сервер</span>
+                        </button>
+                        <button class="btn btn-blue" style="font-size:12px; padding:6px 12px; min-height:34px; background:linear-gradient(135deg, #0284c7 0%, #0369a1 100%);" onclick="triggerServerAction('hot_reload', {})">
+                            <span>⚡ Hot-Reload</span>
                         </button>
                     </div>
+                </div>
+
+                <!-- ПАНЕЛЬ СОЗДАНИЯ НОВОГО СЕРВЕРА STANDSOFTIX С 0 ОНЛАЙНА (СКРЫТАЯ / РАСКРЫВАЕМАЯ) -->
+                <div id="create-server-panel" class="hidden" style="background:rgba(8,11,20,0.85); border:1px solid rgba(251,191,36,0.4); border-radius:12px; padding:18px; margin-bottom:18px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <h4 style="margin:0; font-family:'Rajdhani', sans-serif; font-size:18px; color:#fbbf24;">➕ Создание нового сервера StandSoftix (0 игроков при старте)</h4>
+                        <button class="btn btn-rose" style="font-size:11px; padding:4px 10px; min-height:28px;" onclick="toggleCreateServerForm()">Закрыть ✖</button>
+                    </div>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:10px; margin-bottom:12px;">
+                        <div>
+                            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Название сервера:</label>
+                            <input type="text" id="new-srv-name" class="input-field" placeholder="StandSoftix #4 (Custom)" value="❄️ StandSoftix #4 (Custom RU)">
+                        </div>
+                        <div>
+                            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Режим игры:</label>
+                            <select id="new-srv-mode" class="input-field select-field">
+                                <option value="Командный бой (TDM)">Командный бой (TDM)</option>
+                                <option value="Закладка бомбы (Defuse)">Закладка бомбы (Defuse)</option>
+                                <option value="Гонка вооружений (Arms Race)">Гонка вооружений</option>
+                                <option value="Безумный Санта & Перехват">Безумный Санта 🎅</option>
+                                <option value="Дуэль 1x1">Дуэль 1x1</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Карта:</label>
+                            <select id="new-srv-map" class="input-field select-field">
+                                <option value="Sandstone (Зимний)">Sandstone (Зимний)</option>
+                                <option value="Province (Зимний)">Province (Зимний)</option>
+                                <option value="Winter Yard 0.18.0">Winter Yard 0.18.0</option>
+                                <option value="Rust (Снежный)">Rust (Снежный)</option>
+                                <option value="Zone 9">Zone 9</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Порт UDP (от 7780):</label>
+                            <input type="number" id="new-srv-port" class="input-field" placeholder="7780" value="7780" min="1024" max="65535">
+                        </div>
+                        <div>
+                            <label style="font-size:11px; color:#94a3b8; display:block; margin-bottom:4px;">Слоты (макс. игроков):</label>
+                            <input type="number" id="new-srv-slots" class="input-field" placeholder="250" value="250" min="10" max="2000">
+                        </div>
+                    </div>
+                    <button class="btn btn-gold" style="width:100%; font-size:13px; padding:8px;" onclick="submitCreateServer()">
+                        <span>🚀 Запустить новый сервер с 0 онлайна</span>
+                    </button>
                 </div>
 
                 <!-- ПАНЕЛЬ ВЫСОКОЙ ДОСТУПНОСТИ И ОТКАЗОУСТОЙЧИВОСТИ (HIGH AVAILABILITY & ZERO DOWNTIME) -->
@@ -1091,47 +1139,50 @@
             // Fallback данные если оффлайн или статический GitHub Pages
             if (!serversData || !serversData.clusters) {
                 serversData = {
-                    total_online: 716,
+                    total_online: 0,
                     total_capacity: 1000,
                     clusters: {
                         ru_moscow: {
+                            id: "ru_moscow",
                             name: "🇷🇺 StandSoftix #1 (RU - Москва)",
                             status: "ONLINE",
                             tickrate: 64,
                             mode: "Командный бой (TDM)",
                             map: "Sandstone (Зимний)",
-                            online_players: 185,
+                            port: 7777,
+                            online_players: 0,
                             max_players: 250,
                             ping: 18,
                             uptime_str: "24ч 18м 05с",
-                            cpu_usage: 6.8,
-                            ram_mb: 412
+                            health: "100% HEALTHY"
                         },
                         eu_frankfurt: {
+                            id: "eu_frankfurt",
                             name: "🇪🇺 StandSoftix #2 (EU - Франкфурт)",
                             status: "ONLINE",
                             tickrate: 64,
                             mode: "Закладка бомбы (Defuse)",
                             map: "Province (Зимний)",
-                            online_players: 142,
+                            port: 7778,
+                            online_players: 0,
                             max_players: 250,
                             ping: 39,
                             uptime_str: "24ч 18м 05с",
-                            cpu_usage: 5.2,
-                            ram_mb: 388
+                            health: "100% HEALTHY"
                         },
                         winter_fun: {
+                            id: "winter_fun",
                             name: "❄️ StandSoftix #3 (EVENT - 0.18.0 Winter Fun)",
                             status: "ONLINE",
                             tickrate: 128,
                             mode: "Безумный Санта & Перехват (Mad Santa)",
                             map: "Winter Yard 0.18.0",
-                            online_players: 389,
+                            port: 7779,
+                            online_players: 0,
                             max_players: 500,
                             ping: 21,
                             uptime_str: "24ч 18м 05с",
-                            cpu_usage: 8.4,
-                            ram_mb: 485
+                            health: "100% HEALTHY"
                         }
                     }
                 };
@@ -1140,7 +1191,7 @@
             // Обновляем реальный счетчик в шапке
             const totEl = document.getElementById('total-server-online');
             if (totEl) {
-                const curOnline = serversData.total_online || 716;
+                const curOnline = serversData.total_online || 0;
                 const curCap = serversData.total_capacity || 1000;
                 totEl.textContent = `${curOnline.toLocaleString('ru-RU')} / ${curCap.toLocaleString('ru-RU')}`;
             }
@@ -1192,6 +1243,30 @@
             input.value = '';
         }
 
+        function toggleCreateServerForm() {
+            const p = document.getElementById('create-server-panel');
+            if (p) p.classList.toggle('hidden');
+        }
+
+        function submitCreateServer() {
+            const name = document.getElementById('new-srv-name').value.trim() || 'StandSoftix Custom';
+            const mode = document.getElementById('new-srv-mode').value;
+            const mapName = document.getElementById('new-srv-map').value;
+            const port = parseInt(document.getElementById('new-srv-port').value, 10) || 7780;
+            const slots = parseInt(document.getElementById('new-srv-slots').value, 10) || 250;
+
+            triggerServerAction('create_server', {
+                name: name,
+                mode: mode,
+                map: mapName,
+                port: port,
+                max_players: slots,
+                tickrate: 64
+            });
+
+            toggleCreateServerForm();
+        }
+
         function renderServersGrid(data) {
             const grid = document.getElementById('server-clusters-grid');
             if (!grid) return;
@@ -1200,30 +1275,40 @@
             for (const [cid, s] of Object.entries(data.clusters)) {
                 const isOnline = s.status === 'ONLINE';
                 const statusColor = isOnline ? '#22c55e' : '#ef4444';
-                const borderColor = cid === 'winter_fun' ? 'rgba(56,189,248,0.6)' : 'rgba(255,255,255,0.1)';
+                const borderColor = isOnline ? (cid === 'winter_fun' ? 'rgba(56,189,248,0.7)' : 'rgba(34,197,94,0.4)') : 'rgba(239,68,68,0.3)';
+
+                const powerBtn = isOnline
+                    ? `<button class="btn btn-rose" style="flex:1; font-size:11px; padding:6px 8px; min-height:32px;" onclick="triggerServerAction('stop_server', {server_id:'${cid}'})"><span>⏹ Выключить</span></button>`
+                    : `<button class="btn btn-blue" style="flex:1; font-size:11px; padding:6px 8px; min-height:32px; background:#16a34a;" onclick="triggerServerAction('start_server', {server_id:'${cid}'})"><span>▶️ Включить</span></button>`;
+
+                const deleteBtn = s.created_by === 'Developer_Custom'
+                    ? `<button class="btn btn-rose" style="font-size:11px; padding:6px 8px; min-height:32px; background:#7f1d1d;" title="Удалить сервер" onclick="triggerServerAction('delete_server', {server_id:'${cid}'})"><span>🗑️</span></button>`
+                    : '';
 
                 html += `
-                    <div style="background:rgba(15,23,42,0.85); border:1px solid ${borderColor}; border-radius:12px; padding:16px; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+                    <div style="background:rgba(15,23,42,0.9); border:1px solid ${borderColor}; border-radius:12px; padding:16px; box-shadow:0 4px 15px rgba(0,0,0,0.35); position:relative;">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                             <div style="font-weight:700; font-size:15px; color:#fff;">${s.name}</div>
-                            <span style="font-size:11px; font-weight:800; background:rgba(34,197,94,0.2); color:${statusColor}; padding:2px 8px; border-radius:6px; border:1px solid ${statusColor};">
-                                ${s.status}
+                            <span style="font-size:11px; font-weight:800; background:rgba(34,197,94,0.15); color:${statusColor}; padding:2px 8px; border-radius:6px; border:1px solid ${statusColor};">
+                                ${isOnline ? '🟢 ОНЛАЙН' : '🔴 ВЫКЛЮЧЕН'}
                             </span>
                         </div>
                         <div style="font-size:12px; color:#cbd5e1; line-height:1.6; margin-bottom:12px;">
                             <div>🎮 Режим: <b style="color:#fbbf24;">${s.mode}</b></div>
-                            <div>🗺 Карта: <b>${s.map}</b></div>
-                            <div>👥 Игроки: <b style="color:#38bdf8;">${s.online_players} / ${s.max_players}</b> (Пинг: ${s.ping}ms)</div>
-                            <div>⚡ Tickrate: <b>${s.tickrate} Tick</b> • Аптайм: <b style="color:#4ade80;">${s.uptime_pct || 99.99}%</b></div>
-                            <div>🛡 Даунтайм: <b style="color:#fbbf24;">${s.downtime_str || '0.00с (0%)'}</b> • Здоровье: <b style="color:#38bdf8;">${s.health || '100% HEALTHY'}</b></div>
+                            <div>🗺 Карта: <b>${s.map}</b> (Порт: <b>UDP ${s.port}</b>)</div>
+                            <div>👥 Онлайн: <b style="color:${isOnline ? '#38bdf8' : '#94a3b8'};">${s.online_players} / ${s.max_players}</b> (Честный учет)</div>
+                            <div>⚡ Tickrate: <b>${s.tickrate} Tick</b> • Аптайм: <b style="color:#4ade80;">${s.uptime_str}</b></div>
+                            <div>🛡 Статус сокета: <b style="color:${isOnline ? '#38bdf8' : '#ef4444'};">${s.health || (isOnline ? '100% HEALTHY' : 'OFFLINE')}</b></div>
                         </div>
                         <div style="display:flex; gap:6px;">
-                            <button class="btn btn-blue" style="flex:1; font-size:11px; padding:6px 10px; min-height:32px;" onclick="triggerServerAction('restart', {server_id:'${cid}'})">
-                                <span>Перезапуск 🔄</span>
+                            ${powerBtn}
+                            <button class="btn btn-blue" style="flex:1; font-size:11px; padding:6px 8px; min-height:32px;" onclick="triggerServerAction('restart', {server_id:'${cid}'})">
+                                <span>🔄 Перезапуск</span>
                             </button>
-                            <button class="btn btn-gold" style="flex:1; font-size:11px; padding:6px 10px; min-height:32px;" onclick="triggerServerAction('switch_mode', {server_id:'${cid}', mode_name:'Безумный Санта & Перехват'})">
-                                <span>Санта 🎅</span>
+                            <button class="btn btn-gold" style="font-size:11px; padding:6px 8px; min-height:32px;" title="Режим Санты" onclick="triggerServerAction('switch_mode', {server_id:'${cid}', mode_name:'Безумный Санта & Перехват'})">
+                                <span>🎅</span>
                             </button>
+                            ${deleteBtn}
                         </div>
                     </div>
                 `;

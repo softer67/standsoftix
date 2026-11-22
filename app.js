@@ -77,18 +77,18 @@ async function updateRealServerOnline() {
             const resp = await fetch(ep + '?t=' + Date.now());
             if (resp.ok) {
                 const data = await resp.json();
-                if (data.total_online) {
+                if (data.total_online !== undefined) {
                     realOnline = data.total_online;
                     maxCapacity = data.total_capacity || 1000;
                     if (data.clusters) {
                         const c = data.clusters;
-                        const ru = c.ru_moscow ? c.ru_moscow.online_players : 185;
-                        const eu = c.eu_frankfurt ? c.eu_frankfurt.online_players : 142;
-                        const wf = c.winter_fun ? c.winter_fun.online_players : 389;
+                        const ru = c.ru_moscow ? (c.ru_moscow.online_players || 0) : 0;
+                        const eu = c.eu_frankfurt ? (c.eu_frankfurt.online_players || 0) : 0;
+                        const wf = c.winter_fun ? (c.winter_fun.online_players || 0) : 0;
                         clusterDetails = `[🇷🇺 RU: ${ru} | 🇪🇺 EU: ${eu} | ❄️ Event: ${wf}]`;
                     }
                     break;
-                } else if (data.online_players) {
+                } else if (data.online_players !== undefined) {
                     realOnline = data.online_players;
                     break;
                 }
@@ -96,13 +96,11 @@ async function updateRealServerOnline() {
         } catch(e) {}
     }
 
-    if (realOnline > 0) {
-        el.textContent = `${realOnline.toLocaleString('ru-RU')} / ${maxCapacity.toLocaleString('ru-RU')}`;
-        if (clusterDetails) {
-            el.title = `Игроки на серверах: ${clusterDetails}`;
-            const breakdownEl = document.getElementById('servers-breakdown');
-            if (breakdownEl) breakdownEl.textContent = clusterDetails;
-        }
+    el.textContent = `${realOnline.toLocaleString('ru-RU')} / ${maxCapacity.toLocaleString('ru-RU')}`;
+    if (clusterDetails) {
+        el.title = `Игроки на серверах: ${clusterDetails}`;
+        const breakdownEl = document.getElementById('servers-breakdown');
+        if (breakdownEl) breakdownEl.textContent = clusterDetails;
     }
 }
 
