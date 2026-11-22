@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StandSoftix — Приватный сервер Standoff 2 (0.18.0 Winter Fun)</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <canvas id="snow-canvas"></canvas>
+
+    <header class="navbar">
+        <div class="nav-container">
+            <div class="brand">
+                <span class="ice-icon">❄️</span>
+                <span class="brand-text">STANDSOFTIX</span>
+                <span class="version-tag">v0.18.0</span>
+            </div>
+            <nav class="nav-links">
+                <a href="#downloads">Скачать</a>
+                <a href="#bonus">Бонус 1000G</a>
+                <a href="#promocodes">Промокоды</a>
+                <a href="#partners">Медиа</a>
+                <a href="#dev">Разработчик</a>
+            </nav>
+            <div class="server-status">
+                <span class="status-dot"></span>
+                <span>Сервер: <b>ONLINE</b> (<span id="online-count">1 428</span> игроков)</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="content">
+        <!-- Hero Section -->
+        <section class="hero-section">
+            <div class="hero-card">
+                <div class="hero-image-wrap">
+                    <img src="avatar.jpg" alt="StandSoftix Winter Fun" class="hero-avatar">
+                    <div class="ice-glare"></div>
+                </div>
+                <div class="hero-info">
+                    <div class="badge-winter">🎄 Winter Fun 2021 Update</div>
+                    <h1 class="hero-title">STANDSOFTIX</h1>
+                    <p class="hero-subtitle">Легендарный новогодний приватный сервер версии 0.18.0. Оригинальная карта Зимний Sandstone, Керамбит Ice Dragon, Бабочка Cold Flame, метательные снежки и 4 Telegram-бота!</p>
+                    
+                    <div class="download-buttons" id="downloads">
+                        <a href="/download/apk" class="btn btn-apk">
+                            <span class="btn-icon">📱</span>
+                            <div class="btn-text">
+                                <span class="btn-sub">Для смартфонов</span>
+                                <span class="btn-main">Скачать APK (Android)</span>
+                            </div>
+                            <span class="btn-badge">1.39 GB</span>
+                        </a>
+
+                        <a href="/download/exe" class="btn btn-exe">
+                            <span class="btn-icon">💻</span>
+                            <div class="btn-text">
+                                <span class="btn-sub">Для ПК</span>
+                                <span class="btn-main">Скачать EXE (Windows 11)</span>
+                            </div>
+                            <span class="btn-badge">x64</span>
+                        </a>
+                    </div>
+
+                    <div class="tg-bots-row">
+                        <span class="bots-label">Наши Telegram-боты:</span>
+                        <div class="tg-tags">
+                            <a href="https://t.me/Promocode3_stand_bot" target="_blank" class="tg-tag">🎁 Игроки (@Promocode3_stand_bot)</a>
+                            <a href="https://t.me/Promocode1_stand_bot" target="_blank" class="tg-tag">👑 Тестеры (@Promocode1_stand_bot)</a>
+                            <a href="https://t.me/Promocode2_stand_bot" target="_blank" class="tg-tag">🎥 Блогеры (@Promocode2_stand_bot)</a>
+                            <a href="https://t.me/Promocode4_stand_bot" target="_blank" class="tg-tag">⚙️ Разработчик (@Promocode4_stand_bot)</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ежедневный бонус -->
+        <section class="section-box" id="bonus">
+            <div class="section-header">
+                <h2>🎁 Ежедневный бонус: +1 000 Gold</h2>
+                <p>Получайте бесплатную голду каждые 24 часа! Введите свой ник или ID и заберите промокод.</p>
+            </div>
+            <div class="bonus-box glass-panel">
+                <div class="bonus-inputs">
+                    <input type="text" id="bonus-user" placeholder="Ваш игровой ник или Telegram ID..." class="input-field">
+                    <button id="btn-claim-bonus" class="btn btn-gold" onclick="claimDailyBonus()">
+                        <span>Забрать 1 000 Gold 💰</span>
+                    </button>
+                </div>
+                <div id="bonus-result" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- Проверка промокодов -->
+        <section class="section-box" id="promocodes">
+            <div class="section-header">
+                <h2>🎫 Проверка и активация промокодов</h2>
+                <p>Проверьте любой промокод StandSoftix на валидность и количество оставшихся активаций.</p>
+            </div>
+            <div class="promo-box glass-panel">
+                <div class="promo-inputs">
+                    <input type="text" id="promo-input" placeholder="Введите промокод (например: DAILY1K...)" class="input-field">
+                    <button class="btn btn-blue" onclick="checkPromoCode()">Проверить код 🔍</button>
+                </div>
+                <div id="promo-result" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- Коллекция скинов 0.18.0 -->
+        <section class="section-box">
+            <div class="section-header">
+                <h2>❄️ Зимняя коллекция StandSoftix 0.18.0</h2>
+                <p>Эксклюзивные скины и ножи из оригинального зимнего обновления Standoff 2</p>
+            </div>
+            <div class="skins-grid">
+                <div class="skin-card">
+                    <img src="skins/Karambit_IceDragon_PreviewHD.png" alt="Karambit Ice Dragon">
+                    <div class="skin-title">Karambit "Ice Dragon"</div>
+                    <div class="skin-rarity rarity-nameless">Nameless ❄️</div>
+                </div>
+                <div class="skin-card">
+                    <img src="skins/Karambit_Universe_PreviewHD.png" alt="Karambit Universe">
+                    <div class="skin-title">Karambit "Universe"</div>
+                    <div class="skin-rarity rarity-arcane">Arcane 🌌</div>
+                </div>
+                <div class="skin-card">
+                    <img src="skins/KunaiKnife_ColdFlame_Preview.png" alt="Kunai Cold Flame">
+                    <div class="skin-title">Kunai "Cold Flame"</div>
+                    <div class="skin-rarity rarity-arcane">Arcane 🔥</div>
+                </div>
+                <div class="skin-card">
+                    <img src="skins/AWM_Crystal_Preview.png" alt="AWM Crystal">
+                    <div class="skin-title">AWM "Crystal"</div>
+                    <div class="skin-rarity rarity-epic">Epic 💎</div>
+                </div>
+                <div class="skin-card">
+                    <img src="skins/m40_snowdemon_Preview.png" alt="M40 Snow Demon">
+                    <div class="skin-title">M40 "Snow Demon"</div>
+                    <div class="skin-rarity rarity-legendary">Legendary 👹</div>
+                </div>
+                <div class="skin-card">
+                    <img src="skins/AKR_Nano_PreviewHD.png" alt="AKR Nano">
+                    <div class="skin-title">AKR "Nano"</div>
+                    <div class="skin-rarity rarity-arcane">Arcane ⚡</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Партнёрская панель -->
+        <section class="section-box" id="partners">
+            <div class="section-header">
+                <h2>🎥 Панель медиа-партнёров StandSoftix</h2>
+                <p>Для блогеров и стримеров (YouTube, TikTok, Twitch) — выдача официальных промокодов для вашей аудитории.</p>
+            </div>
+            <div class="partner-panel glass-panel">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Платформа контента:</label>
+                        <select id="partner-platform" class="input-field select-field">
+                            <option value="YT">YouTube (Префикс YT_)</option>
+                            <option value="TT">TikTok (Префикс TT_)</option>
+                            <option value="TW">Twitch (Префикс TW_)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Номинал промокода:</label>
+                        <select id="partner-gold" class="input-field select-field">
+                            <option value="250">250 Gold (Лимит: 50 шт/нед)</option>
+                            <option value="500">500 Gold (Лимит: 50 шт/нед)</option>
+                            <option value="1000">1 000 Gold (Лимит: 50 шт/нед)</option>
+                            <option value="5000">5 000 Gold (Лимит: 10 шт/нед)</option>
+                            <option value="10000">10 000 Gold (Лимит: 10 шт/нед)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Ваш канал / Ник:</label>
+                        <input type="text" id="partner-name" placeholder="@nickname_media" class="input-field">
+                    </div>
+                </div>
+                <button class="btn btn-partner" onclick="generatePartnerPromo()">Сгенерировать промокод для видео 🎬</button>
+                <div id="partner-result" class="result-box hidden"></div>
+            </div>
+        </section>
+
+        <!-- Разработчик / Админ-панель -->
+        <section class="section-box" id="dev">
+            <div class="section-header">
+                <h2>👑 Панель Главного Разработчика</h2>
+                <p>Создание кастомных промокодов на любое количество голды, серебра или эксклюзивных ножей.</p>
+            </div>
+            <div class="dev-panel glass-panel">
+                <div id="dev-auth-block">
+                    <p>Введите мастер-пароль разработчика StandSoftix:</p>
+                    <div class="bonus-inputs">
+                        <input type="password" id="dev-password" placeholder="Пароль доступа..." class="input-field">
+                        <button class="btn btn-blue" onclick="authDev()">Войти в терминал 🔐</button>
+                    </div>
+                </div>
+
+                <div id="dev-controls-block" class="hidden">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Тип награды:</label>
+                            <select id="dev-reward-type" class="input-field select-field">
+                                <option value="gold">Gold (Золото)</option>
+                                <option value="silver">Silver (Серебро)</option>
+                                <option value="knife">Скин / Нож</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Значение / Название скина:</label>
+                            <input type="text" id="dev-reward-val" placeholder="Например: 50000 или Karambit Ice Dragon" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Кол-во активаций (0 = безлимит):</label>
+                            <input type="number" id="dev-uses" value="1" min="0" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label>Кастомный код (необязательно):</label>
+                            <input type="text" id="dev-custom-code" placeholder="Например: NEWYEAR2026" class="input-field">
+                        </div>
+                    </div>
+                    <button class="btn btn-gold" onclick="createDevPromo()">Создать промокод в базе данных ✨</button>
+                    <div id="dev-result" class="result-box hidden"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-container">
+            <p>© 2026 <b>StandSoftix Team</b>. Все права на ассеты Standoff 2 принадлежат Axlebolt. Некоммерческий фанатский приватный сервер v0.18.0 Winter Fun.</p>
+            <p>Сервер промокодов и синхронизации: <code>http://localhost:8080</code></p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
