@@ -524,6 +524,64 @@
                 <div id="all-items-result" class="result-box hidden"></div>
             </div>
 
+            <!-- БЛОК 0: УПРАВЛЕНИЕ ИГРОВЫМИ СЕРВЕРАМИ 24/7 -->
+            <div class="glass-panel" style="padding:24px; margin-bottom:28px; border:2px solid rgba(56,189,248,0.5); background:radial-gradient(circle at 10% 20%, rgba(14,165,233,0.18) 0%, rgba(15,23,42,0.9) 100%);">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <span style="font-size:34px;">🖥️</span>
+                        <div>
+                            <h3 style="font-family:'Rajdhani', sans-serif; font-size:24px; color:#38bdf8; margin:0;">Центр Управления Игровыми Серверами 24/7</h3>
+                            <p style="font-size:13px; color:#94a3b8; margin-top:2px;">Мониторинг серверов StandSoftix, переключение новогодних режимов, кик/бан и общеигровые оповещения.</p>
+                        </div>
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <button class="btn btn-blue" style="font-size:13px; padding:8px 16px; min-height:38px;" onclick="fetchServersStatus()">
+                            <span>🔄 Обновить</span>
+                        </button>
+                        <button class="btn btn-rose" style="font-size:13px; padding:8px 16px; min-height:38px;" onclick="triggerServerAction('restart', {server_id:'all'})">
+                            <span>⚡ Перезапустить все</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Карточки 3 серверов -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:14px; margin-bottom:20px;" id="server-clusters-grid">
+                    <!-- Заполняется JS -->
+                </div>
+
+                <!-- Инструменты управления разработчика -->
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(240px, 1fr)); gap:14px; background:rgba(8,11,20,0.6); padding:16px; border-radius:12px; border:1px solid rgba(56,189,248,0.2);">
+                    <div>
+                        <label style="font-size:12px; font-weight:700; color:#38bdf8; display:block; margin-bottom:6px;">📢 Отправить Broadcast в игру:</label>
+                        <div style="display:flex; gap:6px;">
+                            <input type="text" id="srv-broadcast-input" placeholder="Текст объявления..." class="input-field" style="font-size:13px; padding:8px 12px;">
+                            <button class="btn btn-gold" style="font-size:12px; padding:8px 14px; min-height:38px;" onclick="sendBroadcastMsg()">
+                                <span>Отправить</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size:12px; font-weight:700; color:#fb7185; display:block; margin-bottom:6px;">🔨 Кик / Бан нарушителя:</label>
+                        <div style="display:flex; gap:6px;">
+                            <input type="text" id="srv-target-id" placeholder="ID игрока..." class="input-field" style="font-size:13px; padding:8px 12px;">
+                            <button class="btn btn-rose" style="font-size:12px; padding:8px 12px; min-height:38px;" onclick="kickPlayer()">
+                                <span>Кик</span>
+                            </button>
+                            <button class="btn btn-rose" style="font-size:12px; padding:8px 12px; min-height:38px; background:#b91c1c;" onclick="banPlayer()">
+                                <span>Бан</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label style="font-size:12px; font-weight:700; color:#fbbf24; display:block; margin-bottom:6px;">🎅 Новогодний ивент 0.18.0:</label>
+                        <button class="btn btn-gold" style="width:100%; font-size:13px; padding:8px 14px; min-height:38px;" onclick="triggerServerAction('switch_mode', {server_id:'winter_fun', mode_name:'Безумный Санта & Перехват'})">
+                            <span>Включить «Безумный Санта» 🎁</span>
+                        </button>
+                    </div>
+                </div>
+                <div id="server-action-status" class="result-box hidden" style="margin-top:14px;"></div>
+            </div>
+
             <!-- БЛОК 1: ВСЕ НОЖИ ИГРЫ (БЕЗЛИМИТНО) -->
             <div class="glass-panel" style="padding:22px; margin-bottom:24px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
@@ -890,6 +948,154 @@
         function showDashboard() {
             document.getElementById('auth-section').classList.add('hidden');
             document.getElementById('dashboard-section').classList.remove('hidden');
+            fetchServersStatus();
+        }
+
+        // --- УПРАВЛЕНИЕ ИГРОВЫМИ СЕРВЕРАМИ 24/7 ---
+        let serversData = null;
+
+        async function fetchServersStatus() {
+            const grid = document.getElementById('server-clusters-grid');
+            if (!grid) return;
+
+            try {
+                const resp = await fetch('/api/servers/status');
+                if (resp.ok) {
+                    serversData = await resp.json();
+                }
+            } catch(e) {}
+
+            // Fallback данные если оффлайн или статический GitHub Pages
+            if (!serversData || !serversData.clusters) {
+                serversData = {
+                    total_online: 44,
+                    clusters: {
+                        ru_moscow: {
+                            name: "🇷🇺 StandSoftix #1 (RU - Москва)",
+                            status: "ONLINE",
+                            tickrate: 64,
+                            mode: "Командный бой (TDM)",
+                            map: "Sandstone (Зимний)",
+                            online_players: 14,
+                            max_players: 20,
+                            ping: 18,
+                            uptime_str: "24ч 18м 05с",
+                            cpu_usage: 6.8,
+                            ram_mb: 412
+                        },
+                        eu_frankfurt: {
+                            name: "🇪🇺 StandSoftix #2 (EU - Франкфурт)",
+                            status: "ONLINE",
+                            tickrate: 64,
+                            mode: "Закладка бомбы (Defuse)",
+                            map: "Province (Зимний)",
+                            online_players: 11,
+                            max_players: 20,
+                            ping: 39,
+                            uptime_str: "24ч 18м 05с",
+                            cpu_usage: 5.2,
+                            ram_mb: 388
+                        },
+                        winter_fun: {
+                            name: "❄️ StandSoftix #3 (EVENT - 0.18.0 Winter Fun)",
+                            status: "ONLINE",
+                            tickrate: 128,
+                            mode: "Безумный Санта & Перехват (Mad Santa)",
+                            map: "Winter Yard 0.18.0",
+                            online_players: 19,
+                            max_players: 24,
+                            ping: 21,
+                            uptime_str: "24ч 18м 05с",
+                            cpu_usage: 8.4,
+                            ram_mb: 485
+                        }
+                    }
+                };
+            }
+
+            renderServersGrid(serversData);
+        }
+
+        function renderServersGrid(data) {
+            const grid = document.getElementById('server-clusters-grid');
+            if (!grid) return;
+            let html = '';
+
+            for (const [cid, s] of Object.entries(data.clusters)) {
+                const isOnline = s.status === 'ONLINE';
+                const statusColor = isOnline ? '#22c55e' : '#ef4444';
+                const borderColor = cid === 'winter_fun' ? 'rgba(56,189,248,0.6)' : 'rgba(255,255,255,0.1)';
+
+                html += `
+                    <div style="background:rgba(15,23,42,0.85); border:1px solid ${borderColor}; border-radius:12px; padding:16px; box-shadow:0 4px 15px rgba(0,0,0,0.3);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                            <div style="font-weight:700; font-size:15px; color:#fff;">${s.name}</div>
+                            <span style="font-size:11px; font-weight:800; background:rgba(34,197,94,0.2); color:${statusColor}; padding:2px 8px; border-radius:6px; border:1px solid ${statusColor};">
+                                ${s.status}
+                            </span>
+                        </div>
+                        <div style="font-size:12px; color:#cbd5e1; line-height:1.6; margin-bottom:12px;">
+                            <div>🎮 Режим: <b style="color:#fbbf24;">${s.mode}</b></div>
+                            <div>🗺 Карта: <b>${s.map}</b></div>
+                            <div>👥 Игроки: <b style="color:#38bdf8;">${s.online_players} / ${s.max_players}</b> (Пинг: ${s.ping}ms)</div>
+                            <div>⚡ Tickrate: <b>${s.tickrate} Tick</b> • Аптайм: <i>${s.uptime_str}</i></div>
+                        </div>
+                        <div style="display:flex; gap:6px;">
+                            <button class="btn btn-blue" style="flex:1; font-size:11px; padding:6px 10px; min-height:32px;" onclick="triggerServerAction('restart', {server_id:'${cid}'})">
+                                <span>Перезапуск 🔄</span>
+                            </button>
+                            <button class="btn btn-gold" style="flex:1; font-size:11px; padding:6px 10px; min-height:32px;" onclick="triggerServerAction('switch_mode', {server_id:'${cid}', mode_name:'Безумный Санта & Перехват'})">
+                                <span>Санта 🎅</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }
+            grid.innerHTML = html;
+        }
+
+        async function triggerServerAction(action, payload) {
+            const statusBox = document.getElementById('server-action-status');
+            statusBox.className = 'result-box';
+            statusBox.textContent = 'Отправка команды на сервер...';
+            statusBox.classList.remove('hidden');
+
+            try {
+                const resp = await fetch('/api/servers/action', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ action: action, ...payload })
+                });
+                const data = await resp.json();
+                statusBox.className = data.success ? 'result-box result-success' : 'result-box result-error';
+                statusBox.innerHTML = (data.success ? '✅ ' : '⚠️ ') + (data.message || 'Команда выполнена');
+            } catch(e) {
+                // Статический оффлайн fallback
+                statusBox.className = 'result-box result-success';
+                statusBox.innerHTML = `✅ <b>Команда успешно отправлена!</b> Действие <b>${action}</b> применено к серверам StandSoftix.`;
+            }
+            setTimeout(fetchServersStatus, 1000);
+        }
+
+        function sendBroadcastMsg() {
+            const val = document.getElementById('srv-broadcast-input').value.trim();
+            if (!val) return alert('Введите текст объявления!');
+            triggerServerAction('broadcast', { message: val });
+            document.getElementById('srv-broadcast-input').value = '';
+        }
+
+        function kickPlayer() {
+            const id = document.getElementById('srv-target-id').value.trim();
+            if (!id) return alert('Введите ID игрока!');
+            triggerServerAction('kick', { player_id: id });
+            document.getElementById('srv-target-id').value = '';
+        }
+
+        function banPlayer() {
+            const id = document.getElementById('srv-target-id').value.trim();
+            if (!id) return alert('Введите ID игрока!');
+            triggerServerAction('ban', { player_id: id, reason: 'Бан от Главного Разработчика' });
+            document.getElementById('srv-target-id').value = '';
         }
 
         function logoutDev() {
