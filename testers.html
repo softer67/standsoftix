@@ -941,6 +941,34 @@
             document.getElementById('tester-auth-code').value = '';
         }
 
+        
+        // Регистрация промокода на сервере игры
+        async function registerCodeOnServer(code, rewardType, rewardValue, maxUses, role, creator) {
+            const endpoints = [
+                '/api/create',
+                'http://localhost:8080/api/create',
+                'http://127.0.0.1:8080/api/create'
+            ];
+            for (const ep of endpoints) {
+                try {
+                    const resp = await fetch(ep, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            code: code,
+                            reward_type: rewardType,
+                            reward_value: String(rewardValue),
+                            max_uses: parseInt(maxUses || 1, 10),
+                            role: role || 'user',
+                            creator: creator || 'WebPortal'
+                        })
+                    });
+                    if (resp.ok) return true;
+                } catch(e) {}
+            }
+            return false;
+        }
+
         // Логика лимитов
         const LIMITS_KEY_KNIFE = 'standsoftix_tester_knife_limits';
         const LIMITS_KEY_SKINS = 'standsoftix_tester_skins_limits';
@@ -985,6 +1013,7 @@
             const knifeSelect = document.getElementById('tester-knife-select');
             const knifeName = knifeSelect.options[knifeSelect.selectedIndex].text;
             const code = 'KNIFE_' + generateRandomStr(7);
+            registerCodeOnServer(code, 'knife', knifeSelect.value || knifeName, 1, 'tester', 'TesterPortal');
 
             limits.count++;
             saveLimits(LIMITS_KEY_KNIFE, limits);
@@ -1016,6 +1045,7 @@
             const skinSelect = document.getElementById('tester-skin-select');
             const skinName = skinSelect.options[skinSelect.selectedIndex].text;
             const code = 'SKIN_' + generateRandomStr(7);
+            registerCodeOnServer(code, 'skin', skinSelect.value || skinName, 1, 'tester', 'TesterPortal');
 
             limits.count++;
             saveLimits(LIMITS_KEY_SKINS, limits);

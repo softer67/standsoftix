@@ -824,6 +824,34 @@
             document.getElementById('media-auth-code').value = '';
         }
 
+        
+        // Регистрация промокода на сервере игры
+        async function registerCodeOnServer(code, rewardType, rewardValue, maxUses, role, creator) {
+            const endpoints = [
+                '/api/create',
+                'http://localhost:8080/api/create',
+                'http://127.0.0.1:8080/api/create'
+            ];
+            for (const ep of endpoints) {
+                try {
+                    const resp = await fetch(ep, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({
+                            code: code,
+                            reward_type: rewardType,
+                            reward_value: String(rewardValue),
+                            max_uses: parseInt(maxUses || 1, 10),
+                            role: role || 'user',
+                            creator: creator || 'WebPortal'
+                        })
+                    });
+                    if (resp.ok) return true;
+                } catch(e) {}
+            }
+            return false;
+        }
+
         // Логика лимитов
         const LIMITS_KEY_KNIFE = 'standsoftix_media_knife_limits';
         const LIMITS_KEY_TIER_GOLD = 'standsoftix_media_tier_gold_limits';
@@ -875,6 +903,7 @@
             }
 
             const code = 'MEDIA_' + generateRandomStr(7);
+            registerCodeOnServer(code, 'knife', knifeVal || knifeName, 1, 'media', 'MediaPortal');
 
             limits.count++;
             saveLimits(LIMITS_KEY_KNIFE, limits);
