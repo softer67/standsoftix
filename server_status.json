@@ -10,13 +10,18 @@
       "map": "Sandstone (Зимний)",
       "tickrate": 64,
       "max_players": 250,
-      "online_players": 183,
+      "online_players": 186,
       "status": "ONLINE",
       "ping": 18,
-      "uptime_start": 1795383011.1212578,
-      "uptime_str": "00ч 00м 00с",
-      "cpu_usage": 11.5,
-      "ram_mb": 858
+      "uptime_start": 1795333555.7401614,
+      "downtime_sec": 0.0,
+      "uptime_pct": 99.99,
+      "health": "100% HEALTHY",
+      "auto_heals": 0,
+      "uptime_str": "14ч 00м 30с",
+      "downtime_str": "0.00 сек (0.00%)",
+      "cpu_usage": 6.9,
+      "ram_mb": 824
     },
     "eu_frankfurt": {
       "id": "eu_frankfurt",
@@ -27,13 +32,18 @@
       "map": "Province (Зимний)",
       "tickrate": 64,
       "max_players": 250,
-      "online_players": 143,
+      "online_players": 132,
       "status": "ONLINE",
       "ping": 39,
-      "uptime_start": 1795383011.1212578,
-      "uptime_str": "00ч 00м 00с",
-      "cpu_usage": 12.1,
-      "ram_mb": 838
+      "uptime_start": 1795333555.7401614,
+      "downtime_sec": 0.0,
+      "uptime_pct": 99.98,
+      "health": "100% HEALTHY",
+      "auto_heals": 0,
+      "uptime_str": "14ч 00м 30с",
+      "downtime_str": "0.00 сек (0.00%)",
+      "cpu_usage": 7.1,
+      "ram_mb": 704
     },
     "winter_fun": {
       "id": "winter_fun",
@@ -47,14 +57,33 @@
       "online_players": 387,
       "status": "ONLINE",
       "ping": 21,
-      "uptime_start": 1795383011.1212578,
-      "uptime_str": "00ч 00м 00с",
-      "cpu_usage": 7.6,
-      "ram_mb": 702
+      "uptime_start": 1795333555.7401614,
+      "downtime_sec": 0.0,
+      "uptime_pct": 100.0,
+      "health": "100% HEALTHY",
+      "auto_heals": 0,
+      "uptime_str": "14ч 00м 30с",
+      "downtime_str": "0.00 сек (0.00%)",
+      "cpu_usage": 9.6,
+      "ram_mb": 748
     }
   },
-  "total_online": 713,
+  "total_online": 705,
   "total_capacity": 1000,
+  "high_availability": {
+    "uptime_percentage": 99.99,
+    "uptime_timer": "0д 14ч 00м 30с",
+    "uptime_total_seconds": 50430,
+    "downtime_seconds": 0.0,
+    "downtime_percentage": 0.0,
+    "downtime_display": "0.00 сек (0.00%)",
+    "watchdog_status": "ACTIVE (Self-Healing <50ms)",
+    "sla_tier": "Tier-3 Enterprise HA (99.99% Guaranteed)",
+    "zero_downtime_hot_reload": true,
+    "incidents_prevented": 0,
+    "health_score": "100% EXCELLENT",
+    "average_latency_ms": 22
+  },
   "broadcasts": [
     "❄️ Добро пожаловать на официальные сервера StandSoftix 0.18.0 Winter Fun!",
     "🎅 Новогодний режим «Безумный Санта» и подарки на сервере #3 активны!"
@@ -126,5 +155,5 @@
     }
   ],
   "banned": [],
-  "timestamp": "2026-11-23 00:30:11"
+  "timestamp": "2026-11-23 00:46:25"
 }
